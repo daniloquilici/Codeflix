@@ -1,0 +1,11 @@
+C:\Projetos\Quilici\Fullcycle\Codeflix\quilici.Codeflix.Catalog\src\quilici.Codeflix.Domain\bin\Debug\net6.0\quilici.Codeflix.Domain.deps.json
+C:\Projetos\Quilici\Fullcycle\Codeflix\quilici.Codeflix.Catalog\src\quilici.Codeflix.Domain\bin\Debug\net6.0\quilici.Codeflix.Domain.dll
+C:\Projetos\Quilici\Fullcycle\Codeflix\quilici.Codeflix.Catalog\src\quilici.Codeflix.Domain\bin\Debug\net6.0\quilici.Codeflix.Domain.pdb
+C:\Projetos\Quilici\Fullcycle\Codeflix\quilici.Codeflix.Catalog\src\quilici.Codeflix.Domain\obj\Debug\net6.0\quilici.Codeflix.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projetos\Quilici\Fullcycle\Codeflix\quilici.Codeflix.Catalog\src\quilici.Codeflix.Domain\obj\Debug\net6.0\quilici.Codeflix.Domain.AssemblyInfoInputs.cache
+C:\Projetos\Quilici\Fullcycle\Codeflix\quilici.Codeflix.Catalog\src\quilici.Codeflix.Domain\obj\Debug\net6.0\quilici.Codeflix.Domain.AssemblyInfo.cs
+C:\Projetos\Quilici\Fullcycle\Codeflix\quilici.Codeflix.Catalog\src\quilici.Codeflix.Domain\obj\Debug\net6.0\quilici.Codeflix.Domain.csproj.CoreCompileInputs.cache
+C:\Projetos\Quilici\Fullcycle\Codeflix\quilici.Codeflix.Catalog\src\quilici.Codeflix.Domain\obj\Debug\net6.0\quilici.Codeflix.Domain.dll
+C:\Projetos\Quilici\Fullcycle\Codeflix\quilici.Codeflix.Catalog\src\quilici.Codeflix.Domain\obj\Debug\net6.0\refint\quilici.Codeflix.Domain.dll
+C:\Projetos\Quilici\Fullcycle\Codeflix\quilici.Codeflix.Catalog\src\quilici.Codeflix.Domain\obj\Debug\net6.0\quilici.Codeflix.Domain.pdb
+C:\Projetos\Quilici\Fullcycle\Codeflix\quilici.Codeflix.Catalog\src\quilici.Codeflix.Domain\obj\Debug\net6.0\ref\quilici.Codeflix.Domain.dll
