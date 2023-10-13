@@ -1,5 +1,6 @@
 ﻿using quilici.Codeflix.Domain.Exceptions;
 using quilici.Codeflix.Domain.SeedWork;
+using quilici.Codeflix.Domain.Validation;
 
 namespace quilici.Codeflix.Domain.Entity
 {
@@ -42,20 +43,28 @@ namespace quilici.Codeflix.Domain.Entity
 
         private void Validade()
         {
-            if (string.IsNullOrWhiteSpace(Name))
-                throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
+            DomainValidation.NotNullOrEmpty(Name, nameof(Name));
+            DomainValidation.MinLength(Name, 3, nameof(Name));
+            DomainValidation.MaxLength(Name, 255, nameof(Name));
 
-            if (Name.Length < 3)
-                throw new EntityValidationException($"{nameof(Name)} shoud be at leats 3 charactrs long");
+            DomainValidation.NotNull(Description, nameof(Description));
+            DomainValidation.MaxLength(Description, 10_000, nameof(Description));
 
-            if (Name.Length > 255)
-                throw new EntityValidationException($"{nameof(Name)} shoud be less or equal 255 charactrs long");
 
-            if (Description == null)
-                throw new EntityValidationException($"{nameof(Description)} should not be empty or null");
+            //if (string.IsNullOrWhiteSpace(Name))
+            //    throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
 
-            if (Description.Length > 10_000)
-                throw new EntityValidationException($"{nameof(Description)} shoud be less or equal 10.000 charactrs long");
+            //if (Name.Length < 3)
+            //    throw new EntityValidationException($"{nameof(Name)} shoud be at leats 3 charactrs long");
+
+            //if (Name.Length > 255)
+            //    throw new EntityValidationException($"{nameof(Name)} shoud be less or equal 255 characters long");
+
+            //if (Description == null)
+            //    throw new EntityValidationException($"{nameof(Description)} should not be null");
+
+            //if (Description.Length > 10_000)
+            //    throw new EntityValidationException($"{nameof(Description)} shoud be less or equal 10000 charactrs long");
         }
     }
 }
