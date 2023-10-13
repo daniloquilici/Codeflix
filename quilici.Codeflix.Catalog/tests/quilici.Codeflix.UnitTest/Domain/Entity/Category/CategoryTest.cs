@@ -130,10 +130,7 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
 
         [Theory(DisplayName = nameof(InstantiateErrorWhenNameIsLessThan3Characters))]
         [Trait("Domain", "Category - Aggregates")]
-        [InlineData("1")]
-        [InlineData("12")]
-        [InlineData("a")]
-        [InlineData("ab")]
+        [MemberData(nameof(GetNamesIsLessThan3Characters), parameters: 10)]
         public void InstantiateErrorWhenNameIsLessThan3Characters(string invalidName) 
         {
             var validCategory = _categoryTestFixture.GetValidCategory();
@@ -221,12 +218,12 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
         public void Update()        
         {
             var category = _categoryTestFixture.GetValidCategory();
-            var newValues = new { Name = "New name", Description = "New description" };
+            var categoryNewValues = _categoryTestFixture.GetValidCategory();
 
-            category.Update(newValues.Name, newValues.Description);
+            category.Update(categoryNewValues.Name, categoryNewValues.Description);
 
-            category.Name.Should().Be(newValues.Name);
-            category.Description.Should().Be(newValues.Description);
+            category.Name.Should().Be(categoryNewValues.Name);
+            category.Description.Should().Be(categoryNewValues.Description);
 
             //Assert
             //Assert.Equal(newValues.Name, category.Name);
@@ -238,12 +235,12 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
         public void UpdateOnlyName()
         {
             var category = _categoryTestFixture.GetValidCategory();
-            var newValues = new { Name = "New name"};
+            var newName = _categoryTestFixture.GetValidCategoryName();
             var currentDescription = category.Description;
 
-            category.Update(newValues.Name);
+            category.Update(newName);
 
-            category.Name.Should().Be(newValues.Name);
+            category.Name.Should().Be(newName);
             category.Description.Should().Be(currentDescription);
 
             //Assert
@@ -271,10 +268,7 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
 
         [Theory(DisplayName = nameof(UpdateErrorWhenNameIsLessThan3Characters))]
         [Trait("Domain", "Category - Aggregates")]
-        [InlineData("1")]
-        [InlineData("12")]
-        [InlineData("a")]
-        [InlineData("ab")]
+        [MemberData(nameof(GetNamesIsLessThan3Characters), parameters: 10)]
         public void UpdateErrorWhenNameIsLessThan3Characters(string invalidName)
         {
             var category = _categoryTestFixture.GetValidCategory();
@@ -286,14 +280,14 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
             //Action action = () => category.Update(invalidName);
             //var exception = Assert.Throws<EntityValidationException>(action);
             //Assert.Equal("Name shoud be at leats 3 charactrs long", exception.Message);
-        }
+        }        
 
         [Fact(DisplayName = nameof(UpdateErrorWhenNameIsGreaterThan255Characters))]
         [Trait("Domain", "Category - Aggregates")]
         public void UpdateErrorWhenNameIsGreaterThan255Characters()
         {
             var category = _categoryTestFixture.GetValidCategory();
-            var invalidName = string.Join(null, Enumerable.Range(1, 256).Select(_ => "a").ToArray());
+            var invalidName = _categoryTestFixture.Faker.Lorem.Letter(256);
 
             Action action = () => category.Update(invalidName);
             action.Should().Throw<EntityValidationException>().WithMessage("Name shoud be less or equal 255 charactrs long");
@@ -310,7 +304,10 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
         public void UpdateErrorWhenDescriptionIsGreaterThan10_000Characters()
         {
             var category = _categoryTestFixture.GetValidCategory();
-            var invaliddescription = string.Join(null, Enumerable.Range(1, 10_001).Select(_ => "a").ToArray());
+            var invaliddescription = _categoryTestFixture.Faker.Commerce.ProductDescription();
+
+            while (invaliddescription.Length <= 10_000)
+                invaliddescription += $"{invaliddescription} {_categoryTestFixture.Faker.Commerce.ProductDescription()}";
 
             Action action = () => category.Update("Category name", invaliddescription);
             action.Should().Throw<EntityValidationException>().WithMessage("Description shoud be less or equal 10.000 charactrs long");
@@ -319,6 +316,20 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
             //Action action = () => category.Update("Category name", invaliddescription);
             //var exception = Assert.Throws<EntityValidationException>(action);
             //Assert.Equal("Description shoud be less or equal 10.000 charactrs long", exception.Message);
+        }
+
+        public static IEnumerable<object[]> GetNamesIsLessThan3Characters(int numberOfTests = 6)
+        {
+            var fixture = new CategoryTestFixture();
+
+            for (int i = 0; i < numberOfTests; i++)
+            {
+                var isOdd = i % 2 == 1;
+                yield return new object[] 
+                {
+                    fixture.GetValidCategoryName()[..(isOdd ? 1 : 2)]
+                };
+            }
         }
     }
 }
