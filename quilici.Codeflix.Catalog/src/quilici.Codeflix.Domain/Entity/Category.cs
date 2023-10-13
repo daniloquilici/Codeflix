@@ -40,7 +40,7 @@ namespace quilici.Codeflix.Domain.Entity
             Validade();
         }
 
-        private void Validade() 
+        private void Validade()
         {
             if (string.IsNullOrWhiteSpace(Name))
                 throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
