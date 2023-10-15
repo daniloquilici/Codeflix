@@ -19,7 +19,7 @@ namespace quilici.Codeflix.Domain.Validation
         public static void MinLength(string target, int minLength, string fieldName)
         {
             if (target.Length < minLength)
-                throw new EntityValidationException($"{fieldName} should be at leats {minLength} characters long");
+                throw new EntityValidationException($"{fieldName} should be at least {minLength} characters long");
         }
 
         public static void MaxLength(string target, int maxLength, string fieldName)

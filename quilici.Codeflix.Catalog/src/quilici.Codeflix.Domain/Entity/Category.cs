@@ -55,7 +55,7 @@ namespace quilici.Codeflix.Domain.Entity
             //    throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
 
             //if (Name.Length < 3)
-            //    throw new EntityValidationException($"{nameof(Name)} shoud be at leats 3 charactrs long");
+            //    throw new EntityValidationException($"{nameof(Name)} shoud be at least 3 charactrs long");
 
             //if (Name.Length > 255)
             //    throw new EntityValidationException($"{nameof(Name)} shoud be less or equal 255 characters long");

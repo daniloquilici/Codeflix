@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using quilici.Codeflix.Domain.Exceptions;
-using System.Xml.Linq;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Domain.Entity;
 
@@ -96,9 +95,9 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
             var validCategory = _categoryTestFixture.GetValidCategory();
 
             //Usando fluentAssertions
-            Action action = 
+            Action action =
                 () => new DomainEntity.Category(name!, validCategory.Description);
-            
+
             action.Should()
                 .Throw<EntityValidationException>()
                 .WithMessage("Name should not be empty or null");
@@ -116,7 +115,7 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
             var validCategory = _categoryTestFixture.GetValidCategory();
 
             //Usando fluentAssertions
-            Action action = 
+            Action action =
                 () => new DomainEntity.Category(validCategory.Name, null!);
             action.Should()
                 .Throw<EntityValidationException>()
@@ -131,18 +130,18 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
         [Theory(DisplayName = nameof(InstantiateErrorWhenNameIsLessThan3Characters))]
         [Trait("Domain", "Category - Aggregates")]
         [MemberData(nameof(GetNamesIsLessThan3Characters), parameters: 10)]
-        public void InstantiateErrorWhenNameIsLessThan3Characters(string invalidName) 
+        public void InstantiateErrorWhenNameIsLessThan3Characters(string invalidName)
         {
             var validCategory = _categoryTestFixture.GetValidCategory();
 
             //Usando fluentAssertions
             Action action = () => new DomainEntity.Category(invalidName, validCategory.Description);
-            action.Should().Throw<EntityValidationException>().WithMessage("Name should be at leats 3 characters long");
+            action.Should().Throw<EntityValidationException>().WithMessage("Name should be at least 3 characters long");
 
             //Assert
             //Action action = () => new DomainEntity.Category(invalidName, "Category description");
             //var exception = Assert.Throws<EntityValidationException>(action);
-            //Assert.Equal("Name should be at leats 3 characters long", exception.Message);
+            //Assert.Equal("Name should be at least 3 characters long", exception.Message);
         }
 
         [Fact(DisplayName = nameof(InstantiateErrorWhenNameIsGreaterThan255Characters))]
@@ -208,14 +207,14 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
             category.Deactivate();
 
             category.IsActive.Should().BeFalse();
-            
+
             //Assert            
             //Assert.False(category.IsActive);
         }
 
         [Fact(DisplayName = nameof(Update))]
         [Trait("Domain", "Category - Aggregates")]
-        public void Update()        
+        public void Update()
         {
             var category = _categoryTestFixture.GetValidCategory();
             var categoryNewValues = _categoryTestFixture.GetValidCategory();
@@ -274,13 +273,13 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
             var category = _categoryTestFixture.GetValidCategory();
 
             Action action = () => category.Update(invalidName);
-            action.Should().Throw<EntityValidationException>().WithMessage("Name should be at leats 3 characters long");
+            action.Should().Throw<EntityValidationException>().WithMessage("Name should be at least 3 characters long");
 
             //Assert
             //Action action = () => category.Update(invalidName);
             //var exception = Assert.Throws<EntityValidationException>(action);
-            //Assert.Equal("Name should be at leats 3 characters long", exception.Message);
-        }        
+            //Assert.Equal("Name should be at least 3 characters long", exception.Message);
+        }
 
         [Fact(DisplayName = nameof(UpdateErrorWhenNameIsGreaterThan255Characters))]
         [Trait("Domain", "Category - Aggregates")]
@@ -324,7 +323,7 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
             for (int i = 0; i < numberOfTests; i++)
             {
                 var isOdd = i % 2 == 1;
-                yield return new object[] 
+                yield return new object[]
                 {
                     fixture.GetValidCategoryName()[..(isOdd ? 1 : 2)]
                 };

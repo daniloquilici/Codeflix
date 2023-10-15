@@ -63,7 +63,7 @@ namespace quilici.Codeflix.UnitTest.Domain.Validation
         {
             var fieldName = Faker.Commerce.ProductName().Replace(" ", "");
             Action action = () => DomainValidation.MinLength(target, minLength, fieldName);
-            action.Should().Throw<EntityValidationException>($"{fieldName} should be at leats {minLength} characters long");
+            action.Should().Throw<EntityValidationException>($"{fieldName} should be at least {minLength} characters long");
         }
 
         public static IEnumerable<object[]> GetValuesSmallerThanMin(int numberOfTests = 5)
