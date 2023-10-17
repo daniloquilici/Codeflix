@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using quilici.Codeflix.Application.UseCases.Category.Common;
 
 namespace quilici.Codeflix.Application.UseCases.Category.CreateCategory
 {
-    public class CreateCategoryInput : IRequest<CreateCategoryOutput>
+    public class CreateCategoryInput : IRequest<CategoryModelOutput>
     {
         public string Name { get; set; }
 

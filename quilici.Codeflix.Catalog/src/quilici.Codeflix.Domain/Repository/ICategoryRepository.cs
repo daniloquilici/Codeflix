@@ -5,6 +5,5 @@ namespace quilici.Codeflix.Domain.Repository
 {
     public interface ICategoryRepository : IGenericRepository<Category>
     {
-
     }
 }
