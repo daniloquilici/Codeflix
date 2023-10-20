@@ -1,20 +1,25 @@
 ﻿using Moq;
 using quilici.Codeflix.Application.Interfaces;
 using quilici.Codeflix.Application.UseCases.Category.CreateCategory;
+using quilici.Codeflix.Application.UseCases.Category.UpdateCategory;
+using quilici.Codeflix.Domain.Entity;
 using quilici.Codeflix.Domain.Repository;
 using quilici.Codeflix.UnitTest.Common;
-using System.Diagnostics.SymbolStore;
 using Xunit;
 
-namespace quilici.Codeflix.UnitTest.Application.CreateCategory
+namespace quilici.Codeflix.UnitTest.Application.UpdateCategory
 {
-    [CollectionDefinition(nameof(CreateCategoryTestFixture))]
-    public class CreateCategoryTestFixtureCollection : ICollectionFixture<CreateCategoryTestFixture>
+    [CollectionDefinition(nameof(UpdateCategoryTestFixture))]
+    public class UpdateCategoryTestFixtureCollection : ICollectionFixture<UpdateCategoryTestFixture>
     {
     }
 
-    public class CreateCategoryTestFixture : BaseFixture
+    public class UpdateCategoryTestFixture : BaseFixture
     {
+        public Mock<ICategoryRepository> GetCategoryRepositoryMock() => new Mock<ICategoryRepository>();
+
+        public Mock<IUnitOfWork> GetUnitOfWorkMock() => new Mock<IUnitOfWork>();
+
         public string GetValidCategoryName()
         {
             var categoryName = string.Empty;
@@ -40,20 +45,22 @@ namespace quilici.Codeflix.UnitTest.Application.CreateCategory
 
         public bool GetRandoBoolean() => new Random().NextDouble() < 0.5;
 
-        public CreateCategoryInput GetInput() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
+        public Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
 
-        public CreateCategoryInput GetInvalidInputShortName()
+        public UpdateCategoryInput GetValidInput(Guid? id = null) => new (id ?? Guid.NewGuid(), GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
+
+        public UpdateCategoryInput GetInvalidInputShortName()
         {
-            var invalidInputShortName = GetInput();
+            var invalidInputShortName = GetValidInput();
             invalidInputShortName.Name = invalidInputShortName.Name.Substring(0, 2);
-            
-            return invalidInputShortName;            
+
+            return invalidInputShortName;
         }
 
-        public CreateCategoryInput GetInvalidInputLongName()
+        public UpdateCategoryInput GetInvalidInputLongName()
         {
             //Name more than 255 character
-            var invalidInputLongName = GetInput();
+            var invalidInputLongName = GetValidInput();
             invalidInputLongName.Name = Faker.Commerce.ProductName();
             while (invalidInputLongName.Name.Length < 255)
                 invalidInputLongName.Name += $"{invalidInputLongName.Name} {Faker.Commerce.ProductName()}";
@@ -61,25 +68,14 @@ namespace quilici.Codeflix.UnitTest.Application.CreateCategory
             return invalidInputLongName;
         }
 
-        public CreateCategoryInput CreateCategoryInputInputDescriptionNull()
+        public UpdateCategoryInput CreateCategoryInputTooLongDescription()
         {
-            var invalidInputDescriptionNull = GetInput();
-            invalidInputDescriptionNull.Description = null!;
-            return invalidInputDescriptionNull;
-        }
-
-        public CreateCategoryInput CreateCategoryInputTooLongDescription()
-        {
-            var invalidInputTooLongDescription = GetInput();
+            var invalidInputTooLongDescription = GetValidInput();
             invalidInputTooLongDescription.Description = Faker.Commerce.ProductDescription();
             while (invalidInputTooLongDescription.Description.Length < 10_000)
                 invalidInputTooLongDescription.Description += $"{invalidInputTooLongDescription.Description} {Faker.Commerce.ProductDescription()}";
 
             return invalidInputTooLongDescription;
         }
-
-        public Mock<ICategoryRepository> GetCategoryRepositoryMock() => new Mock<ICategoryRepository>();
-
-        public Mock<IUnitOfWork> GetUnitOfWorkMock() => new Mock<IUnitOfWork>();
     }
 }
