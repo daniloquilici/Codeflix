@@ -1,6 +1,8 @@
 ﻿using Moq;
+using quilici.Codeflix.Application.UseCases.Category.ListCategories;
 using quilici.Codeflix.Domain.Entity;
 using quilici.Codeflix.Domain.Repository;
+using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.UnitTest.Common;
 using Xunit;
 
@@ -42,13 +44,25 @@ namespace quilici.Codeflix.UnitTest.Application.ListCategories
 
         public Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
 
-        public List<Category> GetExampleCategoryList(int length = 10) 
+        public List<Category> GetExampleCategoryList(int length = 10)
         {
             var list = new List<Category>();
             for (var i = 0; i < length; i++)
                 list.Add(GetExampleCategory());
 
             return list;
+        }
+
+        public ListCategoriesInput GetExampleInput()
+        {
+            var random = new Random();
+            return new ListCategoriesInput(
+                page: random.Next(1,10),
+                perPage: random.Next(15,100),
+                search: Faker.Commerce.ProductName(),
+                sort: Faker.Commerce.ProductName(),
+                dir: random.Next(0,10) > 5 ? SearchOrder.Asc : SearchOrder.Desc
+                );
         }
     }
 }
