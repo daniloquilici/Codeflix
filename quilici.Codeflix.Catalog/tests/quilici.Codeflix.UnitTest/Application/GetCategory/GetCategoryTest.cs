@@ -29,7 +29,7 @@ namespace quilici.Codeflix.UnitTest.Application.GetCategory
             //Action
             var output = await useCase.Handle(input, CancellationToken.None);
 
-            repositoryMock.Verify(x => x.Get(It.IsAny<Guid>(), It.IsAny<CancellationToken>()));
+            repositoryMock.Verify(x => x.Get(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Once);
 
             //Assert
             output.Should().NotBeNull();
