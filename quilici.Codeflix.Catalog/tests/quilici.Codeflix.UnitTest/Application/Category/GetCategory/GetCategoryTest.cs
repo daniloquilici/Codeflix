@@ -4,7 +4,7 @@ using quilici.Codeflix.Application.Exceptions;
 using Xunit;
 using UseCase = quilici.Codeflix.Application.UseCases.Category.GetCategory;
 
-namespace quilici.Codeflix.UnitTest.Application.GetCategory
+namespace quilici.Codeflix.UnitTest.Application.Category.GetCategory
 {
     [Collection(nameof(GetCategoryTestFixture))]
     public class GetCategoryTest
@@ -19,7 +19,7 @@ namespace quilici.Codeflix.UnitTest.Application.GetCategory
         {
             //Arrange
             var repositoryMock = _fixture.GetCategoryRepositoryMock();
-            var exampleCategory = _fixture.GetValidCategory();
+            var exampleCategory = _fixture.GetExampleCategory();
 
             repositoryMock.Setup(x => x.Get(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(exampleCategory);
 

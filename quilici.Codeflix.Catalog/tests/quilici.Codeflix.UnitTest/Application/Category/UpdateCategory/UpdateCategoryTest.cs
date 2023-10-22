@@ -8,7 +8,7 @@ using quilici.Codeflix.Domain.Exceptions;
 using Xunit;
 using UseCase = quilici.Codeflix.Application.UseCases.Category.UpdateCategory;
 
-namespace quilici.Codeflix.UnitTest.Application.UpdateCategory
+namespace quilici.Codeflix.UnitTest.Application.Category.UpdateCategory
 {
     [Collection(nameof(UpdateCategoryTestFixture))]
     public class UpdateCategoryTest
@@ -23,7 +23,7 @@ namespace quilici.Codeflix.UnitTest.Application.UpdateCategory
         [Theory(DisplayName = nameof(UpdateCategory))]
         [Trait("Application", "UpdateCategory - Use Cases")]
         [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 10, MemberType = typeof(UpdateCategoryTestDataGenerator))]
-        public async Task UpdateCategory(Category exampleCategory, UseCase.UpdateCategoryInput input)
+        public async Task UpdateCategory(Category exampleCategory, UpdateCategoryInput input)
         {
             //Arrange
             var repositoryMock = _fixture.GetCategoryRepositoryMock();
@@ -59,8 +59,8 @@ namespace quilici.Codeflix.UnitTest.Application.UpdateCategory
             var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
             var input = _fixture.GetValidInput();
 
-            repositoryMock.Setup(x => x.Get(input.Id, It.IsAny<CancellationToken>())).ThrowsAsync(new NotFoundException($"Category '{input.Id}' not found."));            
-            
+            repositoryMock.Setup(x => x.Get(input.Id, It.IsAny<CancellationToken>())).ThrowsAsync(new NotFoundException($"Category '{input.Id}' not found."));
+
             var useCase = new UseCase.UpdateCategory(repositoryMock.Object, unitOfWorkMock.Object);
 
             //Act
@@ -74,9 +74,9 @@ namespace quilici.Codeflix.UnitTest.Application.UpdateCategory
         [Theory(DisplayName = nameof(UpdateCategoryWithoutProvidingIsActive))]
         [Trait("Application", "UpdateCategory - Use Cases")]
         [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 10, MemberType = typeof(UpdateCategoryTestDataGenerator))]
-        public async Task UpdateCategoryWithoutProvidingIsActive(Category exampleCategory, UseCase.UpdateCategoryInput exampleIput)
+        public async Task UpdateCategoryWithoutProvidingIsActive(Category exampleCategory, UpdateCategoryInput exampleIput)
         {
-            var input = new UseCase.UpdateCategoryInput(exampleIput.Id, exampleIput.Name, exampleIput.Description);
+            var input = new UpdateCategoryInput(exampleIput.Id, exampleIput.Name, exampleIput.Description);
 
             //Arrange
             var repositoryMock = _fixture.GetCategoryRepositoryMock();
@@ -106,9 +106,9 @@ namespace quilici.Codeflix.UnitTest.Application.UpdateCategory
         [Theory(DisplayName = nameof(UpdateCategoryOnlyName))]
         [Trait("Application", "UpdateCategory - Use Cases")]
         [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 10, MemberType = typeof(UpdateCategoryTestDataGenerator))]
-        public async Task UpdateCategoryOnlyName(Category exampleCategory, UseCase.UpdateCategoryInput exampleIput)
+        public async Task UpdateCategoryOnlyName(Category exampleCategory, UpdateCategoryInput exampleIput)
         {
-            var input = new UseCase.UpdateCategoryInput(exampleIput.Id, exampleIput.Name);
+            var input = new UpdateCategoryInput(exampleIput.Id, exampleIput.Name);
 
             //Arrange
             var repositoryMock = _fixture.GetCategoryRepositoryMock();

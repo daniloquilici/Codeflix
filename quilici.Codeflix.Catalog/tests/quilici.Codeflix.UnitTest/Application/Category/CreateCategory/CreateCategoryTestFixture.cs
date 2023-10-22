@@ -1,53 +1,24 @@
-﻿using Moq;
-using quilici.Codeflix.Application.Interfaces;
-using quilici.Codeflix.Application.UseCases.Category.CreateCategory;
-using quilici.Codeflix.Domain.Repository;
-using quilici.Codeflix.UnitTest.Common;
-using System.Diagnostics.SymbolStore;
+﻿using quilici.Codeflix.Application.UseCases.Category.CreateCategory;
+using quilici.Codeflix.UnitTest.Application.Category.Common;
 using Xunit;
 
-namespace quilici.Codeflix.UnitTest.Application.CreateCategory
+namespace quilici.Codeflix.UnitTest.Application.Category.CreateCategory
 {
     [CollectionDefinition(nameof(CreateCategoryTestFixture))]
     public class CreateCategoryTestFixtureCollection : ICollectionFixture<CreateCategoryTestFixture>
     {
     }
 
-    public class CreateCategoryTestFixture : BaseFixture
+    public class CreateCategoryTestFixture : CategoryUsesCaseBaseFixture
     {
-        public string GetValidCategoryName()
-        {
-            var categoryName = string.Empty;
-
-            while (categoryName.Length < 3)
-                categoryName = Faker.Commerce.Categories(1)[0];
-
-            if (categoryName.Length > 255)
-                categoryName = categoryName[..255];
-
-            return categoryName;
-        }
-
-        public string GetValidCategoryDescription()
-        {
-            var categoryDescription = Faker.Commerce.ProductDescription();
-
-            if (categoryDescription.Length > 10_000)
-                categoryDescription = categoryDescription[..10_000];
-
-            return categoryDescription;
-        }
-
-        public bool GetRandoBoolean() => new Random().NextDouble() < 0.5;
-
         public CreateCategoryInput GetInput() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
 
         public CreateCategoryInput GetInvalidInputShortName()
         {
             var invalidInputShortName = GetInput();
             invalidInputShortName.Name = invalidInputShortName.Name.Substring(0, 2);
-            
-            return invalidInputShortName;            
+
+            return invalidInputShortName;
         }
 
         public CreateCategoryInput GetInvalidInputLongName()
@@ -77,9 +48,5 @@ namespace quilici.Codeflix.UnitTest.Application.CreateCategory
 
             return invalidInputTooLongDescription;
         }
-
-        public Mock<ICategoryRepository> GetCategoryRepositoryMock() => new Mock<ICategoryRepository>();
-
-        public Mock<IUnitOfWork> GetUnitOfWorkMock() => new Mock<IUnitOfWork>();
     }
 }

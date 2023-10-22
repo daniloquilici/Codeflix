@@ -6,7 +6,7 @@ using quilici.Codeflix.Domain.Exceptions;
 using Xunit;
 using UseCases = quilici.Codeflix.Application.UseCases.Category.CreateCategory;
 
-namespace quilici.Codeflix.UnitTest.Application.CreateCategory
+namespace quilici.Codeflix.UnitTest.Application.Category.CreateCategory
 {
     [Collection(nameof(CreateCategoryTestFixture))]
     public class CreateCategoryTest
@@ -43,12 +43,12 @@ namespace quilici.Codeflix.UnitTest.Application.CreateCategory
             output.Description.Should().Be(input.Description);
             output.IsActive.Should().Be(input.IsActive);
             output.Id.Should().NotBeEmpty();
-            output.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
+            output.CreatedAt.Should().NotBeSameDateAs(default);
         }
 
         [Theory(DisplayName = nameof(ThrowWhenCantInstantiateCategory))]
         [Trait("Aplication", "CreateCategory - Use cases")]
-        [MemberData(nameof(CreateCategoryTestDataGenerator.GetInvalidInputs), parameters:24, MemberType = typeof(CreateCategoryTestDataGenerator))]
+        [MemberData(nameof(CreateCategoryTestDataGenerator.GetInvalidInputs), parameters: 24, MemberType = typeof(CreateCategoryTestDataGenerator))]
         public async void ThrowWhenCantInstantiateCategory(CreateCategoryInput createCategoryInput, string exceptionMessage)
         {
             var useCase = new UseCases.CreateCategory(_createCategoryTestFixture.GetCategoryRepositoryMock().Object, _createCategoryTestFixture.GetUnitOfWorkMock().Object);
@@ -56,7 +56,7 @@ namespace quilici.Codeflix.UnitTest.Application.CreateCategory
             Func<Task> task = async () => await useCase.Handle(createCategoryInput, CancellationToken.None);
 
             await task.Should().ThrowAsync<EntityValidationException>().WithMessage(exceptionMessage);
-        }        
+        }
 
         [Fact(DisplayName = nameof(CreateCategoryWithOnlyName))]
         [Trait("Aplication", "CreateCategory - Use cases")]
@@ -83,7 +83,7 @@ namespace quilici.Codeflix.UnitTest.Application.CreateCategory
             output.Description.Should().Be("");
             output.IsActive.Should().BeTrue();
             output.Id.Should().NotBeEmpty();
-            output.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
+            output.CreatedAt.Should().NotBeSameDateAs(default);
         }
 
         [Fact(DisplayName = nameof(CreateCategoryWithOnlyNameAndDescription))]
@@ -111,7 +111,7 @@ namespace quilici.Codeflix.UnitTest.Application.CreateCategory
             output.Description.Should().Be(input.Description);
             output.IsActive.Should().BeTrue();
             output.Id.Should().NotBeEmpty();
-            output.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
+            output.CreatedAt.Should().NotBeSameDateAs(default);
         }
     }
 }

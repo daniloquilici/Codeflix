@@ -2,10 +2,10 @@
 using FluentAssertions;
 using UseCase = quilici.Codeflix.Application.UseCases.Category.UpdateCategory;
 
-namespace quilici.Codeflix.UnitTest.Application.UpdateCategory
+namespace quilici.Codeflix.UnitTest.Application.Category.UpdateCategory
 {
     [Collection(nameof(UpdateCategoryTestFixture))]
-    public class UpdateCategoryInputValidatorTest 
+    public class UpdateCategoryInputValidatorTest
     {
         private readonly UpdateCategoryTestFixture _fixture;
 
@@ -16,15 +16,15 @@ namespace quilici.Codeflix.UnitTest.Application.UpdateCategory
 
         [Fact(DisplayName = nameof(DontValidateWhenEmptyGuid))]
         [Trait("Application", "UpdateCategoryInputValidator - Use Cases")]
-        public void DontValidateWhenEmptyGuid() 
+        public void DontValidateWhenEmptyGuid()
         {
             //Arrange
             var input = _fixture.GetValidInput(Guid.Empty);
             var validator = new UseCase.UpdateCategoryInputValidator();
-            
+
             //Act
             var validadeResult = validator.Validate(input);
-            
+
             //Assert
             validadeResult.Should().NotBeNull();
             validadeResult.IsValid.Should().BeFalse();

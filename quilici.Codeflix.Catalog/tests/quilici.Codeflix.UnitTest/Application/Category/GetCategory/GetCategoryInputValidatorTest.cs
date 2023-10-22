@@ -2,7 +2,7 @@
 using quilici.Codeflix.Application.UseCases.Category.GetCategory;
 using Xunit;
 
-namespace quilici.Codeflix.UnitTest.Application.GetCategory
+namespace quilici.Codeflix.UnitTest.Application.Category.GetCategory
 {
     [Collection(nameof(GetCategoryTestFixture))]
     public class GetCategoryInputValidatorTest

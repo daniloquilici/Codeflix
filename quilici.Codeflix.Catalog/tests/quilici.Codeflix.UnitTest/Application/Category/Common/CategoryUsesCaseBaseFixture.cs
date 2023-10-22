@@ -1,17 +1,16 @@
 ﻿using Moq;
-using quilici.Codeflix.Domain.Entity;
+using quilici.Codeflix.Application.Interfaces;
 using quilici.Codeflix.Domain.Repository;
 using quilici.Codeflix.UnitTest.Common;
-using Xunit;
+using DomianEntity = quilici.Codeflix.Domain.Entity;
 
-namespace quilici.Codeflix.UnitTest.Application.GetCategory
+namespace quilici.Codeflix.UnitTest.Application.Category.Common
 {
-    [CollectionDefinition(nameof(GetCategoryTestFixture))]
-    public class GetCategoryTestFixtureCollection : ICollectionFixture<GetCategoryTestFixture> {}
-
-    public class GetCategoryTestFixture : BaseFixture
+    public abstract class CategoryUsesCaseBaseFixture : BaseFixture
     {
         public Mock<ICategoryRepository> GetCategoryRepositoryMock() => new Mock<ICategoryRepository>();
+
+        public Mock<IUnitOfWork> GetUnitOfWorkMock() => new Mock<IUnitOfWork>();
 
         public string GetValidCategoryName()
         {
@@ -36,6 +35,8 @@ namespace quilici.Codeflix.UnitTest.Application.GetCategory
             return categoryDescription;
         }
 
-        public Category GetValidCategory() => new(GetValidCategoryName(), GetValidCategoryDescription());
+        public bool GetRandoBoolean() => new Random().NextDouble() < 0.5;
+
+        public DomianEntity.Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
     }
 }
