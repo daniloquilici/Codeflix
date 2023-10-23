@@ -1,5 +1,4 @@
 ﻿using quilici.Codeflix.Application.UseCases.Category.ListCategories;
-using quilici.Codeflix.UnitTest.Application.ListCategories;
 
 namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
 {
