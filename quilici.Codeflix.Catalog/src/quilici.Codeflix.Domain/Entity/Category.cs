@@ -1,5 +1,4 @@
-﻿using quilici.Codeflix.Domain.Exceptions;
-using quilici.Codeflix.Domain.SeedWork;
+﻿using quilici.Codeflix.Domain.SeedWork;
 using quilici.Codeflix.Domain.Validation;
 
 namespace quilici.Codeflix.Domain.Entity
@@ -13,7 +12,7 @@ namespace quilici.Codeflix.Domain.Entity
 
         public Category(string name, string description, bool isActive = true)
             : base()
-        {            
+        {
             Name = name;
             Description = description;
             CreateAt = DateTime.Now;

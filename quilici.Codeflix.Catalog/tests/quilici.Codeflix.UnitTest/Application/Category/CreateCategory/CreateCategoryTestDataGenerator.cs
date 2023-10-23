@@ -1,6 +1,4 @@
-﻿using quilici.Codeflix.UnitTest.Application.CreateCategory;
-
-namespace quilici.Codeflix.UnitTest.Application.Category.CreateCategory
+﻿namespace quilici.Codeflix.UnitTest.Application.Category.CreateCategory
 {
     public class CreateCategoryTestDataGenerator
     {
