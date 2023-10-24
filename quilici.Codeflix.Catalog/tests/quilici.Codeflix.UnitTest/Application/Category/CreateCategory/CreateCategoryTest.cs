@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
 using Moq;
 using quilici.Codeflix.Application.UseCases.Category.CreateCategory;
-using quilici.Codeflix.Domain.Entity;
 using quilici.Codeflix.Domain.Exceptions;
 using Xunit;
+using DomianEntity = quilici.Codeflix.Domain.Entity;
 using UseCases = quilici.Codeflix.Application.UseCases.Category.CreateCategory;
 
 namespace quilici.Codeflix.UnitTest.Application.Category.CreateCategory
@@ -33,7 +33,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.CreateCategory
             //Action
             var output = await useCase.Handle(input, CancellationToken.None);
 
-            repositoryMock.Verify(repository => repository.Insert(It.IsAny<Category>(), It.IsAny<CancellationToken>()), Times.Once);
+            repositoryMock.Verify(repository => repository.Insert(It.IsAny<DomianEntity.Category>(), It.IsAny<CancellationToken>()), Times.Once);
 
             unitOfWorkMock.Verify(uow => uow.Commit(It.IsAny<CancellationToken>()), Times.Once);
 
@@ -73,7 +73,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.CreateCategory
             //Action
             var output = await useCase.Handle(input, CancellationToken.None);
 
-            repositoryMock.Verify(repository => repository.Insert(It.IsAny<Category>(), It.IsAny<CancellationToken>()), Times.Once);
+            repositoryMock.Verify(repository => repository.Insert(It.IsAny<DomianEntity.Category>(), It.IsAny<CancellationToken>()), Times.Once);
 
             unitOfWorkMock.Verify(uow => uow.Commit(It.IsAny<CancellationToken>()), Times.Once);
 
@@ -101,7 +101,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.CreateCategory
             //Action
             var output = await useCase.Handle(input, CancellationToken.None);
 
-            repositoryMock.Verify(repository => repository.Insert(It.IsAny<Category>(), It.IsAny<CancellationToken>()), Times.Once);
+            repositoryMock.Verify(repository => repository.Insert(It.IsAny<DomianEntity.Category>(), It.IsAny<CancellationToken>()), Times.Once);
 
             unitOfWorkMock.Verify(uow => uow.Commit(It.IsAny<CancellationToken>()), Times.Once);
 

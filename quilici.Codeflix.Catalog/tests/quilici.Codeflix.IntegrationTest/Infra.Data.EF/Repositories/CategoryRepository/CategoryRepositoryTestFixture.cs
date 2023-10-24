@@ -1,7 +1,8 @@
-﻿using quilici.Codeflix.Domain.Entity;
-using quilici.Codeflix.IntegrationTest.Infra.Data.EF.Base;
+﻿using Microsoft.EntityFrameworkCore;
+using quilici.Codeflix.Domain.Entity;
+using quilici.Codeflix.Infra.Data.EF;
+using quilici.Codeflix.IntegrationTest.Base;
 using Xunit;
-
 
 namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRepository
 {
@@ -9,7 +10,6 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRe
     public class CategoryRepositoryTestFixtureCollection : ICollectionFixture<CategoryRepositoryTestFixture>
     {
     }
-
     public class CategoryRepositoryTestFixture : BaseFixture
     {
         public string GetValidCategoryName()
@@ -38,5 +38,14 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRe
         public bool GetRandoBoolean() => new Random().NextDouble() < 0.5;
 
         public Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
+
+        public List<Category> GetExampleCategoriesList(int length = 10) => Enumerable.Range(0, length)
+            .Select(_ => GetExampleCategory()).ToList();
+
+        public CodeFlixCatalogDbContext CreateDbContext()
+        {
+            return new CodeFlixCatalogDbContext(new DbContextOptionsBuilder<CodeFlixCatalogDbContext>().UseInMemoryDatabase("integration-tests-db")
+                .Options);
+        }
     }
 }

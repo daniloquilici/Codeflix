@@ -34,18 +34,18 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
             category.Name.Should().Be(validCategory.Name);
             category.Description.Should().Be(validCategory.Description);
             category.Id.Should().NotBeEmpty();
-            category.CreateAt.Should().NotBeSameDateAs(default(DateTime));
-            (category.CreateAt >= dateBefore).Should().BeTrue();
-            (category.CreateAt <= dateAfter).Should().BeTrue();
+            category.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
+            (category.CreatedAt >= dateBefore).Should().BeTrue();
+            (category.CreatedAt <= dateAfter).Should().BeTrue();
             (category.IsActive).Should().BeTrue();
 
             Assert.NotNull(category);
             Assert.Equal(validCategory.Name, category.Name);
             Assert.Equal(validCategory.Description, category.Description);
             Assert.NotEqual(default(Guid), category.Id);
-            Assert.NotEqual(default(DateTime), category.CreateAt);
-            Assert.True(category.CreateAt > dateBefore);
-            Assert.True(category.CreateAt < dateAfter);
+            Assert.NotEqual(default(DateTime), category.CreatedAt);
+            Assert.True(category.CreatedAt > dateBefore);
+            Assert.True(category.CreatedAt < dateAfter);
             Assert.True(category.IsActive);
         }
 
@@ -70,18 +70,18 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
             category.Name.Should().Be(validCategory.Name);
             category.Description.Should().Be(validCategory.Description);
             category.Id.Should().NotBeEmpty();
-            category.CreateAt.Should().NotBeSameDateAs(default(DateTime));
-            (category.CreateAt >= dateBefore).Should().BeTrue();
-            (category.CreateAt <= dateAfter).Should().BeTrue();
+            category.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
+            (category.CreatedAt >= dateBefore).Should().BeTrue();
+            (category.CreatedAt <= dateAfter).Should().BeTrue();
             category.IsActive.Should().Be(isActive);
 
             Assert.NotNull(category);
             Assert.Equal(validCategory.Name, category.Name);
             Assert.Equal(validCategory.Description, category.Description);
             Assert.NotEqual(default(Guid), category.Id);
-            Assert.NotEqual(default(DateTime), category.CreateAt);
-            Assert.True(category.CreateAt > dateBefore);
-            Assert.True(category.CreateAt < dateAfter);
+            Assert.NotEqual(default(DateTime), category.CreatedAt);
+            Assert.True(category.CreatedAt > dateBefore);
+            Assert.True(category.CreatedAt < dateAfter);
             Assert.Equal(isActive, category.IsActive);
         }
 

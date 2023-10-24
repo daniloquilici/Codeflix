@@ -25,7 +25,7 @@ namespace quilici.Codeflix.Application.UseCases.Category.Common
                 category.Name,
                 category.Description,
                 category.IsActive,
-                category.CreateAt
+                category.CreatedAt
                 );
     }
 }

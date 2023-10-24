@@ -7,7 +7,7 @@ namespace quilici.Codeflix.Domain.Entity
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public DateTime CreateAt { get; private set; }
+        public DateTime CreatedAt { get; private set; }
         public bool IsActive { get; private set; }
 
         public Category(string name, string description, bool isActive = true)
@@ -15,7 +15,7 @@ namespace quilici.Codeflix.Domain.Entity
         {
             Name = name;
             Description = description;
-            CreateAt = DateTime.Now;
+            CreatedAt = DateTime.Now;
             IsActive = isActive;
 
             Validade();

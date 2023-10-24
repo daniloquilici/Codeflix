@@ -15,7 +15,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
     {
         public List<DomianEntity.Category> GetExampleCategoryList(int length = 10)
         {
-            var list = new List<Category>();
+            var list = new List<DomianEntity.Category>();
             for (var i = 0; i < length; i++)
                 list.Add(GetExampleCategory());
 

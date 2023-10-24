@@ -37,7 +37,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.GetCategory
             output.Description.Should().Be(exampleCategory.Description);
             output.IsActive.Should().Be(exampleCategory.IsActive);
             output.Id.Should().Be(exampleCategory.Id);
-            output.CreatedAt.Should().Be(exampleCategory.CreateAt);
+            output.CreatedAt.Should().Be(exampleCategory.CreatedAt);
         }
 
         [Fact(DisplayName = nameof(NotFoundExceptionWhenCategoryDoesntExist))]

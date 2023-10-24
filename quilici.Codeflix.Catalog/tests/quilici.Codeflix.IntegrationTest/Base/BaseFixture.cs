@@ -1,6 +1,6 @@
 ﻿using Bogus;
 
-namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Base
+namespace quilici.Codeflix.IntegrationTest.Base
 {
     public class BaseFixture
     {

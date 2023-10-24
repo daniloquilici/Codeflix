@@ -1,11 +1,10 @@
-﻿using Moq;
-using quilici.Codeflix.Domain.Entity;
-using Xunit;
-using FluentAssertions;
-using UseCase = quilici.Codeflix.Application.UseCases.Category.ListCategories;
-using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
+﻿using FluentAssertions;
+using Moq;
 using quilici.Codeflix.Application.UseCases.Category.Common;
-using System.Runtime.Serialization;
+using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
+using Xunit;
+using UseCase = quilici.Codeflix.Application.UseCases.Category.ListCategories;
+using DomianEntity = quilici.Codeflix.Domain.Entity;
 
 namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
 {
@@ -28,10 +27,10 @@ namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
             var repositoryMock = _fixture.GetCategoryRepositoryMock();
             var input = _fixture.GetExampleInput();
 
-            var outputRepositorySearch = new SearchOutput<Category>(
+            var outputRepositorySearch = new SearchOutput<DomianEntity.Category>(
                         currentPage: input.Page,
                         perPage: input.PerPage,
-                        items: (IReadOnlyList<Category>)_fixture.GetExampleCategoryList(),
+                        items: (IReadOnlyList<DomianEntity.Category>)_fixture.GetExampleCategoryList(),
                         total: new Random().Next(50, 200));
 
             repositoryMock.Setup(x => x.Search(It.Is<SearchInput>(searchInput =>
@@ -61,7 +60,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
                 outpuItem.Description.Should().Be(repositoryCategory.Description);
                 outpuItem.IsActive.Should().Be(repositoryCategory.IsActive);
                 outpuItem.Id.Should().Be(repositoryCategory.Id);
-                outpuItem.CreatedAt.Should().Be(repositoryCategory.CreateAt);
+                outpuItem.CreatedAt.Should().Be(repositoryCategory.CreatedAt);
             });
 
             repositoryMock.Verify(x => x.Search(It.Is<SearchInput>(searchInput =>
@@ -81,10 +80,10 @@ namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
             //Arrange
             var categoriesExampleList = _fixture.GetExampleCategoryList();
             var repositoryMock = _fixture.GetCategoryRepositoryMock();
-            var outputRepositorySearch = new SearchOutput<Category>(
+            var outputRepositorySearch = new SearchOutput<DomianEntity.Category>(
                         currentPage: input.Page,
                         perPage: input.PerPage,
-                        items: (IReadOnlyList<Category>)_fixture.GetExampleCategoryList(),
+                        items: (IReadOnlyList<DomianEntity.Category>)_fixture.GetExampleCategoryList(),
                         total: new Random().Next(50, 200));
 
             repositoryMock.Setup(x => x.Search(It.Is<SearchInput>(searchInput =>
@@ -114,7 +113,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
                 outpuItem.Description.Should().Be(repositoryCategory.Description);
                 outpuItem.IsActive.Should().Be(repositoryCategory.IsActive);
                 outpuItem.Id.Should().Be(repositoryCategory.Id);
-                outpuItem.CreatedAt.Should().Be(repositoryCategory.CreateAt);
+                outpuItem.CreatedAt.Should().Be(repositoryCategory.CreatedAt);
             });
 
             repositoryMock.Verify(x => x.Search(It.Is<SearchInput>(searchInput =>
@@ -134,10 +133,10 @@ namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
             var repositoryMock = _fixture.GetCategoryRepositoryMock();
             var input = _fixture.GetExampleInput();
 
-            var outputRepositorySearch = new SearchOutput<Category>(
+            var outputRepositorySearch = new SearchOutput<DomianEntity.Category>(
                         currentPage: input.Page,
                         perPage: input.PerPage,
-                        items: new List<Category>().AsReadOnly(),
+                        items: new List<DomianEntity.Category>().AsReadOnly(),
                         total: 0);
 
             repositoryMock.Setup(x => x.Search(It.Is<SearchInput>(searchInput =>

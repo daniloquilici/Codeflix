@@ -23,7 +23,7 @@ namespace quilici.Codeflix.Application.UseCases.Category.CreateCategory
             await _categoryRepository.Insert(category, cancellationToken);
             await _unitOfWork.Commit(cancellationToken);
 
-            return new CategoryModelOutput(category.Id, category.Name, category.Description, category.IsActive, category.CreateAt);
+            return new CategoryModelOutput(category.Id, category.Name, category.Description, category.IsActive, category.CreatedAt);
         }
     }
 }

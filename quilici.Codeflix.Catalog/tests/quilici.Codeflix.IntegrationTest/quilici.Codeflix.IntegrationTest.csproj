@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\quilici.Codeflix.Domain\quilici.Codeflix.Domain.csproj" />
+    <ProjectReference Include="..\..\src\quilici.Codeflix.Infra.EF\quilici.Codeflix.Infra.Data.EF.csproj" />
   </ItemGroup>
 
 </Project>
