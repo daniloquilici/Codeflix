@@ -16,15 +16,16 @@ namespace quilici.Codeflix.Infra.Data.EF.Repositories
             _context = context;
         }
 
-        public Task Delete(Category aggregate, CancellationToken cancellationToken)
+        public Task Delete(Category aggregate, CancellationToken _)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(_categories.Remove(aggregate));
         }
 
         public async Task<Category> Get(Guid id, CancellationToken cancellationToken)
-        {
-            var category = await _categories.FindAsync(new object[] { id }, cancellationToken);
-            
+        {            
+            var category = await _categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            //var category = await _categories.FindAsync(new object[] { id }, cancellationToken);
+
             //if (category == null)
             //    throw new NotFoundException($"Category '{id}' not found.");
 
@@ -43,6 +44,6 @@ namespace quilici.Codeflix.Infra.Data.EF.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task Update(Category aggregate, CancellationToken cancellationToken) => Task.FromResult(_categories.Update(aggregate));
+        public Task Update(Category aggregate, CancellationToken _) => Task.FromResult(_categories.Update(aggregate));
     }
 }
