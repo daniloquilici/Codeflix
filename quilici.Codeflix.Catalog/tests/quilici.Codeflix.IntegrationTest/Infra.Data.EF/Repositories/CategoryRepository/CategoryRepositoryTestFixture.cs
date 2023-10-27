@@ -42,10 +42,23 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRe
         public List<Category> GetExampleCategoriesList(int length = 10) => Enumerable.Range(0, length)
             .Select(_ => GetExampleCategory()).ToList();
 
-        public CodeFlixCatalogDbContext CreateDbContext()
-        {
-            return new CodeFlixCatalogDbContext(new DbContextOptionsBuilder<CodeFlixCatalogDbContext>().UseInMemoryDatabase("integration-tests-db")
+        public List<Category> GetExampleCategoriesListWithName(List<string> names) => names.Select(x =>
+            {
+                var category = GetExampleCategory();
+                category.Update(x);
+                return category;
+            }).ToList();
+            
+
+        public CodeFlixCatalogDbContext CreateDbContext(bool preserveData = false)
+        {            
+            var context = new CodeFlixCatalogDbContext(new DbContextOptionsBuilder<CodeFlixCatalogDbContext>().UseInMemoryDatabase("integration-tests-db")
                 .Options);
+
+            if (preserveData == false)
+                context.Database.EnsureDeleted();
+
+            return context;
         }
     }
 }

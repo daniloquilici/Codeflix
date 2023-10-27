@@ -39,9 +39,16 @@ namespace quilici.Codeflix.Infra.Data.EF.Repositories
             await _categories.AddAsync(aggregate, cancellationToken);
         }
 
-        public Task<SearchOutput<Category>> Search(SearchInput searchInput, CancellationToken cancellationToken)
+        public async Task<SearchOutput<Category>> Search(SearchInput searchInput, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var toSkip = (searchInput.Page - 1) * searchInput.PerPage;
+            var query = _categories.AsNoTracking();
+            if (!string.IsNullOrWhiteSpace(searchInput.Search))
+                query = query.Where(x => x.Name.Contains(searchInput.Search));
+
+            var total = await query.CountAsync();
+            var items = await query.Skip(toSkip).Take(searchInput.PerPage).ToListAsync();
+            return new (searchInput.Page, searchInput.PerPage, total, items);
         }
 
         public Task Update(Category aggregate, CancellationToken _) => Task.FromResult(_categories.Update(aggregate));
