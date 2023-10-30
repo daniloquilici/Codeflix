@@ -211,7 +211,7 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRe
             }
         }
 
-        [Theory(DisplayName = nameof(SeachReturnsPaginated))]
+        [Theory(DisplayName = nameof(SearchByText))]
         [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
         [InlineData("Action", 1, 5, 1, 1)]
         [InlineData("Horror", 1, 5, 3, 3)]
@@ -221,7 +221,7 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRe
         [InlineData("Sci-fi", 2, 3, 1, 4)]
         [InlineData("Sci-fi Other", 1, 3, 0, 0)]
         [InlineData("Robots", 1, 5, 2, 2)]
-        public async Task SeachByText(string search, int page, int perPage, int expectedQuantityItemsReturned, int expectedQuantityItems)
+        public async Task SearchByText(string search, int page, int perPage, int expectedQuantityItemsReturned, int expectedQuantityItems)
         {
             CodeFlixCatalogDbContext dbContext = _fixture.CreateDbContext();
             var exampleCategoryList = _fixture.GetExampleCategoriesListWithName(new List<string>() { "Action", "Horror", "Horror - Robots", "Horror - Based on Real Facts", "Drama", "Sci-fi IA", "Sci-fi Space", "Sci-fi Robots", "Sci-fi Future" });
@@ -247,6 +247,50 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRe
                 outputItem.Description.Should().Be(exampleItem.Description);
                 outputItem.IsActive.Should().Be(exampleItem.IsActive);
                 outputItem.CreatedAt.Should().Be(exampleItem.CreatedAt);
+            }
+        }
+
+        [Theory(DisplayName = nameof(SearchOrdened))]
+        [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+        [InlineData("name", "asc")]
+        [InlineData("name", "desc")]
+        [InlineData("id", "asc")]
+        [InlineData("id", "desc")]
+        [InlineData("CreatedAt", "asc")]
+        [InlineData("CreatedAt", "desc")]
+        [InlineData("", "asc")]
+        public async Task SearchOrdened(string orderBy, string order)
+        {
+            CodeFlixCatalogDbContext dbContext = _fixture.CreateDbContext();
+            var exampleCategoryList = _fixture.GetExampleCategoriesList(10);
+            await dbContext.AddRangeAsync(exampleCategoryList);
+            await dbContext.SaveChangesAsync(CancellationToken.None);
+            var categoryRepository = new Repository.CategoryRepository(dbContext);
+            var searchOrder = order.ToLower() == "asc" ? SearchOrder.Asc : SearchOrder.Desc;
+            var seachInput = new SearchInput(1, 20, "", orderBy, searchOrder);
+
+            var output = await categoryRepository.Search(seachInput, CancellationToken.None);
+
+            var expectedOrderedList = _fixture.CloneCategoryListOrdered(exampleCategoryList, orderBy, searchOrder);
+
+            output.Should().NotBeNull();
+            output.Items.Should().NotBeNull();
+            output.CurrentPage.Should().Be(seachInput.Page);
+            output.PerPage.Should().Be(seachInput.PerPage);
+            output.Total.Should().Be(exampleCategoryList.Count);
+            output.Items.Should().HaveCount(exampleCategoryList.Count);
+            for (int i = 0; i < expectedOrderedList.Count; i++)
+            {
+                var expectedItem = expectedOrderedList[i];
+                var outputItem = output.Items[i];
+
+                expectedItem.Should().NotBeNull();
+                outputItem.Should().NotBeNull();
+                outputItem.Id.Should().Be(expectedItem.Id);
+                outputItem.Name.Should().Be(expectedItem.Name);
+                outputItem.Description.Should().Be(expectedItem.Description);
+                outputItem.IsActive.Should().Be(expectedItem.IsActive);
+                outputItem.CreatedAt.Should().Be(expectedItem.CreatedAt);
             }
         }
     }

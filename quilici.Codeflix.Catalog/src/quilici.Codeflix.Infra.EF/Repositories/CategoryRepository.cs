@@ -3,6 +3,7 @@ using quilici.Codeflix.Application.Exceptions;
 using quilici.Codeflix.Domain.Entity;
 using quilici.Codeflix.Domain.Repository;
 using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
+using System.Linq.Expressions;
 
 namespace quilici.Codeflix.Infra.Data.EF.Repositories
 {
@@ -43,6 +44,8 @@ namespace quilici.Codeflix.Infra.Data.EF.Repositories
         {
             var toSkip = (searchInput.Page - 1) * searchInput.PerPage;
             var query = _categories.AsNoTracking();
+            query = AddOrderToQuery(query, searchInput.OrderBy, searchInput.Order);
+
             if (!string.IsNullOrWhiteSpace(searchInput.Search))
                 query = query.Where(x => x.Name.Contains(searchInput.Search));
 
@@ -50,6 +53,18 @@ namespace quilici.Codeflix.Infra.Data.EF.Repositories
             var items = await query.Skip(toSkip).Take(searchInput.PerPage).ToListAsync();
             return new (searchInput.Page, searchInput.PerPage, total, items);
         }
+
+        private IQueryable<Category> AddOrderToQuery(IQueryable<Category> query, string orderProperty, SearchOrder order)       
+            => (orderProperty.ToLower(), order) switch
+               {
+                   ("name", SearchOrder.Asc) => query.OrderBy(x => x.Name),
+                   ("name", SearchOrder.Desc) => query.OrderByDescending(x => x.Name),
+                   ("id", SearchOrder.Asc) => query.OrderBy(x => x.Id),
+                   ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
+                   ("createdat", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
+                   ("createdat", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
+                   _ => query.OrderBy(x => x.Name)
+               };
 
         public Task Update(Category aggregate, CancellationToken _) => Task.FromResult(_categories.Update(aggregate));
     }
