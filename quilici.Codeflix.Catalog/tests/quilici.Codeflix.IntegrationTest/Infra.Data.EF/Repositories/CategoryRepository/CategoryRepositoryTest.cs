@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using quilici.Codeflix.Application.Exceptions;
 using quilici.Codeflix.Domain.Entity;
 using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
@@ -49,7 +48,7 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRe
             exampleCategoryList.Add(exampleCategory);
             await dbContext.AddRangeAsync(exampleCategoryList);
             await dbContext.SaveChangesAsync(CancellationToken.None);
-            
+
             var categoryRepository = new Repository.CategoryRepository(_fixture.CreateDbContext(true));
 
             var dbCategory = await categoryRepository.Get(exampleCategory.Id, CancellationToken.None);
@@ -124,7 +123,7 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRe
             var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(exampleCategory.Id);
             //var dbCategory = await dbContext.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == exampleCategory.Id);
 
-            dbCategory.Should().BeNull();            
+            dbCategory.Should().BeNull();
         }
 
         [Fact(DisplayName = nameof(SeachReturnsListAndTotal))]
