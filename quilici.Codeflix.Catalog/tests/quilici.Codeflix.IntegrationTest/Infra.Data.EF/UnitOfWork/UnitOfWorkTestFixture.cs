@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-﻿using quilici.Codeflix.Domain.Entity;
+using quilici.Codeflix.Domain.Entity;
 using quilici.Codeflix.IntegrationTest.Base;
-=======
-﻿using quilici.Codeflix.IntegrationTest.Base;
->>>>>>> d6f462914faeb68acc03e5802e620ad18dc6d46c
 using Xunit;
 
 namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.UnitOfWork
@@ -15,7 +11,6 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.UnitOfWork
 
     public class UnitOfWorkTestFixture : BaseFixture
     {
-<<<<<<< HEAD
         public string GetValidCategoryName()
         {
             var categoryName = string.Empty;
@@ -45,7 +40,5 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.UnitOfWork
 
         public List<Category> GetExampleCategoriesList(int length = 10) => Enumerable.Range(0, length)
             .Select(_ => GetExampleCategory()).ToList();
-=======
->>>>>>> d6f462914faeb68acc03e5802e620ad18dc6d46c
     }
 }

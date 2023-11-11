@@ -16,10 +16,9 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.UnitOfWork
         }
 
         [Fact(DisplayName = "Commit")]
-<<<<<<< HEAD
         [Trait("Integration/Infra.Data", "UnitOfWork - Persistence")]
-        public async Task Commit() 
-        { 
+        public async Task Commit()
+        {
             var dbContext = _fixture.CreateDbContext();
             var exampleCategoriesList = _fixture.GetExampleCategoriesList();
             await dbContext.AddRangeAsync(exampleCategoriesList);
@@ -29,46 +28,20 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.UnitOfWork
 
             var assertDbContext = _fixture.CreateDbContext(true);
             var savedCategories = assertDbContext.Categories.AsNoTracking().ToList();
-=======
-        [Trait("Integration/Infra.Data", "Persistence")]
-        public async Task Commit() 
-        {
-            var dbContext = _fixture.CreateDbContext();
-            var exampleCategoriesList = _fixture.GetExampleCategoriesList();
-            dbContext.AddRange(exampleCategoriesList);
 
-            var unitOfwork = new UnitOfWorkInfra.UnitOfWork(dbContext);
-            await unitOfwork.Commit(CancellationToken.None);
-
-            var assertDbContext = _fixture.CreateDbContext(true);
-            var savedCategories = assertDbContext.Categories.AsNoTracking().ToList();
-
->>>>>>> d6f462914faeb68acc03e5802e620ad18dc6d46c
             savedCategories.Should().HaveCount(exampleCategoriesList.Count);
         }
 
         [Fact(DisplayName = "Rollback")]
-<<<<<<< HEAD
         [Trait("Integration/Infra.Data", "UnitOfWork - Persistence")]
         public async Task Rollback()
         {
             var dbContext = _fixture.CreateDbContext();
             var unitOfWork = new UnitOfWorkInfra.UnitOfWork(dbContext);
-            
+
             var task = async () => await unitOfWork.RollbackAsync(CancellationToken.None);
 
             await task.Should().NotThrowAsync();
-=======
-        [Trait("Integration/Infra.Data", "Persistence")]
-        public async Task Rollback()
-        {
-            var dbContext = _fixture.CreateDbContext();
-
-            var unitOfwork = new UnitOfWorkInfra.UnitOfWork(dbContext);
-            var task = async () => await unitOfwork.Rollbakc(CancellationToken.None);
-
-            await task.Should().NotThrowAsync();            
->>>>>>> d6f462914faeb68acc03e5802e620ad18dc6d46c
         }
     }
 }
