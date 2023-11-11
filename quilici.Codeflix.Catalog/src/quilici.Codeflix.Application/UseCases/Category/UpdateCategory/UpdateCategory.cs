@@ -26,7 +26,7 @@ namespace quilici.Codeflix.Application.UseCases.Category.UpdateCategory
                     category.Deactivate();
             
             await _categoryRepository.Update(category, cancellationToken);
-            await _unitOfWork.Commit(cancellationToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
             return CategoryModelOutput.FromCategory(category);
         }
     }

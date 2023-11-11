@@ -1,8 +1,5 @@
-﻿using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using quilici.Codeflix.Domain.Entity;
+﻿using quilici.Codeflix.Domain.Entity;
 using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
-using quilici.Codeflix.Infra.Data.EF;
 using quilici.Codeflix.IntegrationTest.Base;
 using Xunit;
 
@@ -50,19 +47,8 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRe
                 category.Update(x);
                 return category;
             }).ToList();
-            
-        public CodeFlixCatalogDbContext CreateDbContext(bool preserveData = false)
-        {            
-            var context = new CodeFlixCatalogDbContext(new DbContextOptionsBuilder<CodeFlixCatalogDbContext>().UseInMemoryDatabase("integration-tests-db")
-                .Options);
 
-            if (preserveData == false)
-                context.Database.EnsureDeleted();
-
-            return context;
-        }
-
-        public List<Category> CloneCategoryListOrdered(List<Category> categoryList, string orderBy, SearchOrder order) 
+        public List<Category> CloneCategoryListOrdered(List<Category> categoryList, string orderBy, SearchOrder order)
         {
             var listClone = new List<Category>(categoryList);
 

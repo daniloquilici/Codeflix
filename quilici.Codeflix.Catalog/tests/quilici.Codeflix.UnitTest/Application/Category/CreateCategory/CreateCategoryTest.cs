@@ -35,7 +35,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.CreateCategory
 
             repositoryMock.Verify(repository => repository.Insert(It.IsAny<DomianEntity.Category>(), It.IsAny<CancellationToken>()), Times.Once);
 
-            unitOfWorkMock.Verify(uow => uow.Commit(It.IsAny<CancellationToken>()), Times.Once);
+            unitOfWorkMock.Verify(uow => uow.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
 
             //Assert
             output.Should().NotBeNull();
@@ -75,7 +75,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.CreateCategory
 
             repositoryMock.Verify(repository => repository.Insert(It.IsAny<DomianEntity.Category>(), It.IsAny<CancellationToken>()), Times.Once);
 
-            unitOfWorkMock.Verify(uow => uow.Commit(It.IsAny<CancellationToken>()), Times.Once);
+            unitOfWorkMock.Verify(uow => uow.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
 
             //Assert
             output.Should().NotBeNull();
@@ -103,7 +103,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.CreateCategory
 
             repositoryMock.Verify(repository => repository.Insert(It.IsAny<DomianEntity.Category>(), It.IsAny<CancellationToken>()), Times.Once);
 
-            unitOfWorkMock.Verify(uow => uow.Commit(It.IsAny<CancellationToken>()), Times.Once);
+            unitOfWorkMock.Verify(uow => uow.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
 
             //Assert
             output.Should().NotBeNull();

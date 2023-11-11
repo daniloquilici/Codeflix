@@ -1,0 +1,8 @@
+﻿########################################################
+XUNIT.RUNNER.JSON
+############################
+Arquivo para que o XUnit não paralelize a database. Quando se tem vários testes de integração utilizando a mesma database, algum teste pode falhar, pois 
+espera uma quantidade 'x' de registros mas vem mais.
+
+############################
+Outra forma de resolver esse probelma é remover esse arquivo e passar um parametro randamico na criação do dbContext, assitem cada teste teria sua database
