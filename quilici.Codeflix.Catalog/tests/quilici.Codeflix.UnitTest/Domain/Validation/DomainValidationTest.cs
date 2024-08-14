@@ -1,11 +1,11 @@
 ﻿using Bogus;
 using FluentAssertions;
 using Microsoft.VisualBasic;
-using quilici.Codeflix.Domain.Exceptions;
-using quilici.Codeflix.Domain.Validation;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
+using quilici.Codeflix.Catalog.Domain.Validation;
 using Xunit;
 
-namespace quilici.Codeflix.UnitTest.Domain.Validation
+namespace quilici.Codeflix.Catalog.UnitTest.Domain.Validation
 {
     public class DomainValidationTest
     {
@@ -47,7 +47,7 @@ namespace quilici.Codeflix.UnitTest.Domain.Validation
 
         [Fact(DisplayName = nameof(NotNullOrEmptyOk))]
         [Trait("Domain", "DomainValidation - Validation")]
-        public void NotNullOrEmptyOk() 
+        public void NotNullOrEmptyOk()
         {
             var target = Faker.Commerce.ProductName();
             var fieldName = Faker.Commerce.ProductName().Replace(" ", "");
@@ -59,7 +59,7 @@ namespace quilici.Codeflix.UnitTest.Domain.Validation
         [Theory(DisplayName = nameof(MinLengthThrowWhenLess))]
         [Trait("Domain", "DomainValidation - Validation")]
         [MemberData(nameof(GetValuesSmallerThanMin), parameters: 10)]
-        public void MinLengthThrowWhenLess(string target, int minLength) 
+        public void MinLengthThrowWhenLess(string target, int minLength)
         {
             var fieldName = Faker.Commerce.ProductName().Replace(" ", "");
             Action action = () => DomainValidation.MinLength(target, minLength, fieldName);
@@ -70,12 +70,12 @@ namespace quilici.Codeflix.UnitTest.Domain.Validation
         {
             yield return new object[] { "123456", 10 };
             var faker = new Faker();
-            for (int i = 0; i < (numberOfTests-1); i++)
+            for (int i = 0; i < numberOfTests - 1; i++)
             {
                 var example = faker.Commerce.ProductName();
-                var minLength = example.Length + (new Random()).Next(1, 20);
+                var minLength = example.Length + new Random().Next(1, 20);
                 yield return new object[] { example, minLength };
-            }    
+            }
         }
 
         [Theory(DisplayName = nameof(MinLengthOk))]
@@ -92,10 +92,10 @@ namespace quilici.Codeflix.UnitTest.Domain.Validation
         {
             yield return new object[] { "123456", 6 };
             var faker = new Faker();
-            for (int i = 0; i < (numberOfTests-1); i++)
+            for (int i = 0; i < numberOfTests - 1; i++)
             {
                 var example = faker.Commerce.ProductName();
-                var minLength = example.Length - (new Random()).Next(1, 5);
+                var minLength = example.Length - new Random().Next(1, 5);
                 yield return new object[] { example, minLength };
             }
         }
@@ -110,14 +110,14 @@ namespace quilici.Codeflix.UnitTest.Domain.Validation
             action.Should().Throw<EntityValidationException>($"{fieldName} should be less or equal {maxLength} characters long");
         }
 
-        public static IEnumerable<object[]> GetValuesGreaterThanMax(int numberOfTests = 5) 
+        public static IEnumerable<object[]> GetValuesGreaterThanMax(int numberOfTests = 5)
         {
             yield return new object[] { "123456", 5 };
             var faker = new Faker();
-            for (int i = 0; i < (numberOfTests - 1); i++)
+            for (int i = 0; i < numberOfTests - 1; i++)
             {
                 var example = faker.Commerce.ProductName();
-                var minLength = example.Length - (new Random()).Next(1, 5);
+                var minLength = example.Length - new Random().Next(1, 5);
                 yield return new object[] { example, minLength };
             }
         }
@@ -136,10 +136,10 @@ namespace quilici.Codeflix.UnitTest.Domain.Validation
         {
             yield return new object[] { "123456", 6 };
             var faker = new Faker();
-            for (int i = 0; i < (numberOfTests - 1); i++)
+            for (int i = 0; i < numberOfTests - 1; i++)
             {
                 var example = faker.Commerce.ProductName();
-                var minLength = example.Length + (new Random()).Next(0, 5);
+                var minLength = example.Length + new Random().Next(0, 5);
                 yield return new object[] { example, minLength };
             }
         }

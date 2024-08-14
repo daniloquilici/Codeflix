@@ -1,16 +1,15 @@
-﻿using quilici.Codeflix.Application.UseCases.Category.Common;
-using quilici.Codeflix.Application.UseCases.Category.UpdateCategory;
-using quilici.Codeflix.Infra.Data.EF;
-using quilici.Codeflix.Infra.Data.EF.Repositories;
-using Xunit;
-using DomianEntity = quilici.Codeflix.Domain.Entity;
-using ApplicationUseCase = quilici.Codeflix.Application.UseCases.Category.UpdateCategory;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using quilici.Codeflix.Application.Exceptions;
-using quilici.Codeflix.Domain.Exceptions;
+using quilici.Codeflix.Catalog.Application.Exceptions;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
+using quilici.Codeflix.Catalog.Infra.Data.EF;
+using quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
+using Xunit;
+using ApplicationUseCase = quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 
-namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.UpdateCategory
+namespace quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Category.UpdateCategory
 {
     [Collection(nameof(UpdateCategoryTestFixture))]
     public class UpdateCategoryTest
@@ -23,7 +22,7 @@ namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.UpdateC
         [Theory(DisplayName = nameof(UpdateCategory))]
         [Trait("Integration/Application", "UpdateCategory - Use Cases")]
         [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 5, MemberType = typeof(UpdateCategoryTestDataGenerator))]
-        public async Task UpdateCategory(DomianEntity.Category exampleCategory, UpdateCategoryInput input)
+        public async Task UpdateCategory(Domain.Entity.Category exampleCategory, UpdateCategoryInput input)
         {
             //Arrange
             var dbContext = _fixture.CreateDbContext();
@@ -38,7 +37,7 @@ namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.UpdateC
             CategoryModelOutput output = await useCase.Handle(input, CancellationToken.None);
 
             //Assert
-            var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(output.Id);
+            var dbCategory = await _fixture.CreateDbContext(true).Categories.FindAsync(output.Id);
 
             dbCategory.Should().NotBeNull();
             dbCategory!.Name.Should().Be(input.Name);
@@ -49,13 +48,13 @@ namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.UpdateC
             output.Should().NotBeNull();
             output.Name.Should().Be(input.Name);
             output.Description.Should().Be(input.Description);
-            output.IsActive.Should().Be((bool)input.IsActive!);            
+            output.IsActive.Should().Be((bool)input.IsActive!);
         }
 
         [Theory(DisplayName = nameof(UpdateCategoryWithoutIsActive))]
         [Trait("Integration/Application", "UpdateCategory - Use Cases")]
         [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 5, MemberType = typeof(UpdateCategoryTestDataGenerator))]
-        public async Task UpdateCategoryWithoutIsActive(DomianEntity.Category exampleCategory, UpdateCategoryInput exampleInput)
+        public async Task UpdateCategoryWithoutIsActive(Domain.Entity.Category exampleCategory, UpdateCategoryInput exampleInput)
         {
             //Arrange
             var input = new UpdateCategoryInput(exampleInput.Id, exampleInput.Name, exampleInput.Description);
@@ -72,7 +71,7 @@ namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.UpdateC
             CategoryModelOutput output = await useCase.Handle(input, CancellationToken.None);
 
             //Assert
-            var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(output.Id);
+            var dbCategory = await _fixture.CreateDbContext(true).Categories.FindAsync(output.Id);
 
             dbCategory.Should().NotBeNull();
             dbCategory!.Name.Should().Be(input.Name);
@@ -89,7 +88,7 @@ namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.UpdateC
         [Theory(DisplayName = nameof(UpdateCategoryOnlyName))]
         [Trait("Integration/Application", "UpdateCategory - Use Cases")]
         [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 5, MemberType = typeof(UpdateCategoryTestDataGenerator))]
-        public async Task UpdateCategoryOnlyName(DomianEntity.Category exampleCategory, UpdateCategoryInput exampleInput)
+        public async Task UpdateCategoryOnlyName(Domain.Entity.Category exampleCategory, UpdateCategoryInput exampleInput)
         {
             //Arrange
             var input = new UpdateCategoryInput(exampleInput.Id, exampleInput.Name);
@@ -106,7 +105,7 @@ namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.UpdateC
             CategoryModelOutput output = await useCase.Handle(input, CancellationToken.None);
 
             //Assert
-            var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(output.Id);
+            var dbCategory = await _fixture.CreateDbContext(true).Categories.FindAsync(output.Id);
 
             dbCategory.Should().NotBeNull();
             dbCategory!.Name.Should().Be(input.Name);

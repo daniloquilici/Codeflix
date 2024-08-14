@@ -1,6 +1,6 @@
-﻿using quilici.Codeflix.Domain.Exceptions;
+﻿using quilici.Codeflix.Catalog.Domain.Exceptions;
 
-namespace quilici.Codeflix.Domain.Validation
+namespace quilici.Codeflix.Catalog.Domain.Validation
 {
     public class DomainValidation
     {

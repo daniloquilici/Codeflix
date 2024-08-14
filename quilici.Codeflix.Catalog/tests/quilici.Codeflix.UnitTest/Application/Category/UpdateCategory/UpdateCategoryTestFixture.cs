@@ -1,8 +1,8 @@
-﻿using quilici.Codeflix.Application.UseCases.Category.UpdateCategory;
-using quilici.Codeflix.UnitTest.Application.Category.Common;
+﻿using quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
+using quilici.Codeflix.Catalog.UnitTest.Application.Category.Common;
 using Xunit;
 
-namespace quilici.Codeflix.UnitTest.Application.Category.UpdateCategory
+namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.UpdateCategory
 {
     [CollectionDefinition(nameof(UpdateCategoryTestFixture))]
     public class UpdateCategoryTestFixtureCollection : ICollectionFixture<UpdateCategoryTestFixture>

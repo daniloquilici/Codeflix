@@ -1,10 +1,9 @@
-﻿using quilici.Codeflix.Application.UseCases.Category.ListCategories;
-using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
-using quilici.Codeflix.UnitTest.Application.Category.Common;
+﻿using quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
+using quilici.Codeflix.Catalog.UnitTest.Application.Category.Common;
 using Xunit;
-using DomianEntity = quilici.Codeflix.Domain.Entity;
 
-namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
+namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.ListCategories
 {
     [CollectionDefinition(nameof(ListCategoriesTestFixture))]
     public class ListCategoriesTestFixtureCollection : ICollectionFixture<ListCategoriesTestFixture>
@@ -13,9 +12,9 @@ namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
 
     public class ListCategoriesTestFixture : CategoryUsesCaseBaseFixture
     {
-        public List<DomianEntity.Category> GetExampleCategoryList(int length = 10)
+        public List<Catalog.Domain.Entity.Category> GetExampleCategoryList(int length = 10)
         {
-            var list = new List<DomianEntity.Category>();
+            var list = new List<Catalog.Domain.Entity.Category>();
             for (var i = 0; i < length; i++)
                 list.Add(GetExampleCategory());
 

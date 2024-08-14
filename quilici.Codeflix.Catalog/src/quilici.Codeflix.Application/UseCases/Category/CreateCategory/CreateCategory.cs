@@ -1,9 +1,9 @@
-﻿using quilici.Codeflix.Application.Interfaces;
-using quilici.Codeflix.Application.UseCases.Category.Common;
-using quilici.Codeflix.Domain.Repository;
-using DomianEntity = quilici.Codeflix.Domain.Entity;
+﻿using quilici.Codeflix.Catalog.Application.Interfaces;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.Domain.Repository;
+using DomianEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
-namespace quilici.Codeflix.Application.UseCases.Category.CreateCategory
+namespace quilici.Codeflix.Catalog.Application.UseCases.Category.CreateCategory
 {
     public class CreateCategory : ICreateCategory
     {

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace quilici.Codeflix.Application.UseCases.Category.GetCategory
+namespace quilici.Codeflix.Catalog.Application.UseCases.Category.GetCategory
 {
     public class GetCategoryInputValidator : AbstractValidator<GetCategoryInput>
     {

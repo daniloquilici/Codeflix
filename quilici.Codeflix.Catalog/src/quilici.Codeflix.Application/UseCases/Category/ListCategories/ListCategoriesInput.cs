@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using quilici.Codeflix.Application.Common;
-using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
+using quilici.Codeflix.Catalog.Application.Common;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 
-namespace quilici.Codeflix.Application.UseCases.Category.ListCategories
+namespace quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories
 {
     public class ListCategoriesInput : PaginatedListInput, IRequest<ListCategoriesOutput>
     {

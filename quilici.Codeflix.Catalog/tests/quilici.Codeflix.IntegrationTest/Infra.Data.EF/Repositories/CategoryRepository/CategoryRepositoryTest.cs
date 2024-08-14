@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
-using quilici.Codeflix.Application.Exceptions;
-using quilici.Codeflix.Domain.Entity;
-using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
-using quilici.Codeflix.Infra.Data.EF;
+using quilici.Codeflix.Catalog.Application.Exceptions;
+using quilici.Codeflix.Catalog.Domain.Entity;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
+using quilici.Codeflix.Catalog.Infra.Data.EF;
 using Xunit;
-using Repository = quilici.Codeflix.Infra.Data.EF.Repositories;
+using Repository = quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
 
-namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRepository
+namespace quilici.Codeflix.Catalog.IntegrationTest.Infra.Data.EF.Repositories.CategoryRepository
 {
     [Collection(nameof(CategoryRepositoryTestFixture))]
     public class CategoryRepositoryTest
@@ -29,7 +29,7 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRe
             await categoryRepository.Insert(exampleCategory, CancellationToken.None);
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(exampleCategory.Id);
+            var dbCategory = await _fixture.CreateDbContext(true).Categories.FindAsync(exampleCategory.Id);
 
             dbCategory.Should().NotBeNull();
             dbCategory!.Name.Should().Be(exampleCategory.Name);
@@ -94,7 +94,7 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRe
             await categoryRepository.Update(exampleCategory, CancellationToken.None);
             await dbContext.SaveChangesAsync();
 
-            var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(exampleCategory.Id);
+            var dbCategory = await _fixture.CreateDbContext(true).Categories.FindAsync(exampleCategory.Id);
             //var dbCategory = await dbContext.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == exampleCategory.Id);
 
             dbCategory.Should().NotBeNull();
@@ -120,7 +120,7 @@ namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRe
             await categoryRepository.Delete(exampleCategory, CancellationToken.None);
             await dbContext.SaveChangesAsync();
 
-            var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(exampleCategory.Id);
+            var dbCategory = await _fixture.CreateDbContext(true).Categories.FindAsync(exampleCategory.Id);
             //var dbCategory = await dbContext.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == exampleCategory.Id);
 
             dbCategory.Should().BeNull();

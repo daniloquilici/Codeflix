@@ -1,13 +1,12 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using quilici.Codeflix.Application.Exceptions;
-using quilici.Codeflix.Infra.Data.EF;
-using quilici.Codeflix.Infra.Data.EF.Repositories;
-using System.Collections.Immutable;
+using quilici.Codeflix.Catalog.Application.Exceptions;
+using quilici.Codeflix.Catalog.Infra.Data.EF;
+using quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
 using Xunit;
-using ApplicationUseCase = quilici.Codeflix.Application.UseCases.Category.DeleteCategory;
+using ApplicationUseCase = quilici.Codeflix.Catalog.Application.UseCases.Category.DeleteCategory;
 
-namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.DeleteCategory
+namespace quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Category.DeleteCategory
 {
     [Collection(nameof(DeleteCategoryTestFixture))]
     public class DeleteCategoryTest
@@ -36,7 +35,7 @@ namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.DeleteC
             var input = new ApplicationUseCase.DeleteCategoryInput(categoryExample.Id);
 
             await useCase.Handle(input, CancellationToken.None);
-            
+
             var assertDbContext = _fixture.CreateDbContext(true);
             var dbCategoryDeleted = await assertDbContext.Categories.FindAsync(categoryExample.Id);
 
@@ -60,7 +59,7 @@ namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.DeleteC
 
             var input = new ApplicationUseCase.DeleteCategoryInput(Guid.NewGuid());
 
-            var task = async () =>  await useCase.Handle(input, CancellationToken.None);
+            var task = async () => await useCase.Handle(input, CancellationToken.None);
             await task.Should().ThrowAsync<NotFoundException>().WithMessage($"Category '{input.Id}' not found.");
         }
     }

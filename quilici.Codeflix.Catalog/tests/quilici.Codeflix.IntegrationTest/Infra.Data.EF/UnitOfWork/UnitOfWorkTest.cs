@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
-using UnitOfWorkInfra = quilici.Codeflix.Infra.Data.EF;
+using UnitOfWorkInfra = quilici.Codeflix.Catalog.Infra.Data.EF;
 
-namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.UnitOfWork
+namespace quilici.Codeflix.Catalog.IntegrationTest.Infra.Data.EF.UnitOfWork
 {
     [Collection(nameof(UnitOfWorkTestFixture))]
     public class UnitOfWorkTest

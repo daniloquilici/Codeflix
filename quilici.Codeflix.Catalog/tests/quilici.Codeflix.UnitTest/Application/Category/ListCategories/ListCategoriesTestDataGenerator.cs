@@ -1,6 +1,6 @@
-﻿using quilici.Codeflix.Application.UseCases.Category.ListCategories;
+﻿using quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 
-namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
+namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.ListCategories
 {
     public class ListCategoriesTestDataGenerator
     {

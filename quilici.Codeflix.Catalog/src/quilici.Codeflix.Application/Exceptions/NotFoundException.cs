@@ -1,4 +1,4 @@
-﻿namespace quilici.Codeflix.Application.Exceptions
+﻿namespace quilici.Codeflix.Catalog.Application.Exceptions
 {
     public class NotFoundException : ApplicationException
     {
@@ -6,7 +6,7 @@
         {
         }
 
-        public static void ThrowIfNull(object? @object, string exceptionMessage) 
+        public static void ThrowIfNull(object? @object, string exceptionMessage)
         {
             if (@object == null)
                 throw new NotFoundException(exceptionMessage);

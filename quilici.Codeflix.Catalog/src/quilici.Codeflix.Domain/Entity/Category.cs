@@ -1,7 +1,7 @@
-﻿using quilici.Codeflix.Domain.SeedWork;
-using quilici.Codeflix.Domain.Validation;
+﻿using quilici.Codeflix.Catalog.Domain.SeedWork;
+using quilici.Codeflix.Catalog.Domain.Validation;
 
-namespace quilici.Codeflix.Domain.Entity
+namespace quilici.Codeflix.Catalog.Domain.Entity
 {
     public class Category : AggregateRoot
     {

@@ -1,4 +1,4 @@
-﻿namespace quilici.Codeflix.Domain.SeedWork.SearchableRepository
+﻿namespace quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository
 {
     public enum SearchOrder
     {

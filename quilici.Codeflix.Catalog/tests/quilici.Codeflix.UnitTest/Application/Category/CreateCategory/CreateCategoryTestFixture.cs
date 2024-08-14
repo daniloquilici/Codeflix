@@ -1,8 +1,8 @@
-﻿using quilici.Codeflix.Application.UseCases.Category.CreateCategory;
-using quilici.Codeflix.UnitTest.Application.Category.Common;
+﻿using quilici.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
+using quilici.Codeflix.Catalog.UnitTest.Application.Category.Common;
 using Xunit;
 
-namespace quilici.Codeflix.UnitTest.Application.Category.CreateCategory
+namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.CreateCategory
 {
     [CollectionDefinition(nameof(CreateCategoryTestFixture))]
     public class CreateCategoryTestFixtureCollection : ICollectionFixture<CreateCategoryTestFixture>

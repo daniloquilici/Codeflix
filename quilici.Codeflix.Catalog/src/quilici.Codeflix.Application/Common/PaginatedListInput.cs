@@ -1,6 +1,6 @@
-﻿using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
+﻿using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 
-namespace quilici.Codeflix.Application.Common
+namespace quilici.Codeflix.Catalog.Application.Common
 {
     public abstract class PaginatedListInput
     {

@@ -1,13 +1,13 @@
 ﻿using FluentAssertions;
-using quilici.Codeflix.Application.UseCases.Category.Common;
-using quilici.Codeflix.Application.UseCases.Category.ListCategories;
-using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
-using quilici.Codeflix.Infra.Data.EF;
-using quilici.Codeflix.Infra.Data.EF.Repositories;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
+using quilici.Codeflix.Catalog.Infra.Data.EF;
+using quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
 using Xunit;
-using ApplicationUseCases = quilici.Codeflix.Application.UseCases.Category.ListCategories;
+using ApplicationUseCases = quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 
-namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.ListCategories
+namespace quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Category.ListCategories
 {
     [Collection(nameof(ListCategoriesTestFixture))]
     public class ListCategoriesTest

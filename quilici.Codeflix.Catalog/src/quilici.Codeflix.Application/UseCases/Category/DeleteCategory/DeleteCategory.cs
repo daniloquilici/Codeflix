@@ -1,7 +1,7 @@
-﻿using quilici.Codeflix.Application.Interfaces;
-using quilici.Codeflix.Domain.Repository;
+﻿using quilici.Codeflix.Catalog.Application.Interfaces;
+using quilici.Codeflix.Catalog.Domain.Repository;
 
-namespace quilici.Codeflix.Application.UseCases.Category.DeleteCategory
+namespace quilici.Codeflix.Catalog.Application.UseCases.Category.DeleteCategory
 {
     public class DeleteCategory : IDeleteCategory
     {

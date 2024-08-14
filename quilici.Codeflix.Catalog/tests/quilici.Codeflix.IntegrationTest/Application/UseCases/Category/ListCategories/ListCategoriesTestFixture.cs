@@ -1,25 +1,24 @@
-﻿using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
-using quilici.Codeflix.IntegrationTest.Application.UseCases.Category.Common;
+﻿using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
+using quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Category.Common;
 using Xunit;
-using DomainEntity = quilici.Codeflix.Domain.Entity;
 
-namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.ListCategories
+namespace quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Category.ListCategories
 {
     [CollectionDefinition(nameof(ListCategoriesTestFixture))]
     public class ListCategoriesTestFixturaCollection : ICollectionFixture<ListCategoriesTestFixture> { }
 
     public class ListCategoriesTestFixture : CategoryUseCasesBaseFixture
     {
-        public List<DomainEntity.Category> GetExampleCategoriesListWithName(List<string> names) => names.Select(x =>
+        public List<Domain.Entity.Category> GetExampleCategoriesListWithName(List<string> names) => names.Select(x =>
         {
             var category = GetExampleCategory();
             category.Update(x);
             return category;
         }).ToList();
 
-        public List<DomainEntity.Category> CloneCategoryListOrdered(List<DomainEntity.Category> categoryList, string orderBy, SearchOrder order)
+        public List<Domain.Entity.Category> CloneCategoryListOrdered(List<Domain.Entity.Category> categoryList, string orderBy, SearchOrder order)
         {
-            var listClone = new List<DomainEntity.Category>(categoryList);
+            var listClone = new List<Domain.Entity.Category>(categoryList);
 
             var orderedEnumerable = (orderBy.ToLower(), order) switch
             {

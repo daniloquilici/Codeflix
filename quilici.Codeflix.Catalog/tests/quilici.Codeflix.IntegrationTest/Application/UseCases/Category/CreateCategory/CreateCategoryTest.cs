@@ -1,20 +1,20 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using quilici.Codeflix.Application.UseCases.Category.CreateCategory;
-using quilici.Codeflix.Domain.Exceptions;
-using quilici.Codeflix.Infra.Data.EF;
-using quilici.Codeflix.Infra.Data.EF.Repositories;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
+using quilici.Codeflix.Catalog.Infra.Data.EF;
+using quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
 using Xunit;
-using ApplicationUseCases = quilici.Codeflix.Application.UseCases.Category.CreateCategory;
+using ApplicationUseCases = quilici.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 
-namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.CreateCategory
+namespace quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Category.CreateCategory
 {
     [Collection(nameof(CreateCategoryTestFixture))]
     public class CreateCategoryTest
     {
         private readonly CreateCategoryTestFixture _fixture;
 
-        public CreateCategoryTest(CreateCategoryTestFixture fixture) => this._fixture = fixture;
+        public CreateCategoryTest(CreateCategoryTestFixture fixture) => _fixture = fixture;
 
         [Fact(DisplayName = nameof(CreateCategory))]
         [Trait("Integration/Application", "CreateCategory - Use cases")]
@@ -34,7 +34,7 @@ namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.CreateC
 
             //Assert
 
-            var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(output.Id);
+            var dbCategory = await _fixture.CreateDbContext(true).Categories.FindAsync(output.Id);
 
             dbCategory.Should().NotBeNull();
             dbCategory!.Name.Should().Be(input.Name);
@@ -68,7 +68,7 @@ namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.CreateC
 
             //Assert
 
-            var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(output.Id);
+            var dbCategory = await _fixture.CreateDbContext(true).Categories.FindAsync(output.Id);
 
             dbCategory.Should().NotBeNull();
             dbCategory!.Name.Should().Be(input.Name);
@@ -103,7 +103,7 @@ namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.CreateC
 
             //Assert
 
-            var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(output.Id);
+            var dbCategory = await _fixture.CreateDbContext(true).Categories.FindAsync(output.Id);
 
             dbCategory.Should().NotBeNull();
             dbCategory!.Name.Should().Be(input.Name);

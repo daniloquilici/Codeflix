@@ -1,6 +1,6 @@
-﻿using quilici.Codeflix.Application.Interfaces;
+﻿using quilici.Codeflix.Catalog.Application.Interfaces;
 
-namespace quilici.Codeflix.Infra.Data.EF
+namespace quilici.Codeflix.Catalog.Infra.Data.EF
 {
     public class UnitOfWork : IUnitOfWork
     {

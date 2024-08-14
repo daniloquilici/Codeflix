@@ -1,8 +1,8 @@
-﻿using quilici.Codeflix.Application.UseCases.Category.Common;
-using quilici.Codeflix.Domain.Repository;
-using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
+﻿using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.Domain.Repository;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 
-namespace quilici.Codeflix.Application.UseCases.Category.ListCategories
+namespace quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories
 {
     public class ListCategories : IListCategories
     {
@@ -19,7 +19,7 @@ namespace quilici.Codeflix.Application.UseCases.Category.ListCategories
 
             //var output = new ListCategoriesOutput(searchOutput.CurrentPage, searchOutput.PerPage, searchOutput.Total, searchOutput.Items.Select(x => CategoryModelOutput.FromCategory(x)).ToList());
             //Mesmo comando que a linha acima
-            return new ListCategoriesOutput(searchOutput.CurrentPage, searchOutput.PerPage, searchOutput.Total, searchOutput.Items.Select(CategoryModelOutput.FromCategory).ToList());           
+            return new ListCategoriesOutput(searchOutput.CurrentPage, searchOutput.PerPage, searchOutput.Total, searchOutput.Items.Select(CategoryModelOutput.FromCategory).ToList());
         }
     }
 }

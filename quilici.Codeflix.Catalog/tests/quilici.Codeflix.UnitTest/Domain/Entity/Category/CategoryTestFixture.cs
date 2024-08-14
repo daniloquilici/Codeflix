@@ -1,8 +1,7 @@
-﻿using quilici.Codeflix.UnitTest.Common;
+﻿using quilici.Codeflix.Catalog.UnitTest.Common;
 using Xunit;
-using DomainEntity = quilici.Codeflix.Domain.Entity;
 
-namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
+namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Category
 {
     [CollectionDefinition(nameof(CategoryTestFixture))]
     public class CategiryTestFixtureCollection : ICollectionFixture<CategoryTestFixture>
@@ -37,7 +36,7 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
             return categoryDescription;
         }
 
-        public DomainEntity.Category GetValidCategory() => new(GetValidCategoryName(), GetValidCategoryDescription());
+        public Catalog.Domain.Entity.Category GetValidCategory() => new(GetValidCategoryName(), GetValidCategoryDescription());
     }
 }
 

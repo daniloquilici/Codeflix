@@ -1,6 +1,6 @@
-﻿using Domainentity = quilici.Codeflix.Domain.Entity;
+﻿using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
-namespace quilici.Codeflix.Application.UseCases.Category.Common
+namespace quilici.Codeflix.Catalog.Application.UseCases.Category.Common
 {
     public class CategoryModelOutput
     {
@@ -19,7 +19,7 @@ namespace quilici.Codeflix.Application.UseCases.Category.Common
             CreatedAt = createdAt;
         }
 
-        public static CategoryModelOutput FromCategory(Domainentity.Category category) =>
+        public static CategoryModelOutput FromCategory(DomainEntity.Category category) =>
             new(
                 category.Id,
                 category.Name,

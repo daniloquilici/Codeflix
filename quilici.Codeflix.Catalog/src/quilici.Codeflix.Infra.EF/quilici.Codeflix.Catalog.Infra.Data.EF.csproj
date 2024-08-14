@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\quilici.Codeflix.Application\quilici.Codeflix.Application.csproj" />
-    <ProjectReference Include="..\quilici.Codeflix.Domain\quilici.Codeflix.Domain.csproj" />
+    <ProjectReference Include="..\quilici.Codeflix.Application\quilici.Codeflix.Catalog.Application.csproj" />
+    <ProjectReference Include="..\quilici.Codeflix.Domain\quilici.Codeflix.Catalog.Domain.csproj" />
   </ItemGroup>
 
 </Project>

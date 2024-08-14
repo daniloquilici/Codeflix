@@ -1,10 +1,9 @@
 ﻿using Moq;
-using quilici.Codeflix.Application.Interfaces;
-using quilici.Codeflix.Domain.Repository;
-using quilici.Codeflix.UnitTest.Common;
-using DomianEntity = quilici.Codeflix.Domain.Entity;
+using quilici.Codeflix.Catalog.Application.Interfaces;
+using quilici.Codeflix.Catalog.Domain.Repository;
+using quilici.Codeflix.Catalog.UnitTest.Common;
 
-namespace quilici.Codeflix.UnitTest.Application.Category.Common
+namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.Common
 {
     public abstract class CategoryUsesCaseBaseFixture : BaseFixture
     {
@@ -37,6 +36,6 @@ namespace quilici.Codeflix.UnitTest.Application.Category.Common
 
         public bool GetRandoBoolean() => new Random().NextDouble() < 0.5;
 
-        public DomianEntity.Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
+        public Catalog.Domain.Entity.Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
     }
 }

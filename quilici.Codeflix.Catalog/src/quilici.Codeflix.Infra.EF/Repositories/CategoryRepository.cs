@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using quilici.Codeflix.Application.Exceptions;
-using quilici.Codeflix.Domain.Entity;
-using quilici.Codeflix.Domain.Repository;
-using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
+using quilici.Codeflix.Catalog.Application.Exceptions;
+using quilici.Codeflix.Catalog.Domain.Entity;
+using quilici.Codeflix.Catalog.Domain.Repository;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
+using quilici.Codeflix.Catalog.Infra.Data.EF;
 using System.Linq.Expressions;
 
-namespace quilici.Codeflix.Infra.Data.EF.Repositories
+namespace quilici.Codeflix.Catalog.Infra.Data.EF.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {
@@ -23,7 +24,7 @@ namespace quilici.Codeflix.Infra.Data.EF.Repositories
         }
 
         public async Task<Category> Get(Guid id, CancellationToken cancellationToken)
-        {            
+        {
             var category = await _categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
             //var category = await _categories.FindAsync(new object[] { id }, cancellationToken);
 
@@ -51,20 +52,20 @@ namespace quilici.Codeflix.Infra.Data.EF.Repositories
 
             var total = await query.CountAsync();
             var items = await query.Skip(toSkip).Take(searchInput.PerPage).ToListAsync();
-            return new (searchInput.Page, searchInput.PerPage, total, items);
+            return new(searchInput.Page, searchInput.PerPage, total, items);
         }
 
-        private IQueryable<Category> AddOrderToQuery(IQueryable<Category> query, string orderProperty, SearchOrder order)       
+        private IQueryable<Category> AddOrderToQuery(IQueryable<Category> query, string orderProperty, SearchOrder order)
             => (orderProperty.ToLower(), order) switch
-               {
-                   ("name", SearchOrder.Asc) => query.OrderBy(x => x.Name),
-                   ("name", SearchOrder.Desc) => query.OrderByDescending(x => x.Name),
-                   ("id", SearchOrder.Asc) => query.OrderBy(x => x.Id),
-                   ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
-                   ("createdat", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
-                   ("createdat", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
-                   _ => query.OrderBy(x => x.Name)
-               };
+            {
+                ("name", SearchOrder.Asc) => query.OrderBy(x => x.Name),
+                ("name", SearchOrder.Desc) => query.OrderByDescending(x => x.Name),
+                ("id", SearchOrder.Asc) => query.OrderBy(x => x.Id),
+                ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
+                ("createdat", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
+                ("createdat", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
+                _ => query.OrderBy(x => x.Name)
+            };
 
         public Task Update(Category aggregate, CancellationToken _) => Task.FromResult(_categories.Update(aggregate));
     }

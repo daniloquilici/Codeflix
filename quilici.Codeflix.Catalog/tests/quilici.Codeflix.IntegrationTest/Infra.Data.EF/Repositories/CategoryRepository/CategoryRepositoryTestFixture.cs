@@ -1,9 +1,9 @@
-﻿using quilici.Codeflix.Domain.Entity;
-using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
-using quilici.Codeflix.IntegrationTest.Base;
+﻿using quilici.Codeflix.Catalog.Domain.Entity;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
+using quilici.Codeflix.Catalog.IntegrationTest.Base;
 using Xunit;
 
-namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.Repositories.CategoryRepository
+namespace quilici.Codeflix.Catalog.IntegrationTest.Infra.Data.EF.Repositories.CategoryRepository
 {
     [CollectionDefinition(nameof(CategoryRepositoryTestFixture))]
     public class CategoryRepositoryTestFixtureCollection : ICollectionFixture<CategoryRepositoryTestFixture>

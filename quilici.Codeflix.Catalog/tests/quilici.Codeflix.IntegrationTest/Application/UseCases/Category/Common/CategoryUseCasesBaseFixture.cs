@@ -1,8 +1,7 @@
-﻿using quilici.Codeflix.IntegrationTest.Base;
-using DomainEntity = quilici.Codeflix.Domain.Entity;
+﻿using quilici.Codeflix.Catalog.IntegrationTest.Base;
 
 
-namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.Common
+namespace quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Category.Common
 {
     public class CategoryUseCasesBaseFixture : BaseFixture
     {
@@ -31,9 +30,9 @@ namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.Common
 
         public bool GetRandoBoolean() => new Random().NextDouble() < 0.5;
 
-        public DomainEntity.Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
+        public Domain.Entity.Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
 
-        public List<DomainEntity.Category> GetExampleCategoriesList(int length = 10) => Enumerable.Range(0, length)
+        public List<Domain.Entity.Category> GetExampleCategoriesList(int length = 10) => Enumerable.Range(0, length)
             .Select(_ => GetExampleCategory()).ToList();
     }
 }

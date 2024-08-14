@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
-using quilici.Codeflix.Application.UseCases.Category.GetCategory;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.GetCategory;
 using Xunit;
 
-namespace quilici.Codeflix.UnitTest.Application.Category.GetCategory
+namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.GetCategory
 {
     [Collection(nameof(GetCategoryTestFixture))]
     public class GetCategoryInputValidatorTest

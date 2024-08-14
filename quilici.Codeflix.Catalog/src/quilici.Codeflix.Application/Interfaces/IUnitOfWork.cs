@@ -1,4 +1,4 @@
-﻿namespace quilici.Codeflix.Application.Interfaces
+﻿namespace quilici.Codeflix.Catalog.Application.Interfaces
 {
     public interface IUnitOfWork
     {

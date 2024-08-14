@@ -1,8 +1,8 @@
-using quilici.Codeflix.Domain.Entity;
-using quilici.Codeflix.IntegrationTest.Base;
+using quilici.Codeflix.Catalog.Domain.Entity;
+using quilici.Codeflix.Catalog.IntegrationTest.Base;
 using Xunit;
 
-namespace quilici.Codeflix.IntegrationTest.Infra.Data.EF.UnitOfWork
+namespace quilici.Codeflix.Catalog.IntegrationTest.Infra.Data.EF.UnitOfWork
 {
     [CollectionDefinition(nameof(UnitOfWorkTestFixture))]
     public class UnitOfWorkTestFixtureCollection : ICollectionFixture<UnitOfWorkTestFixture>

@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using quilici.Codeflix.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
 
-namespace quilici.Codeflix.Application.UseCases.Category.GetCategory
+namespace quilici.Codeflix.Catalog.Application.UseCases.Category.GetCategory
 {
     public class GetCategoryInput : IRequest<CategoryModelOutput>
     {

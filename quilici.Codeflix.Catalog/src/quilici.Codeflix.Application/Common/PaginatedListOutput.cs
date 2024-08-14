@@ -1,4 +1,4 @@
-﻿namespace quilici.Codeflix.Application.Common
+﻿namespace quilici.Codeflix.Catalog.Application.Common
 {
     public abstract class PaginatedListOutput<TOutputItem>
     {

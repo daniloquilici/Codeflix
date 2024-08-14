@@ -1,14 +1,13 @@
 ﻿using FluentAssertions;
 using Moq;
-using quilici.Codeflix.Application.Exceptions;
-using quilici.Codeflix.Application.UseCases.Category.Common;
-using quilici.Codeflix.Application.UseCases.Category.UpdateCategory;
-using quilici.Codeflix.Domain.Exceptions;
+using quilici.Codeflix.Catalog.Application.Exceptions;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
 using Xunit;
-using DomianEntity = quilici.Codeflix.Domain.Entity;
-using UseCase = quilici.Codeflix.Application.UseCases.Category.UpdateCategory;
+using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 
-namespace quilici.Codeflix.UnitTest.Application.Category.UpdateCategory
+namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.UpdateCategory
 {
     [Collection(nameof(UpdateCategoryTestFixture))]
     public class UpdateCategoryTest
@@ -23,7 +22,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.UpdateCategory
         [Theory(DisplayName = nameof(UpdateCategory))]
         [Trait("Application", "UpdateCategory - Use Cases")]
         [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 10, MemberType = typeof(UpdateCategoryTestDataGenerator))]
-        public async Task UpdateCategory(DomianEntity.Category exampleCategory, UpdateCategoryInput input)
+        public async Task UpdateCategory(Catalog.Domain.Entity.Category exampleCategory, UpdateCategoryInput input)
         {
             //Arrange
             var repositoryMock = _fixture.GetCategoryRepositoryMock();
@@ -74,7 +73,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.UpdateCategory
         [Theory(DisplayName = nameof(UpdateCategoryWithoutProvidingIsActive))]
         [Trait("Application", "UpdateCategory - Use Cases")]
         [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 10, MemberType = typeof(UpdateCategoryTestDataGenerator))]
-        public async Task UpdateCategoryWithoutProvidingIsActive(DomianEntity.Category exampleCategory, UpdateCategoryInput exampleIput)
+        public async Task UpdateCategoryWithoutProvidingIsActive(Catalog.Domain.Entity.Category exampleCategory, UpdateCategoryInput exampleIput)
         {
             var input = new UpdateCategoryInput(exampleIput.Id, exampleIput.Name, exampleIput.Description);
 
@@ -106,7 +105,7 @@ namespace quilici.Codeflix.UnitTest.Application.Category.UpdateCategory
         [Theory(DisplayName = nameof(UpdateCategoryOnlyName))]
         [Trait("Application", "UpdateCategory - Use Cases")]
         [MemberData(nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate), parameters: 10, MemberType = typeof(UpdateCategoryTestDataGenerator))]
-        public async Task UpdateCategoryOnlyName(DomianEntity.Category exampleCategory, UpdateCategoryInput exampleIput)
+        public async Task UpdateCategoryOnlyName(Catalog.Domain.Entity.Category exampleCategory, UpdateCategoryInput exampleIput)
         {
             var input = new UpdateCategoryInput(exampleIput.Id, exampleIput.Name);
 

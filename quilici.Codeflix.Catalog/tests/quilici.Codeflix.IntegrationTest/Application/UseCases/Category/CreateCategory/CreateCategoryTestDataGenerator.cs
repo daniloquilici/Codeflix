@@ -1,4 +1,4 @@
-﻿namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.CreateCategory
+﻿namespace quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Category.CreateCategory
 {
     public class CreateCategoryTestDataGenerator
     {

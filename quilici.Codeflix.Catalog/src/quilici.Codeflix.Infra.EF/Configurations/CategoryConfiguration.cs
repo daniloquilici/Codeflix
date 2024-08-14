@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using quilici.Codeflix.Domain.Entity;
+using quilici.Codeflix.Catalog.Domain.Entity;
 
-namespace quilici.Codeflix.Infra.Data.EF.Configurations
+namespace quilici.Codeflix.Catalog.Infra.Data.EF.Configurations
 {
     internal class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {

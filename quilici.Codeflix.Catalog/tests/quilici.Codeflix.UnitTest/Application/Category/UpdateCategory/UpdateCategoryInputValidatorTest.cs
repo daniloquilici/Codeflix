@@ -1,8 +1,8 @@
 ﻿using Xunit;
 using FluentAssertions;
-using UseCase = quilici.Codeflix.Application.UseCases.Category.UpdateCategory;
+using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 
-namespace quilici.Codeflix.UnitTest.Application.Category.UpdateCategory
+namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.UpdateCategory
 {
     [Collection(nameof(UpdateCategoryTestFixture))]
     public class UpdateCategoryInputValidatorTest

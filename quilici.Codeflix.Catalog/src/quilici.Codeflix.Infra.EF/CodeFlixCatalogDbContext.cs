@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using quilici.Codeflix.Domain.Entity;
-using quilici.Codeflix.Infra.Data.EF.Configurations;
+using quilici.Codeflix.Catalog.Domain.Entity;
+using quilici.Codeflix.Catalog.Infra.Data.EF.Configurations;
 
-namespace quilici.Codeflix.Infra.Data.EF
+namespace quilici.Codeflix.Catalog.Infra.Data.EF
 {
     public class CodeFlixCatalogDbContext : DbContext
     {

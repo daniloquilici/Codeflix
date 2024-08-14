@@ -1,7 +1,7 @@
-﻿using quilici.Codeflix.Application.UseCases.Category.Common;
-using quilici.Codeflix.Domain.Repository;
+﻿using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.Domain.Repository;
 
-namespace quilici.Codeflix.Application.UseCases.Category.GetCategory
+namespace quilici.Codeflix.Catalog.Application.UseCases.Category.GetCategory
 {
     public class GetCategory : IGetCategory
     {

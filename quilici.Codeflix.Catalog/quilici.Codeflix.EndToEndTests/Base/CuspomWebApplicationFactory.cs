@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using quilici.Codeflix.Infra.Data.EF;
+using quilici.Codeflix.Catalog.Infra.Data.EF;
 
-namespace quilici.Codeflix.EndToEndTests.Base
+namespace quilici.Codeflix.Catalog.EndToEndTests.Base
 {
     public class CuspomWebApplicationFactory<TSartup> : WebApplicationFactory<TSartup>
         where TSartup : class

@@ -1,4 +1,4 @@
-﻿namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.UpdateCategory
+﻿namespace quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Category.UpdateCategory
 {
     public class UpdateCategoryTestDataGenerator
     {

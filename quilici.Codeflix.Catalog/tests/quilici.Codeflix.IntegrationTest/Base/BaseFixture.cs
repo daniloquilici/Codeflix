@@ -1,8 +1,8 @@
 ﻿using Bogus;
 using Microsoft.EntityFrameworkCore;
-using quilici.Codeflix.Infra.Data.EF;
+using quilici.Codeflix.Catalog.Infra.Data.EF;
 
-namespace quilici.Codeflix.IntegrationTest.Base
+namespace quilici.Codeflix.Catalog.IntegrationTest.Base
 {
     public class BaseFixture
     {

@@ -1,7 +1,7 @@
-﻿using quilici.Codeflix.IntegrationTest.Application.UseCases.Category.Common;
+﻿using quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Category.Common;
 using Xunit;
 
-namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.DeleteCategory
+namespace quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Category.DeleteCategory
 {
     [CollectionDefinition(nameof(DeleteCategoryTestFixture))]
     public class DeleteCategoryTestFixtureCollection : ICollectionFixture<DeleteCategoryTestFixture> { }

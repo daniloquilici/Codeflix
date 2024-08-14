@@ -1,4 +1,4 @@
-﻿namespace quilici.Codeflix.Application.Exceptions
+﻿namespace quilici.Codeflix.Catalog.Application.Exceptions
 {
     public abstract class ApplicationException : Exception
     {

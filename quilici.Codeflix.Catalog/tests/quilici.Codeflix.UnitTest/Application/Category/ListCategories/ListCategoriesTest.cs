@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using Moq;
-using quilici.Codeflix.Application.UseCases.Category.Common;
-using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using Xunit;
-using UseCase = quilici.Codeflix.Application.UseCases.Category.ListCategories;
-using DomianEntity = quilici.Codeflix.Domain.Entity;
+using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 
-namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
+namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.ListCategories
 {
     [Collection(nameof(ListCategoriesTestFixture))]
     public class ListCategoriesTest
@@ -27,10 +27,10 @@ namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
             var repositoryMock = _fixture.GetCategoryRepositoryMock();
             var input = _fixture.GetExampleInput();
 
-            var outputRepositorySearch = new SearchOutput<DomianEntity.Category>(
+            var outputRepositorySearch = new SearchOutput<Catalog.Domain.Entity.Category>(
                         currentPage: input.Page,
                         perPage: input.PerPage,
-                        items: (IReadOnlyList<DomianEntity.Category>)_fixture.GetExampleCategoryList(),
+                        items: _fixture.GetExampleCategoryList(),
                         total: new Random().Next(50, 200));
 
             repositoryMock.Setup(x => x.Search(It.Is<SearchInput>(searchInput =>
@@ -75,15 +75,15 @@ namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
         [Theory(DisplayName = nameof(ListInputWithoutAllParameters))]
         [Trait("Appliacation", "ListCategories - Use Cases")]
         [MemberData(nameof(ListCategoriesTestDataGenerator.GetinputsWithoutAllParameters), parameters: 14, MemberType = typeof(ListCategoriesTestDataGenerator))]
-        public async Task ListInputWithoutAllParameters(UseCase.ListCategoriesInput input)
+        public async Task ListInputWithoutAllParameters(ListCategoriesInput input)
         {
             //Arrange
             var categoriesExampleList = _fixture.GetExampleCategoryList();
             var repositoryMock = _fixture.GetCategoryRepositoryMock();
-            var outputRepositorySearch = new SearchOutput<DomianEntity.Category>(
+            var outputRepositorySearch = new SearchOutput<Catalog.Domain.Entity.Category>(
                         currentPage: input.Page,
                         perPage: input.PerPage,
-                        items: (IReadOnlyList<DomianEntity.Category>)_fixture.GetExampleCategoryList(),
+                        items: _fixture.GetExampleCategoryList(),
                         total: new Random().Next(50, 200));
 
             repositoryMock.Setup(x => x.Search(It.Is<SearchInput>(searchInput =>
@@ -133,10 +133,10 @@ namespace quilici.Codeflix.UnitTest.Application.Category.ListCategories
             var repositoryMock = _fixture.GetCategoryRepositoryMock();
             var input = _fixture.GetExampleInput();
 
-            var outputRepositorySearch = new SearchOutput<DomianEntity.Category>(
+            var outputRepositorySearch = new SearchOutput<Catalog.Domain.Entity.Category>(
                         currentPage: input.Page,
                         perPage: input.PerPage,
-                        items: new List<DomianEntity.Category>().AsReadOnly(),
+                        items: new List<Catalog.Domain.Entity.Category>().AsReadOnly(),
                         total: 0);
 
             repositoryMock.Setup(x => x.Search(It.Is<SearchInput>(searchInput =>

@@ -1,8 +1,8 @@
-﻿using quilici.Codeflix.Domain.Entity;
-using quilici.Codeflix.Domain.SeedWork;
-using quilici.Codeflix.Domain.SeedWork.SearchableRepository;
+﻿using quilici.Codeflix.Catalog.Domain.Entity;
+using quilici.Codeflix.Catalog.Domain.SeedWork;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 
-namespace quilici.Codeflix.Domain.Repository
+namespace quilici.Codeflix.Catalog.Domain.Repository
 {
     public interface ICategoryRepository : IGenericRepository<Category>, ISearchableRepository<Category>
     {

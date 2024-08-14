@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using quilici.Codeflix.Infra.Data.EF;
-using DomainEntity = quilici.Codeflix.Domain.Entity;
+using quilici.Codeflix.Catalog.Infra.Data.EF;
 
-namespace quilici.Codeflix.EndToEndTests.Api.Category.Common
+namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.Common
 {
     public class CategoryPersistence
     {
@@ -11,7 +10,7 @@ namespace quilici.Codeflix.EndToEndTests.Api.Category.Common
         public CategoryPersistence(CodeFlixCatalogDbContext context)
             => _context = context;
 
-        public async Task<DomainEntity.Category?> GetById(Guid id)
+        public async Task<Domain.Entity.Category?> GetById(Guid id)
             => await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
 }

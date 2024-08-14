@@ -1,4 +1,4 @@
-﻿namespace quilici.Codeflix.UnitTest.Application.Category.UpdateCategory
+﻿namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.UpdateCategory
 {
     public class UpdateCategoryTestDataGenerator
     {

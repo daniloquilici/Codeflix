@@ -1,9 +1,9 @@
 ﻿using Bogus;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
-using quilici.Codeflix.Infra.Data.EF;
+using quilici.Codeflix.Catalog.Infra.Data.EF;
 
-namespace quilici.Codeflix.EndToEndTests.Base
+namespace quilici.Codeflix.Catalog.EndToEndTests.Base
 {
     public class BaseFixture
     {

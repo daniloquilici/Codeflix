@@ -1,9 +1,8 @@
 ﻿using FluentAssertions;
-using quilici.Codeflix.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
 using System.Net;
-using DominEntity = quilici.Codeflix.Domain.Entity;
 
-namespace quilici.Codeflix.EndToEndTests.Api.Category.CreateCategory
+namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
 {
     [Collection(nameof(CreateCategoryApiTestFixture))]
     public class CreateCategoryApiTest

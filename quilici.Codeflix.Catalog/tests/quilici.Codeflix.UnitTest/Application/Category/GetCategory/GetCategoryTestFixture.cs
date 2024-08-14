@@ -1,7 +1,7 @@
-﻿using quilici.Codeflix.UnitTest.Application.Category.Common;
+﻿using quilici.Codeflix.Catalog.UnitTest.Application.Category.Common;
 using Xunit;
 
-namespace quilici.Codeflix.UnitTest.Application.Category.GetCategory
+namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.GetCategory
 {
     [CollectionDefinition(nameof(GetCategoryTestFixture))]
     public class GetCategoryTestFixtureCollection : ICollectionFixture<GetCategoryTestFixture> { }

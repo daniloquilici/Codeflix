@@ -1,10 +1,10 @@
-﻿using quilici.Codeflix.Infra.Data.EF.Repositories;
-using UseCase = quilici.Codeflix.Application.UseCases.Category.GetCategory;
+﻿using FluentAssertions;
+using quilici.Codeflix.Catalog.Application.Exceptions;
+using quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
 using Xunit;
-using FluentAssertions;
-using quilici.Codeflix.Application.Exceptions;
+using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Category.GetCategory;
 
-namespace quilici.Codeflix.IntegrationTest.Application.UseCases.Category.GetCategory
+namespace quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Category.GetCategory
 {
     [Collection(nameof(GetCategoryTestFixture))]
     public class GetCategoryTest

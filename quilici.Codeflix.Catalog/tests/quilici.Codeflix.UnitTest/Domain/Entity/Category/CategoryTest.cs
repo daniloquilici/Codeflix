@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
-using quilici.Codeflix.Domain.Exceptions;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
 using Xunit;
-using DomainEntity = quilici.Codeflix.Domain.Entity;
+using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
-namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
+namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Category
 {
     [Collection(nameof(CategoryTestFixture))]
     public class CategoryTest
@@ -12,7 +12,7 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
 
         public CategoryTest(CategoryTestFixture categoryTestFixture)
         {
-            this._categoryTestFixture = categoryTestFixture;
+            _categoryTestFixture = categoryTestFixture;
         }
 
         [Fact(DisplayName = nameof(Instantiate))]
@@ -37,7 +37,7 @@ namespace quilici.Codeflix.UnitTest.Domain.Entity.Category
             category.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
             (category.CreatedAt >= dateBefore).Should().BeTrue();
             (category.CreatedAt <= dateAfter).Should().BeTrue();
-            (category.IsActive).Should().BeTrue();
+            category.IsActive.Should().BeTrue();
 
             Assert.NotNull(category);
             Assert.Equal(validCategory.Name, category.Name);

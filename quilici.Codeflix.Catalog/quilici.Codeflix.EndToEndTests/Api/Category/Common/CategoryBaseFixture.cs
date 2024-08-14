@@ -1,6 +1,6 @@
-﻿using quilici.Codeflix.EndToEndTests.Base;
+﻿using quilici.Codeflix.Catalog.EndToEndTests.Base;
 
-namespace quilici.Codeflix.EndToEndTests.Api.Category.Common
+namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.Common
 {
     public class CategoryBaseFixture : BaseFixture
     {

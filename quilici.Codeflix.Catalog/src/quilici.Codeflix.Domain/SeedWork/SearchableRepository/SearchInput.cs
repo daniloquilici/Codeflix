@@ -1,4 +1,4 @@
-﻿namespace quilici.Codeflix.Domain.SeedWork.SearchableRepository
+﻿namespace quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository
 {
     public class SearchInput
     {
@@ -8,7 +8,7 @@
 
         public string Search { get; set; }
 
-        public String OrderBy { get; set; }
+        public string OrderBy { get; set; }
 
         public SearchOrder Order { get; set; }
 

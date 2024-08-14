@@ -1,4 +1,4 @@
-﻿namespace quilici.Codeflix.Domain.Exceptions
+﻿namespace quilici.Codeflix.Catalog.Domain.Exceptions
 {
     public class EntityValidationException : Exception
     {

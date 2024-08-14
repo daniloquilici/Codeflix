@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using Moq;
-using quilici.Codeflix.Application.Exceptions;
+using quilici.Codeflix.Catalog.Application.Exceptions;
 using Xunit;
-using UseCases = quilici.Codeflix.Application.UseCases.Category.DeleteCategory;
+using UseCases = quilici.Codeflix.Catalog.Application.UseCases.Category.DeleteCategory;
 
-namespace quilici.Codeflix.UnitTest.Application.Category.DeleteCategory
+namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.DeleteCategory
 {
     [Collection(nameof(DeleteCategoryTestFixture))]
     public class DeleteCategoryTest

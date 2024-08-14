@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using Moq;
-using quilici.Codeflix.Application.Exceptions;
+using quilici.Codeflix.Catalog.Application.Exceptions;
 using Xunit;
-using UseCase = quilici.Codeflix.Application.UseCases.Category.GetCategory;
+using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Category.GetCategory;
 
-namespace quilici.Codeflix.UnitTest.Application.Category.GetCategory
+namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.GetCategory
 {
     [Collection(nameof(GetCategoryTestFixture))]
     public class GetCategoryTest
