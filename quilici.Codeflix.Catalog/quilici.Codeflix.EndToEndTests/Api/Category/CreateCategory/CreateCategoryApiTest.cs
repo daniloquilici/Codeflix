@@ -12,7 +12,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
         public CreateCategoryApiTest(CreateCategoryApiTestFixture fixture)
             => _fixture = fixture;
 
-        [Fact(DisplayName = "")]
+        [Fact(DisplayName = nameof(CreateCategory))]
         [Trait("EndToEnd/API", "Category - Endpoints")]
         public async Task CreateCategory()
         {

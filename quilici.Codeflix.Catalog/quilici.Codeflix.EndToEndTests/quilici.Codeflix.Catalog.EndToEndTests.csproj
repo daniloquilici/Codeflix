@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\src\quilici.Codeflix.Catalog.Api\quilici.Codeflix.Catalog.Api.csproj" />
     <ProjectReference Include="..\src\quilici.Codeflix.Infra.EF\quilici.Codeflix.Catalog.Infra.Data.EF.csproj" />
   </ItemGroup>
 

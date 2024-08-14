@@ -1,6 +1,5 @@
 ﻿using Bogus;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using quilici.Codeflix.Catalog.Infra.Data.EF;
 
 namespace quilici.Codeflix.Catalog.EndToEndTests.Base
