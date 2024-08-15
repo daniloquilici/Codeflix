@@ -1,5 +1,4 @@
-﻿using MediatR;
-using quilici.Codeflix.Catalog.Application.Interfaces;
+﻿using quilici.Codeflix.Catalog.Application.Interfaces;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 using quilici.Codeflix.Catalog.Domain.Repository;
 using quilici.Codeflix.Catalog.Infra.Data.EF;
@@ -11,7 +10,7 @@ namespace quilici.Codeflix.Catalog.Api.Configurations
     {
         public static IServiceCollection AddUseCases(this IServiceCollection services)
         {
-            services.AddMediatR(typeof(CreateCategory));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateCategory).Assembly));
             services.AddRepositories();
             return services;
         }
