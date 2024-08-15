@@ -10,8 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\quilici.Codeflix.Application\quilici.Codeflix.Catalog.Application.csproj" />
+    <ProjectReference Include="..\quilici.Codeflix.Infra.EF\quilici.Codeflix.Catalog.Infra.Data.EF.csproj" />
   </ItemGroup>
 
 </Project>
