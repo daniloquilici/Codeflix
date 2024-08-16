@@ -52,7 +52,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
             output.Should().NotBeNull();
             output!.Title.Should().Be("One or more validation errors ocurred");
             output.Type.Should().Be("UnprocessableEntity");
-            output.Status.Should().Be((int)HttpStatusCode.UnprocessableEntity);
+            output.Status.Should().Be(StatusCodes.Status422UnprocessableEntity);
             output.Detail.Should().Be(expectedDetail);
         }
     }
