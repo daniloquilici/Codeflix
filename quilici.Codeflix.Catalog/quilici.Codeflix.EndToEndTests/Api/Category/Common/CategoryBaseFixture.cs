@@ -35,5 +35,29 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.Common
         }
 
         public bool GetRandoBoolean() => new Random().NextDouble() < 0.5;
+
+        public string GetInvalidNameTooShort()
+        {
+            return Faker.Commerce.ProductName().Substring(0, 2);
+        }
+
+        public string GetInvalidNameTooLong()
+        {
+            //Name more than 255 character
+            var nameLong = Faker.Commerce.ProductName();
+            while (nameLong.Length < 255)
+                nameLong += $"{nameLong} {Faker.Commerce.ProductName()}";
+
+            return nameLong;
+        }
+
+        public string GetInvalidDescriptionTooLong()
+        {
+            var descriptionTooLong = Faker.Commerce.ProductDescription();
+            while (descriptionTooLong.Length < 10_000)
+                descriptionTooLong += $"{descriptionTooLong} {Faker.Commerce.ProductDescription()}";
+
+            return descriptionTooLong;
+        }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 using System.Net;
 
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
@@ -35,6 +38,22 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
             dbCategory.IsActive.Should().Be(input.IsActive);
             dbCategory.Id.Should().NotBeEmpty();
             dbCategory.CreatedAt.Should().NotBeSameDateAs(default);
+        }
+
+        [Theory(DisplayName = nameof(ThrowWhenCantIntantiateAggregate))]
+        [Trait("EndToEnd/API", "Category - Endpoints")]
+        [MemberData(nameof(CreateCategoryApiTestDataGenerator.GetInvalidInputs), MemberType = typeof(CreateCategoryApiTestDataGenerator))]
+        public async Task ThrowWhenCantIntantiateAggregate(CreateCategoryInput input, string expectedDetail)
+        {
+            var (response, output) = await _fixture.ApiClient.Post<ProblemDetails>("/categories", input);
+
+            response.Should().NotBeNull();
+            response!.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
+            output.Should().NotBeNull();
+            output!.Title.Should().Be("One or more validation errors ocurred");
+            output.Type.Should().Be("UnprocessableEntity");
+            output.Status.Should().Be((int)HttpStatusCode.UnprocessableEntity);
+            output.Detail.Should().Be(expectedDetail);
         }
     }
 }
