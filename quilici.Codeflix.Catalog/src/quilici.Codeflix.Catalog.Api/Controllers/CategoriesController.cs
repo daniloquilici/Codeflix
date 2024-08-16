@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.DeleteCategory;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.GetCategory;
 
 namespace quilici.Codeflix.Catalog.Api.Controllers
@@ -32,6 +33,15 @@ namespace quilici.Codeflix.Catalog.Api.Controllers
         {
             var output = await _mediator.Send(new GetCategoryInput(id), cancellationToken);
             return Ok(output);
+        }
+
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            await _mediator.Send(new DeleteCategoryInput(id), cancellationToken);
+            return NoContent();
         }
     }
 }

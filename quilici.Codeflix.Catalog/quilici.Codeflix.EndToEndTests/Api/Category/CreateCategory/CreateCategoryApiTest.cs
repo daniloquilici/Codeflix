@@ -40,10 +40,10 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
             dbCategory.CreatedAt.Should().NotBeSameDateAs(default);
         }
 
-        [Theory(DisplayName = nameof(ThrowWhenCantIntantiateAggregate))]
+        [Theory(DisplayName = nameof(ErrorWhenCantIntantiateAggregate))]
         [Trait("EndToEnd/API", "Category/Create - Endpoints")]
         [MemberData(nameof(CreateCategoryApiTestDataGenerator.GetInvalidInputs), MemberType = typeof(CreateCategoryApiTestDataGenerator))]
-        public async Task ThrowWhenCantIntantiateAggregate(CreateCategoryInput input, string expectedDetail)
+        public async Task ErrorWhenCantIntantiateAggregate(CreateCategoryInput input, string expectedDetail)
         {
             var (response, output) = await _fixture.ApiClient.Post<ProblemDetails>("/categories", input);
 
