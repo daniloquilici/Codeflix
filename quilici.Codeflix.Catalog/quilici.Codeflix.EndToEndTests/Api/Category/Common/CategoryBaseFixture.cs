@@ -1,4 +1,6 @@
 ﻿using quilici.Codeflix.Catalog.EndToEndTests.Base;
+using System.Net.Sockets;
+using DominEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.Common
 {
@@ -59,5 +61,11 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.Common
 
             return descriptionTooLong;
         }
+
+        public DominEntity.Category GetExampleCategory() 
+            => new (GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
+
+        public IList<DominEntity.Category> GetExampleCategoriesList(int listLenght = 15)
+            => Enumerable.Range(1, listLenght).Select(_ => new DominEntity.Category(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean())).ToList();
     }
 }
