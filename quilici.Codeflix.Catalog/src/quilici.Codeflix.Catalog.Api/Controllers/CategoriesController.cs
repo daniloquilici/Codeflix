@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.GetCategory;
 
 namespace quilici.Codeflix.Catalog.Api.Controllers
 {
@@ -23,6 +24,14 @@ namespace quilici.Codeflix.Catalog.Api.Controllers
         {
             var output = await _mediator.Send(input, cancellationToken);
             return CreatedAtAction(nameof(Create), new { output.Id }, output);
+        }
+
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(CategoryModelOutput), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var output = await _mediator.Send(new GetCategoryInput(id), cancellationToken);
+            return Ok(output);
         }
     }
 }
