@@ -1,10 +1,10 @@
-﻿namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
+﻿namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
 {
     public class UpdateCategoryApiTestDataGenerator
     {
         public static IEnumerable<object[]> GetInvalidInputs()
         {
-            var fixture = new CreateCategoryApiTestFixture();
+            var fixture = new UpdateCategoryApiTestFixture();
             var invalidInputsList = new List<object[]>();
             int totalInvalidCases = 3;
 

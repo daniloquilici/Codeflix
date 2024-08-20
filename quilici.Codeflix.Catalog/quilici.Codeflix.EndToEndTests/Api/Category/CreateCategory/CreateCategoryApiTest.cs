@@ -42,7 +42,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
 
         [Theory(DisplayName = nameof(ErrorWhenCantIntantiateAggregate))]
         [Trait("EndToEnd/API", "Category/Create - Endpoints")]
-        [MemberData(nameof(CreateCategoryApiTestDataGenerator.GetInvalidInputs), MemberType = typeof(CreateCategoryApiTestDataGenerator))]
+        [MemberData(nameof(UpdateCategoryApiTestDataGenerator.GetInvalidInputs), MemberType = typeof(UpdateCategoryApiTestDataGenerator))]
         public async Task ErrorWhenCantIntantiateAggregate(CreateCategoryInput input, string expectedDetail)
         {
             var (response, output) = await _fixture.ApiClient.Post<ProblemDetails>("/categories", input);
