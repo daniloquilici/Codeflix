@@ -55,7 +55,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
             output.Status.Should().Be(StatusCodes.Status422UnprocessableEntity);
             output.Detail.Should().Be(expectedDetail);
         }
-
+        
         public void Dispose()
             => _fixture.CleanPersistence();
     }
