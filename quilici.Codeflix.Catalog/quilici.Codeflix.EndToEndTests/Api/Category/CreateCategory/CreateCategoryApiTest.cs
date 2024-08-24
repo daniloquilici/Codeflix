@@ -8,7 +8,7 @@ using System.Net;
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
 {
     [Collection(nameof(CreateCategoryApiTestFixture))]
-    public class CreateCategoryApiTest
+    public class CreateCategoryApiTest : IDisposable
     {
         private readonly CreateCategoryApiTestFixture _fixture;
 
@@ -55,5 +55,8 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.CreateCategory
             output.Status.Should().Be(StatusCodes.Status422UnprocessableEntity);
             output.Detail.Should().Be(expectedDetail);
         }
+
+        public void Dispose()
+            => _fixture.CleanPersistence();
     }
 }

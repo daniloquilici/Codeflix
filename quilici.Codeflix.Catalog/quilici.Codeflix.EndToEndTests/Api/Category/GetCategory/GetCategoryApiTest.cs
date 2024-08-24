@@ -7,7 +7,7 @@ using System.Net;
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.GetCategory
 {
     [Collection(nameof(GetCategoryApiTestFixture))]
-    public class GetCategoryApiTest
+    public class GetCategoryApiTest : IDisposable
     {
         private readonly GetCategoryApiTestFixture _fixture;
 
@@ -16,7 +16,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.GetCategory
 
         [Fact(DisplayName = nameof(GetCategory))]
         [Trait("EndToEnd/API", "Category/Get - Endpoints")]
-        public async Task GetCategory() 
+        public async Task GetCategory()
         {
             //arrange
             var exempleCategoriesList = _fixture.GetExampleCategoriesList(20);
@@ -57,7 +57,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.GetCategory
             output!.Type.Should().Be("NotFound");
             output.Detail.Should().Be($"Category '{randowGuid}' not found.");
         }
-
-
+        public void Dispose()
+            => _fixture.CleanPersistence();
     }
 }

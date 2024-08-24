@@ -4,6 +4,7 @@ using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.DeleteCategory;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.GetCategory;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 
 namespace quilici.Codeflix.Catalog.Api.Controllers
@@ -54,6 +55,14 @@ namespace quilici.Codeflix.Catalog.Api.Controllers
         {
             await _mediator.Send(new DeleteCategoryInput(id), cancellationToken);
             return NoContent();
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(CategoryModelOutput), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Get([FromQuery] ListCategoriesInput input, CancellationToken cancellationToken)
+        {
+            var output = await _mediator.Send(input, cancellationToken);
+            return Ok(output);
         }
     }
 }
