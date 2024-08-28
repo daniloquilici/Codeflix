@@ -60,8 +60,8 @@ namespace quilici.Codeflix.Catalog.Api.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(CategoryModelOutput), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get(CancellationToken cancellationToken,
-                                             [FromQuery] int? page = null, 
+        public async Task<IActionResult> List(CancellationToken cancellationToken,
+                                             [FromQuery] int? page = null,
                                              [FromQuery] int? perPage = null,
                                              [FromQuery] string? search = null,
                                              [FromQuery] string? sort = null,

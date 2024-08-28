@@ -1,6 +1,4 @@
-﻿using FluentAssertions.Primitives;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.VisualStudio.TestPlatform.Utilities;
+﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using System.Text.Json;
 
@@ -13,7 +11,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Base
         public ApiClient(HttpClient httpClient)
             => _httpClient = httpClient;
 
-        public async Task<(HttpResponseMessage?, TOutput?)> Post<TOutput>(string route, object payload) where TOutput : class 
+        public async Task<(HttpResponseMessage?, TOutput?)> Post<TOutput>(string route, object payload) where TOutput : class
         {
             var response = await _httpClient.PostAsync(route, new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json"));
 
@@ -58,7 +56,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Base
             return output;
         }
 
-        private string PrepareGetRoute(string route, object? queryStringParametersObject) 
+        private string PrepareGetRoute(string route, object? queryStringParametersObject)
         {
             if (queryStringParametersObject is null)
                 return route;

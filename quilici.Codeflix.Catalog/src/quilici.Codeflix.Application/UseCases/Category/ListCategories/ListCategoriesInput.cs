@@ -12,7 +12,7 @@ namespace quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories
         }
 
         public ListCategoriesInput()
-            : base(1, 15, string.Empty, string.Empty, SearchOrder.Asc)
+            : base(1, 15, "", "", SearchOrder.Asc)
         {
         }
     }

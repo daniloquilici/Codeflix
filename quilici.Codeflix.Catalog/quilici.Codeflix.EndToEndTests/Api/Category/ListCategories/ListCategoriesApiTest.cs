@@ -97,6 +97,42 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             }
         }
 
+        [Theory(DisplayName = nameof(ListPaginated))]
+        [Trait("EndToEnd/API", "Category/List - Endpoints")]
+        [InlineData(10, 1, 5, 5)]
+        [InlineData(10, 2, 5, 5)]
+        [InlineData(7, 2, 5, 2)]
+        [InlineData(7, 3, 5, 0)]
+        public async Task ListPaginated(int quantityCategoriesGenerate, int page, int perPage, int expectedQuantityItems)
+        {
+            //arrange
+            var exempleCategoriesList = _fixture.GetExampleCategoriesList(quantityCategoriesGenerate);
+            await _fixture.Persistence.InsertList(exempleCategoriesList);
+            var input = new ListCategoriesInput(page, perPage);
+
+            //act
+            var (response, output) = await _fixture.ApiClient.Get<ListCategoriesOutput>("/categories", input);
+
+            //assert
+            response.Should().NotBeNull();
+            response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
+            output.Should().NotBeNull();            
+            output!.Page.Should().Be(input.Page);
+            output.PerPage.Should().Be(input.PerPage);
+            output.Total.Should().Be(exempleCategoriesList.Count);
+            output.Items.Should().HaveCount(expectedQuantityItems);
+            foreach (var outputItem in output.Items)
+            {
+                var exampleItem = exempleCategoriesList.FirstOrDefault(x => x.Id == outputItem.Id);
+                exampleItem.Should().NotBeNull();
+
+                outputItem.Name.Should().Be(exampleItem!.Name);
+                outputItem.Description.Should().Be(exampleItem.Description);
+                outputItem.IsActive.Should().Be(exampleItem.IsActive);
+                outputItem.CreatedAt.Should().Be(exampleItem.CreatedAt);
+            }
+        }
+
         public void Dispose()
             => _fixture.CleanPersistence();
     }
