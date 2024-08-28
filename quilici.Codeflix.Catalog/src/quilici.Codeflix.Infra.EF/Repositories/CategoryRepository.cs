@@ -56,7 +56,8 @@ namespace quilici.Codeflix.Catalog.Infra.Data.EF.Repositories
         }
 
         private IQueryable<Category> AddOrderToQuery(IQueryable<Category> query, string orderProperty, SearchOrder order)
-            => (orderProperty.ToLower(), order) switch
+        {
+            var orderedeQuery = (orderProperty.ToLower(), order) switch
             {
                 ("name", SearchOrder.Asc) => query.OrderBy(x => x.Name),
                 ("name", SearchOrder.Desc) => query.OrderByDescending(x => x.Name),
@@ -64,8 +65,11 @@ namespace quilici.Codeflix.Catalog.Infra.Data.EF.Repositories
                 ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
                 ("createdat", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
                 ("createdat", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
-                _ => query.OrderBy(x => x.Name)
+                _ => query.OrderBy(x => x.Name),
             };
+
+            return orderedeQuery.ThenBy(x => x.CreatedAt);
+        }
 
         public Task Update(Category aggregate, CancellationToken _) => Task.FromResult(_categories.Update(aggregate));
     }
