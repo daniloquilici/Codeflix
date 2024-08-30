@@ -10,5 +10,10 @@ namespace quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories
             : base(page, perPage, search, sort, dir)
         {
         }
+
+        public ListCategoriesInput()
+            : base(1, 15, "", "", SearchOrder.Asc)
+        {
+        }
     }
 }

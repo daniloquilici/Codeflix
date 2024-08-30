@@ -34,7 +34,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Base
             return context;
         }
 
-        public void CleanPersistence()
+        public void CleanPersistence() 
         {
             var context = CreateDbContext();
             context.Database.EnsureDeleted();

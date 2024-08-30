@@ -57,7 +57,6 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.GetCategory
             output!.Type.Should().Be("NotFound");
             output.Detail.Should().Be($"Category '{randowGuid}' not found.");
         }
-
         public void Dispose()
             => _fixture.CleanPersistence();
     }

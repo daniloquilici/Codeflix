@@ -54,7 +54,6 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.DeleteCategory
             output.Status.Should().Be(StatusCodes.Status404NotFound);
             output.Detail.Should().Be($"Category '{randowGuid}' not found.");
         }
-
         public void Dispose()
             => _fixture.CleanPersistence();
     }
