@@ -19,7 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "quilici.Codeflix.Catalog.In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "quilici.Codeflix.Catalog.EndToEndTests", "quilici.Codeflix.EndToEndTests\quilici.Codeflix.Catalog.EndToEndTests.csproj", "{85DA2830-DCF5-42DC-B522-4073D62D4C8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "quilici.Codeflix.Catalog.Api", "src\quilici.Codeflix.Catalog.Api\quilici.Codeflix.Catalog.Api.csproj", "{F24FA986-4C2F-4EF0-8550-4AEF54B83634}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "quilici.Codeflix.Catalog.Api", "src\quilici.Codeflix.Catalog.Api\quilici.Codeflix.Catalog.Api.csproj", "{F24FA986-4C2F-4EF0-8550-4AEF54B83634}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "env", "env", "{3D0309A9-8A76-478C-BB30-DFD7AAC60105}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
