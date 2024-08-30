@@ -1,13 +1,12 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
 using System.Net;
 
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.DeleteCategory
 {
     [Collection(nameof(DeleteCategoryApiTestFixture))]
-    public class DeleteCategoryApiTest
+    public class DeleteCategoryApiTest : IDisposable
     {
         private readonly DeleteCategoryApiTestFixture _fixture;
 
@@ -16,7 +15,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.DeleteCategory
 
         [Fact(DisplayName = nameof(DeleteCategory))]
         [Trait("EndToEnd/API", "Category/Delete - Endpoints")]
-        public async void DeleteCategory() 
+        public async void DeleteCategory()
         {
             //arrange
             var exempleCategoriesList = _fixture.GetExampleCategoriesList(20);
@@ -55,5 +54,8 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.DeleteCategory
             output.Status.Should().Be(StatusCodes.Status404NotFound);
             output.Detail.Should().Be($"Category '{randowGuid}' not found.");
         }
+
+        public void Dispose()
+            => _fixture.CleanPersistence();
     }
 }
