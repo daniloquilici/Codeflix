@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.EndToEndTests.Extensions;
 using System.Net;
 
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.GetCategory
@@ -34,7 +35,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.GetCategory
             output.Name.Should().Be(exampleCategory.Name);
             output.Description.Should().Be(exampleCategory.Description);
             output.IsActive.Should().Be(exampleCategory.IsActive);
-            output.CreatedAt.Should().Be(exampleCategory.CreatedAt);
+            output.CreatedAt.TrimMillisseconds().Should().Be(exampleCategory.CreatedAt.TrimMillisseconds());
         }
 
         [Fact(DisplayName = nameof(ErrorWhenNotFound))]
