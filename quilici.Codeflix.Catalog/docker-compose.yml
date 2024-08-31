@@ -9,3 +9,7 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: rxma90ed
+
+networks:
+  default:
+    name: service_catalog
