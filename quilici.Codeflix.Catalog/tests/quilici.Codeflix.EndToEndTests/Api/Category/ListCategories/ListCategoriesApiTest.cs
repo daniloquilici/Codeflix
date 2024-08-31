@@ -1,9 +1,11 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.EndToEndTests.Extensions;
 using System.Net;
+using Xunit.Abstractions;
 
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
 {
@@ -11,9 +13,13 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
     public class ListCategoriesApiTest : IDisposable
     {
         private readonly ListCategotiesApiTestFixture _fixture;
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public ListCategoriesApiTest(ListCategotiesApiTestFixture fixture)
-            => _fixture = fixture;
+        public ListCategoriesApiTest(ListCategotiesApiTestFixture fixture, ITestOutputHelper testOutputHelper)
+        { 
+            _fixture = fixture; 
+            _testOutputHelper = testOutputHelper;
+        }
 
         [Fact(DisplayName = nameof(ListCategoriesAndTotalByDefault))]
         [Trait("EndToEnd/API", "Category/List - Endpoints")]
@@ -182,8 +188,6 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
         [InlineData("name", "desc")]
         [InlineData("id", "asc")]
         [InlineData("id", "desc")]
-        [InlineData("CreatedAt", "asc")]
-        [InlineData("CreatedAt", "desc")]
         [InlineData("", "asc")]
         public async Task ListOrdered(string orderBy, string order)
         {
@@ -206,6 +210,17 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             output.Items.Should().HaveCount(exempleCategoriesList.Count);
 
             var expectedOrderedList = _fixture.CloneCategoryListOrdered(exempleCategoriesList, input.Sort, input.Dir);
+
+            var count = 0;
+            var expectedArr = expectedOrderedList.Select(x => $"{++count} {x.Name} {x.CreatedAt} {JsonConvert.SerializeObject(x)}");
+            count = 0;
+            var outputArr = output.Items.Select(x => $"{++count} {x.Name} {x.CreatedAt} {JsonConvert.SerializeObject(x)}");
+
+            _testOutputHelper.WriteLine("Expecteds...");
+            _testOutputHelper.WriteLine(string.Join("\n", expectedArr));
+            _testOutputHelper.WriteLine("Outputs...");
+            _testOutputHelper.WriteLine(string.Join("\n", outputArr));
+
             for (int i = 0; i < expectedOrderedList.Count; i++)
             {
                 var outputItem = output.Items[i];
@@ -219,6 +234,52 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
                 outputItem.Description.Should().Be(exampleItem.Description);
                 outputItem.IsActive.Should().Be(exampleItem.IsActive);
                 outputItem.CreatedAt.TrimMillisseconds().Should().Be(exampleItem.CreatedAt.TrimMillisseconds());
+            }
+        }
+
+        [Theory(DisplayName = nameof(ListOrderedDates))]
+        [Trait("EndToEnd/API", "Category/List - Endpoints")]
+        [InlineData("CreatedAt", "asc")]
+        [InlineData("CreatedAt", "desc")]
+        public async Task ListOrderedDates(string orderBy, string order)
+        {
+            //arrange
+            var exempleCategoriesList = _fixture.GetExampleCategoriesList(10);
+            await _fixture.Persistence.InsertList(exempleCategoriesList);
+            var inputOrder = order == "asc" ? SearchOrder.Asc : SearchOrder.Desc;
+            var input = new ListCategoriesInput(page: 1, perPage: 20, sort: orderBy, dir: inputOrder);
+
+            //act
+            var (response, output) = await _fixture.ApiClient.Get<ListCategoriesOutput>("/categories", input);
+
+            //assert
+            response.Should().NotBeNull();
+            response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
+            output.Should().NotBeNull();
+            output!.Page.Should().Be(input.Page);
+            output.PerPage.Should().Be(input.PerPage);
+            output.Total.Should().Be(exempleCategoriesList.Count);
+            output.Items.Should().HaveCount(exempleCategoriesList.Count);
+            DateTime? lastItemDate = null;
+
+            foreach (var outputItem in output.Items)
+            {
+                var exampleItem = exempleCategoriesList.FirstOrDefault(x => x.Id == outputItem.Id);
+                exampleItem.Should().NotBeNull();
+
+                outputItem.Name.Should().Be(exampleItem!.Name);
+                outputItem.Description.Should().Be(exampleItem.Description);
+                outputItem.IsActive.Should().Be(exampleItem.IsActive);
+                outputItem.CreatedAt.TrimMillisseconds().Should().Be(exampleItem.CreatedAt.TrimMillisseconds());
+
+                if (lastItemDate != null)
+                {
+                    if (order == "asc")
+                        Assert.True(outputItem.CreatedAt >= lastItemDate);
+                    else
+                        Assert.True(outputItem.CreatedAt <= lastItemDate);
+                }
+                lastItemDate = outputItem.CreatedAt;
             }
         }
 
