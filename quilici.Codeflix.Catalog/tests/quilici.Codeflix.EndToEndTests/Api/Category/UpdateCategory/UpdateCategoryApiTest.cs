@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using quilici.Codeflix.Catalog.Api.ApiModels.Category;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
-using quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 using System.Net;
 
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
@@ -23,7 +23,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
             var exempleCategoriesList = _fixture.GetExampleCategoriesList(20);
             await _fixture.Persistence.InsertList(exempleCategoriesList);
             var exampleCategory = exempleCategoriesList[10];
-            var input = _fixture.GetExampleInput(exampleCategory.Id);
+            var input = _fixture.GetExampleInput();
 
             //act
             var (response, output) = await _fixture.ApiClient.Put<CategoryModelOutput>($"/categories/{exampleCategory.Id}", input);
@@ -52,7 +52,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
             var exempleCategoriesList = _fixture.GetExampleCategoriesList(20);
             await _fixture.Persistence.InsertList(exempleCategoriesList);
             var exampleCategory = exempleCategoriesList[10];
-            var input = new UpdateCategoryInput(exampleCategory.Id, _fixture.GetValidCategoryName());
+            var input = new UpdateCategoryApiInput(_fixture.GetValidCategoryName());
 
             //act
             var (response, output) = await _fixture.ApiClient.Put<CategoryModelOutput>($"/categories/{exampleCategory.Id}", input);
@@ -81,7 +81,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
             var exempleCategoriesList = _fixture.GetExampleCategoriesList(20);
             await _fixture.Persistence.InsertList(exempleCategoriesList);
             var exampleCategory = exempleCategoriesList[10];
-            var input = new UpdateCategoryInput(exampleCategory.Id, _fixture.GetValidCategoryName(), _fixture.GetValidCategoryDescription());
+            var input = new UpdateCategoryApiInput(_fixture.GetValidCategoryName(), _fixture.GetValidCategoryDescription());
 
             //act
             var (response, output) = await _fixture.ApiClient.Put<CategoryModelOutput>($"/categories/{exampleCategory.Id}", input);
@@ -110,7 +110,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
             var exempleCategoriesList = _fixture.GetExampleCategoriesList(20);
             await _fixture.Persistence.InsertList(exempleCategoriesList);
             var randomGuid = Guid.NewGuid();
-            var input = _fixture.GetExampleInput(randomGuid);
+            var input = _fixture.GetExampleInput();
 
             //act
             var (response, output) = await _fixture.ApiClient.Put<ProblemDetails>($"/categories/{randomGuid}", input);
@@ -128,22 +128,21 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
         [Theory(DisplayName = nameof(ErrorWhenCantInstantieteAggregate))]
         [Trait("EndToEnd/API", "Category/Update - Endpoints")]
         [MemberData(nameof(UpdateCategoryApiTestDataGenerator.GetInvalidInputs), MemberType = typeof(UpdateCategoryApiTestDataGenerator))]
-        public async void ErrorWhenCantInstantieteAggregate(UpdateCategoryInput input, string expectedDetail)
+        public async void ErrorWhenCantInstantieteAggregate(UpdateCategoryApiInput input, string expectedDetail)
         {
             //arrange
             var exempleCategoriesList = _fixture.GetExampleCategoriesList(20);
             await _fixture.Persistence.InsertList(exempleCategoriesList);
             var exampleCategory = exempleCategoriesList[10];
-            input.Id = exampleCategory.Id;
 
             //act
-            var (response, output) = await _fixture.ApiClient.Put<ProblemDetails>($"/categories/{input.Id}", input);
+            var (response, output) = await _fixture.ApiClient.Put<ProblemDetails>($"/categories/{exampleCategory.Id}", input);
 
             //assert
             response.Should().NotBeNull();
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status422UnprocessableEntity);
             output.Should().NotBeNull();
-            output!.Title.Should().Be("One or more validation errors ocurred");                                       
+            output!.Title.Should().Be("One or more validation errors ocurred");
             output.Type.Should().Be("UnprocessableEntity");
             output.Status.Should().Be(StatusCodes.Status422UnprocessableEntity);
             output.Detail.Should().Be(expectedDetail);

@@ -1,4 +1,4 @@
-﻿using quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
+﻿using quilici.Codeflix.Catalog.Api.ApiModels.Category;
 using quilici.Codeflix.Catalog.EndToEndTests.Api.Category.Common;
 
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
@@ -8,7 +8,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.UpdateCategory
 
     public class UpdateCategoryApiTestFixture : CategoryBaseFixture
     {
-        public UpdateCategoryInput GetExampleInput(Guid? id = null)
-            => new(id ?? Guid.NewGuid(), GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
+        public UpdateCategoryApiInput GetExampleInput()
+            => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
     }
 }
