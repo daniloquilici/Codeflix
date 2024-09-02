@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using quilici.Codeflix.Catalog.EndToEndTests.Extensions;
 using System.Text;
 using System.Text.Json;
 
@@ -7,13 +8,21 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Base
     public class ApiClient
     {
         private readonly HttpClient _httpClient;
+        private readonly JsonSerializerOptions _defaultJsonSerializerOptions;
 
         public ApiClient(HttpClient httpClient)
-            => _httpClient = httpClient;
+        {
+            _httpClient = httpClient;
+            _defaultJsonSerializerOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = new SnakeCaseNamingPolicy(),
+                PropertyNameCaseInsensitive = true
+            };
+        }
 
         public async Task<(HttpResponseMessage?, TOutput?)> Post<TOutput>(string route, object payload) where TOutput : class
         {
-            var response = await _httpClient.PostAsync(route, new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json"));
+            var response = await _httpClient.PostAsync(route, new StringContent(JsonSerializer.Serialize(payload, _defaultJsonSerializerOptions), Encoding.UTF8, "application/json"));
 
             var output = await GetOutput<TOutput>(response);
 
@@ -22,7 +31,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Base
 
         public async Task<(HttpResponseMessage?, TOutput?)> Put<TOutput>(string route, object payload) where TOutput : class
         {
-            var response = await _httpClient.PutAsync(route, new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json"));
+            var response = await _httpClient.PutAsync(route, new StringContent(JsonSerializer.Serialize(payload, _defaultJsonSerializerOptions), Encoding.UTF8, "application/json"));
 
             var output = await GetOutput<TOutput>(response);
 
@@ -51,7 +60,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Base
             var outputString = await response.Content.ReadAsStringAsync();
             TOutput? output = null;
             if (!string.IsNullOrWhiteSpace(outputString))
-                output = JsonSerializer.Deserialize<TOutput>(outputString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                output = JsonSerializer.Deserialize<TOutput>(outputString, _defaultJsonSerializerOptions);
 
             return output;
         }
@@ -64,6 +73,14 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Base
             var parametersJson = JsonSerializer.Serialize(queryStringParametersObject);
             var parametersDictionary = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(parametersJson);
             return QueryHelpers.AddQueryString(route, parametersDictionary!);
+        }
+    }
+
+    public class SnakeCaseNamingPolicy : JsonNamingPolicy
+    {
+        public override string ConvertName(string name)
+        {
+            return name.ToSnakeCase();
         }
     }
 }

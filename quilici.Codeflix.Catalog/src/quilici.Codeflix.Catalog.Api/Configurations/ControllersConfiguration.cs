@@ -1,4 +1,5 @@
 ﻿using quilici.Codeflix.Catalog.Api.Filters;
+using quilici.Codeflix.Catalog.Api.Policies;
 
 namespace quilici.Codeflix.Catalog.Api.Configurations
 {
@@ -6,7 +7,13 @@ namespace quilici.Codeflix.Catalog.Api.Configurations
     {
         public static IServiceCollection AddAndConfigureControllers(this IServiceCollection services) 
         {
-            services.AddControllers(options => options.Filters.Add(typeof(ApiGlobalExceptionFilter)));
+            services.AddControllers(options => 
+                options.Filters.Add(typeof(ApiGlobalExceptionFilter))
+            ).AddJsonOptions(jsonOptions => 
+            {
+                jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = new JsonSnakeCasePolicy();
+            });
+
             services.AddDocumentation();
             return services;
         }
