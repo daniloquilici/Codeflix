@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using quilici.Codeflix.Catalog.Api.ApiModels.Response;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
 using quilici.Codeflix.Catalog.EndToEndTests.Extensions;
 using System.Net;
@@ -25,17 +26,17 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.GetCategory
             var exampleCategory = exempleCategoriesList[10];
 
             //act
-            var (response, output) = await _fixture.ApiClient.Get<CategoryModelOutput>($"/categories/{exampleCategory.Id}");
+            var (response, output) = await _fixture.ApiClient.Get<ApiResponse<CategoryModelOutput>>($"/categories/{exampleCategory.Id}");
 
             //assert
             response.Should().NotBeNull();
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
-            output.Should().NotBeNull();
-            output!.Id.Should().Be(exampleCategory.Id);
-            output.Name.Should().Be(exampleCategory.Name);
-            output.Description.Should().Be(exampleCategory.Description);
-            output.IsActive.Should().Be(exampleCategory.IsActive);
-            output.CreatedAt.TrimMillisseconds().Should().Be(exampleCategory.CreatedAt.TrimMillisseconds());
+            output!.Data.Should().NotBeNull();
+            output.Data.Id.Should().Be(exampleCategory.Id);
+            output.Data.Name.Should().Be(exampleCategory.Name);
+            output.Data.Description.Should().Be(exampleCategory.Description);
+            output.Data.IsActive.Should().Be(exampleCategory.IsActive);
+            output.Data.CreatedAt.TrimMillisseconds().Should().Be(exampleCategory.CreatedAt.TrimMillisseconds());
         }
 
         [Fact(DisplayName = nameof(ErrorWhenNotFound))]

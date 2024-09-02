@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using quilici.Codeflix.Catalog.Api.Extension;
 using quilici.Codeflix.Catalog.EndToEndTests.Extensions;
 using System.Text;
 using System.Text.Json;
