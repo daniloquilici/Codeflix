@@ -30,8 +30,8 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
         {
             //arrange
             var defaultPerPage = 15;
-            var exempleCategoriesList = _fixture.GetExampleCategoriesList(20);
-            await _fixture.Persistence.InsertList(exempleCategoriesList);
+            var exampleCategoriesList = _fixture.GetExampleCategoriesList(20);
+            await _fixture.Persistence.InsertList(exampleCategoriesList);
 
             //act
             var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CategoryModelOutput>>("/categories");
@@ -39,22 +39,26 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             //assert
             response.Should().NotBeNull();
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
+
             output.Should().NotBeNull();
-            output!.Meta.Should().NotBeNull();
-            output.Data.Should().NotBeNull();
-            output.Meta.Total.Should().Be(exempleCategoriesList.Count);
+            output!.Data.Should().NotBeNull();
+            output.Meta.Should().NotBeNull();
+            output.Meta!.Total.Should().Be(exampleCategoriesList.Count);
             output.Meta.CurrentPage.Should().Be(1);
             output.Meta.PerPage.Should().Be(defaultPerPage);
-            output.Data!.Count.Should().Be(defaultPerPage);
-            foreach (var outputItem in output.Data)
-            {
-                var exampleItem = exempleCategoriesList.FirstOrDefault(x => x.Id == outputItem.Id);
-                exampleItem.Should().NotBeNull();
+            output.Data.Should().HaveCount(defaultPerPage);
 
+            foreach (CategoryModelOutput outputItem in output.Data!)
+            {
+                var exampleItem = exampleCategoriesList
+                    .FirstOrDefault(x => x.Id == outputItem.Id);
+                exampleItem.Should().NotBeNull();
                 outputItem.Name.Should().Be(exampleItem!.Name);
                 outputItem.Description.Should().Be(exampleItem.Description);
                 outputItem.IsActive.Should().Be(exampleItem.IsActive);
-                outputItem.CreatedAt.TrimMillisseconds().Should().Be(exampleItem.CreatedAt.TrimMillisseconds());
+                outputItem.CreatedAt.TrimMillisseconds().Should().Be(
+                    exampleItem.CreatedAt.TrimMillisseconds()
+                );
             }
         }
 

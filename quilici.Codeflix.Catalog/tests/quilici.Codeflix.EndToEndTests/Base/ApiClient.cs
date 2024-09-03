@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using quilici.Codeflix.Catalog.Api.Extension;
-using quilici.Codeflix.Catalog.EndToEndTests.Extensions;
+using quilici.Codeflix.Catalog.Api.Policies;
 using System.Text;
 using System.Text.Json;
 
@@ -16,7 +16,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Base
             _httpClient = httpClient;
             _defaultJsonSerializerOptions = new JsonSerializerOptions
             {
-                PropertyNamingPolicy = new SnakeCaseNamingPolicy(),
+                PropertyNamingPolicy = new JsonSnakeCasePolicy(),
                 PropertyNameCaseInsensitive = true
             };
         }
