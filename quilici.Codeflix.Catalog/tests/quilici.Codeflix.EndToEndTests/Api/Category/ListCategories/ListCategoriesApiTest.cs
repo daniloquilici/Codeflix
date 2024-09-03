@@ -1,9 +1,12 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using quilici.Codeflix.Catalog.Api.ApiModels.Response;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.EndToEndTests.Extensions;
+using quilici.Codeflix.Catalog.EndToEndTests.Models;
 using System.Net;
 using Xunit.Abstractions;
 
@@ -31,18 +34,19 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             await _fixture.Persistence.InsertList(exempleCategoriesList);
 
             //act
-            var (response, output) = await _fixture.ApiClient.Get<ListCategoriesOutput>("/categories");
+            var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CategoryModelOutput>>("/categories");
 
             //assert
             response.Should().NotBeNull();
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
             output.Should().NotBeNull();
-            output!.Total.Should().Be(exempleCategoriesList.Count);
-            output.Page.Should().Be(1);
-            output.PerPage.Should().Be(defaultPerPage);
-            output.Items.Should().NotBeNull();
-            output.Items.Count.Should().Be(defaultPerPage);
-            foreach (var outputItem in output.Items)
+            output!.Meta.Should().NotBeNull();
+            output.Data.Should().NotBeNull();
+            output.Meta.Total.Should().Be(exempleCategoriesList.Count);
+            output.Meta.CurrentPage.Should().Be(1);
+            output.Meta.PerPage.Should().Be(defaultPerPage);
+            output.Data!.Count.Should().Be(defaultPerPage);
+            foreach (var outputItem in output.Data)
             {
                 var exampleItem = exempleCategoriesList.FirstOrDefault(x => x.Id == outputItem.Id);
                 exampleItem.Should().NotBeNull();
@@ -61,15 +65,15 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             //arrange
 
             //act
-            var (response, output) = await _fixture.ApiClient.Get<ListCategoriesOutput>("/categories");
+            var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CategoryModelOutput>>("/categories");
 
             //assert
             response.Should().NotBeNull();
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
             output.Should().NotBeNull();
-            output!.Total.Should().Be(0);
-            output.Items.Should().NotBeNull();
-            output.Items.Count.Should().Be(0);
+            output!.Data.Should().NotBeNull();
+            output.Data!.Count.Should().Be(0);
+            output.Meta.Total.Should().Be(0);
         }
 
         [Fact(DisplayName = nameof(ListCategoriesAndTotal))]
@@ -82,18 +86,19 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             var input = new ListCategoriesInput(1, 5);
 
             //act
-            var (response, output) = await _fixture.ApiClient.Get<ListCategoriesOutput>("/categories", input);
+            var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CategoryModelOutput>>("/categories", input);
 
             //assert
             response.Should().NotBeNull();
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
             output.Should().NotBeNull();
-            output!.Total.Should().Be(exempleCategoriesList.Count);
-            output.Page.Should().Be(input.Page);
-            output.PerPage.Should().Be(input.PerPage);
-            output.Items.Should().NotBeNull();
-            output.Items.Count.Should().Be(input.PerPage);
-            foreach (var outputItem in output.Items)
+            output!.Data.Should().NotBeNull();
+            output.Meta.Should().NotBeNull();
+            output.Meta.Total.Should().Be(exempleCategoriesList.Count);
+            output.Meta.CurrentPage.Should().Be(input.Page);
+            output.Meta.PerPage.Should().Be(input.PerPage);
+            output.Data!.Count.Should().Be(input.PerPage);
+            foreach (var outputItem in output.Data)
             {
                 var exampleItem = exempleCategoriesList.FirstOrDefault(x => x.Id == outputItem.Id);
                 exampleItem.Should().NotBeNull();
@@ -119,17 +124,18 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             var input = new ListCategoriesInput(page, perPage);
 
             //act
-            var (response, output) = await _fixture.ApiClient.Get<ListCategoriesOutput>("/categories", input);
+            var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CategoryModelOutput>>("/categories", input);
 
             //assert
             response.Should().NotBeNull();
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
-            output.Should().NotBeNull();            
-            output!.Page.Should().Be(input.Page);
-            output.PerPage.Should().Be(input.PerPage);
-            output.Total.Should().Be(exempleCategoriesList.Count);
-            output.Items.Should().HaveCount(expectedQuantityItems);
-            foreach (var outputItem in output.Items)
+            output.Should().NotBeNull();
+            output!.Meta.Should().NotBeNull();
+            output.Meta.CurrentPage.Should().Be(input.Page);
+            output.Meta.PerPage.Should().Be(input.PerPage);
+            output.Meta.Total.Should().Be(exempleCategoriesList.Count);
+            output.Data.Should().HaveCount(expectedQuantityItems);
+            foreach (var outputItem in output.Data!)
             {
                 var exampleItem = exempleCategoriesList.FirstOrDefault(x => x.Id == outputItem.Id);
                 exampleItem.Should().NotBeNull();
@@ -160,17 +166,18 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             var input = new ListCategoriesInput(page, perPage, search);
 
             //act
-            var (response, output) = await _fixture.ApiClient.Get<ListCategoriesOutput>("/categories", input);
+            var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CategoryModelOutput>>("/categories", input);
 
             //assert
             response.Should().NotBeNull();
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
             output.Should().NotBeNull();
-            output!.Page.Should().Be(input.Page);
-            output.PerPage.Should().Be(input.PerPage);
-            output.Total.Should().Be(expectedQuantityItems);
-            output.Items.Should().HaveCount(expectedQuantityItemsReturned);
-            foreach (var outputItem in output.Items)
+            output!.Meta.Should().NotBeNull();
+            output.Meta.CurrentPage.Should().Be(input.Page);
+            output.Meta.PerPage.Should().Be(input.PerPage);
+            output.Meta.Total.Should().Be(expectedQuantityItems);
+            output.Data.Should().HaveCount(expectedQuantityItemsReturned);
+            foreach (var outputItem in output.Data!)
             {
                 var exampleItem = exempleCategoriesList.FirstOrDefault(x => x.Id == outputItem.Id);
                 exampleItem.Should().NotBeNull();
@@ -198,23 +205,24 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             var input = new ListCategoriesInput(page: 1, perPage: 20, sort: orderBy, dir: inputOrder);
 
             //act
-            var (response, output) = await _fixture.ApiClient.Get<ListCategoriesOutput>("/categories", input);
+            var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CategoryModelOutput>>("/categories", input);
 
             //assert
             response.Should().NotBeNull();
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
             output.Should().NotBeNull();
-            output!.Page.Should().Be(input.Page);
-            output.PerPage.Should().Be(input.PerPage);
-            output.Total.Should().Be(exempleCategoriesList.Count);
-            output.Items.Should().HaveCount(exempleCategoriesList.Count);
+            output!.Meta.Should().NotBeNull();
+            output.Meta.CurrentPage.Should().Be(input.Page);
+            output.Meta.PerPage.Should().Be(input.PerPage);
+            output.Meta.Total.Should().Be(exempleCategoriesList.Count);
+            output.Data.Should().HaveCount(exempleCategoriesList.Count);
 
             var expectedOrderedList = _fixture.CloneCategoryListOrdered(exempleCategoriesList, input.Sort, input.Dir);
 
             var count = 0;
             var expectedArr = expectedOrderedList.Select(x => $"{++count} {x.Name} {x.CreatedAt} {JsonConvert.SerializeObject(x)}");
             count = 0;
-            var outputArr = output.Items.Select(x => $"{++count} {x.Name} {x.CreatedAt} {JsonConvert.SerializeObject(x)}");
+            var outputArr = output.Data!.Select(x => $"{++count} {x.Name} {x.CreatedAt} {JsonConvert.SerializeObject(x)}");
 
             _testOutputHelper.WriteLine("Expecteds...");
             _testOutputHelper.WriteLine(string.Join("\n", expectedArr));
@@ -223,7 +231,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
 
             for (int i = 0; i < expectedOrderedList.Count; i++)
             {
-                var outputItem = output.Items[i];
+                var outputItem = output.Data![i];
                 var exampleItem = expectedOrderedList[i];
 
                 outputItem.Should().NotBeNull();
@@ -250,19 +258,20 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             var input = new ListCategoriesInput(page: 1, perPage: 20, sort: orderBy, dir: inputOrder);
 
             //act
-            var (response, output) = await _fixture.ApiClient.Get<ListCategoriesOutput>("/categories", input);
+            var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CategoryModelOutput>>("/categories", input);
 
             //assert
             response.Should().NotBeNull();
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
             output.Should().NotBeNull();
-            output!.Page.Should().Be(input.Page);
-            output.PerPage.Should().Be(input.PerPage);
-            output.Total.Should().Be(exempleCategoriesList.Count);
-            output.Items.Should().HaveCount(exempleCategoriesList.Count);
+            output!.Meta.Should().NotBeNull();
+            output.Meta.CurrentPage.Should().Be(input.Page);
+            output.Meta.PerPage.Should().Be(input.PerPage);
+            output.Meta.Total.Should().Be(exempleCategoriesList.Count);
+            output.Data.Should().HaveCount(exempleCategoriesList.Count);
             DateTime? lastItemDate = null;
 
-            foreach (var outputItem in output.Items)
+            foreach (var outputItem in output.Data!)
             {
                 var exampleItem = exempleCategoriesList.FirstOrDefault(x => x.Id == outputItem.Id);
                 exampleItem.Should().NotBeNull();
