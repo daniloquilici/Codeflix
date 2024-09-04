@@ -53,6 +53,12 @@ namespace quilici.Codeflix.Catalog.Domain.Entity
             Validate();
         }
 
+        public void RemoveCategory(Guid categoryId) 
+        {
+            _categories.Remove(categoryId);
+            Validate();
+        }
+
         private void Validate() 
             => DomainValidation.NotNullOrEmpty(Name, nameof(Name));
     }
