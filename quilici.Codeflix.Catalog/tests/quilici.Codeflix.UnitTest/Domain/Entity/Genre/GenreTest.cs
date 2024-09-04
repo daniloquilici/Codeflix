@@ -32,6 +32,18 @@ namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Genre
             (genre.CreatedAt <= dateTimeAfter).Should().BeTrue();
         }
 
+        [Theory(DisplayName = nameof(InstantiateThrowWhenNameEmpty))]
+        [Trait("Domain", "Genre - Aggregates")]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public void InstantiateThrowWhenNameEmpty(string? name)
+        {
+            var action = () => new DomainEntity.Genre(name!);
+
+            action.Should().Throw<EntityValidationException>().WithMessage("Name should not be empty or null");
+        }
+
         [Theory(DisplayName = nameof(InstantiateWithIsActive))]
         [Trait("Domain", "Genre - Aggregates")]
         [InlineData(false)]
@@ -101,18 +113,6 @@ namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Genre
             genre.CreatedAt.Should().NotBeSameDateAs(default);
         }
 
-        [Theory(DisplayName = nameof(InstantiateThrowWhenNameEmpty))]
-        [Trait("Domain", "Genre - Aggregates")]
-        [InlineData("")]
-        [InlineData(" ")]
-        [InlineData(null)]
-        public void InstantiateThrowWhenNameEmpty(string? name)
-        {
-            var action = () => new DomainEntity.Genre(name!);
-
-            action.Should().Throw<EntityValidationException>().WithMessage("Name should not be empty or null");
-        }
-
         [Theory(DisplayName = nameof(UpdateThrowWhenNameIsEmpty))]
         [Trait("Domain", "Genre - Aggregates")]
         [InlineData("")]
@@ -126,6 +126,37 @@ namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Genre
 
             action.Should().Throw<EntityValidationException>().WithMessage("Name should not be empty or null");
             
+        }
+
+        [Fact(DisplayName = nameof(AddCategory))]
+        [Trait("Domain", "Genre - Aggregates")]
+        public void AddCategory()
+        {
+            var genre = _fixture.GetExampleGenre();
+            var categoryGuid = Guid.NewGuid();
+
+            genre.AddCategory(categoryGuid);
+
+            genre.Should().NotBeNull();
+            genre.Categories.Should().HaveCount(1);
+            genre.Categories.Should().Contain(categoryGuid);
+        }
+
+        [Fact(DisplayName = nameof(AddTwoCategory))]
+        [Trait("Domain", "Genre - Aggregates")]
+        public void AddTwoCategory()
+        {
+            var genre = _fixture.GetExampleGenre();
+            var categoryGuid1 = Guid.NewGuid();
+            var categoryGuid2 = Guid.NewGuid();
+
+            genre.AddCategory(categoryGuid1);
+            genre.AddCategory(categoryGuid2);
+
+            genre.Should().NotBeNull();
+            genre.Categories.Should().HaveCount(2);
+            genre.Categories.Should().Contain(categoryGuid1);
+            genre.Categories.Should().Contain(categoryGuid2);
         }
     }
 }
