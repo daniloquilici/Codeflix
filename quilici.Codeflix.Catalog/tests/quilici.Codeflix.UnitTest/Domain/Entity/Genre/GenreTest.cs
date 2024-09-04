@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using FluentAssertions;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Genre
 {
@@ -16,7 +17,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Genre
 
         [Fact(DisplayName = nameof(Instantiate))]
         [Trait("Domain", "Genre - Aggregates")]
-        public void Instantiate() 
+        public void Instantiate()
         {
             var genreName = _fixture.GetValidName();
             var dateTimeBefore = DateTime.Now;
@@ -98,6 +99,33 @@ namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Genre
             genre.Name.Should().Be(newName);
             genre.IsActive.Should().Be(oldIsActive);
             genre.CreatedAt.Should().NotBeSameDateAs(default);
+        }
+
+        [Theory(DisplayName = nameof(InstantiateThrowWhenNameEmpty))]
+        [Trait("Domain", "Genre - Aggregates")]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public void InstantiateThrowWhenNameEmpty(string? name)
+        {
+            var action = () => new DomainEntity.Genre(name!);
+
+            action.Should().Throw<EntityValidationException>().WithMessage("Name should not be empty or null");
+        }
+
+        [Theory(DisplayName = nameof(UpdateThrowWhenNameIsEmpty))]
+        [Trait("Domain", "Genre - Aggregates")]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public void UpdateThrowWhenNameIsEmpty(string? name)
+        {
+            var genre = _fixture.GetExampleGenre();
+
+            var action = () => genre.Update(name!);
+
+            action.Should().Throw<EntityValidationException>().WithMessage("Name should not be empty or null");
+            
         }
     }
 }

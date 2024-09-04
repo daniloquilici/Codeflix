@@ -1,4 +1,6 @@
-﻿namespace quilici.Codeflix.Catalog.Domain.Entity
+﻿using quilici.Codeflix.Catalog.Domain.Validation;
+
+namespace quilici.Codeflix.Catalog.Domain.Entity
 {
     public class Genre
     {
@@ -11,6 +13,8 @@
             Name = name;
             IsActive = true;
             CreatedAt = DateTime.Now;
+
+            Validate();
         }
 
         public Genre(string name, bool isActive = true)
@@ -18,12 +22,32 @@
             Name = name;
             IsActive = isActive;
             CreatedAt = DateTime.Now;
+
+            Validate();
         }
 
-        public void Activate() => IsActive = true;
+        public void Activate() 
+        { 
+            IsActive = true; 
 
-        public void Deactivate() => IsActive = false;
+            Validate();
+        }
 
-        public void Update(string name) => Name = name;
+        public void Deactivate() 
+        { 
+            IsActive = false;
+
+            Validate();
+        }
+
+        public void Update(string name) 
+        { 
+            Name = name; 
+            
+            Validate();
+        }
+
+        private void Validate() 
+            => DomainValidation.NotNullOrEmpty(Name, nameof(Name));
     }
 }
