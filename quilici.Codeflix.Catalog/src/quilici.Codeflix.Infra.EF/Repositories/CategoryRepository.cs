@@ -3,8 +3,6 @@ using quilici.Codeflix.Catalog.Application.Exceptions;
 using quilici.Codeflix.Catalog.Domain.Entity;
 using quilici.Codeflix.Catalog.Domain.Repository;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
-using quilici.Codeflix.Catalog.Infra.Data.EF;
-using System.Linq.Expressions;
 
 namespace quilici.Codeflix.Catalog.Infra.Data.EF.Repositories
 {

@@ -34,8 +34,6 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.Common
             return categoryDescription;
         }
 
-        public bool GetRandoBoolean() => new Random().NextDouble() < 0.5;
-
         public Catalog.Domain.Entity.Category GetExampleCategory() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
     }
 }

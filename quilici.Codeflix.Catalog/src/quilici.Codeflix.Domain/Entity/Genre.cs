@@ -1,8 +1,9 @@
-﻿using quilici.Codeflix.Catalog.Domain.Validation;
+﻿using quilici.Codeflix.Catalog.Domain.SeedWork;
+using quilici.Codeflix.Catalog.Domain.Validation;
 
 namespace quilici.Codeflix.Catalog.Domain.Entity
 {
-    public class Genre
+    public class Genre : AggregateRoot
     {               
         public string Name { get; private set; }
         public bool IsActive { get; private set; }

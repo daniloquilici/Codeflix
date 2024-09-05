@@ -25,6 +25,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Genre
             var dateTimeAfter = DateTime.Now;
 
             genre.Should().NotBeNull();
+            genre.Id.Should().NotBeEmpty();
             genre.Name.Should().Be(genreName);
             genre.IsActive.Should().BeTrue();
             genre.CreatedAt.Should().NotBeSameDateAs(default);
@@ -57,6 +58,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Genre
 
             genre.Should().NotBeNull();
             genre.Name.Should().Be(genreName);
+            genre.Id.Should().NotBeEmpty();
             genre.IsActive.Should().Be(isActive);
             genre.CreatedAt.Should().NotBeSameDateAs(default);
             (genre.CreatedAt >= dateTimeBefore).Should().BeTrue();
@@ -75,6 +77,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Genre
             genre.Activate();
             
             genre.Should().NotBeNull();
+            genre.Id.Should().NotBeEmpty();
             genre.Name.Should().Be(oldName);
             genre.IsActive.Should().BeTrue();
             genre.CreatedAt.Should().NotBeSameDateAs(default);
@@ -92,6 +95,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Genre
             genre.Deactivate();
 
             genre.Should().NotBeNull();
+            genre.Id.Should().NotBeEmpty();
             genre.Name.Should().Be(oldName);
             genre.IsActive.Should().BeFalse();
             genre.CreatedAt.Should().NotBeSameDateAs(default);
@@ -108,6 +112,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Genre
             genre.Update(newName);
 
             genre.Should().NotBeNull();
+            genre.Id.Should().NotBeEmpty();
             genre.Name.Should().Be(newName);
             genre.IsActive.Should().Be(oldIsActive);
             genre.CreatedAt.Should().NotBeSameDateAs(default);
@@ -177,7 +182,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Genre
         [Trait("Domain", "Genre - Aggregates")]
         public void RemoveAllCategories()
         {
-            var genre = _fixture.GetExampleGenre(categoriesIdsList: new List<Guid>() { Guid.NewGuid(), Guid.NewGuid(), exampleGuid, Guid.NewGuid(), Guid.NewGuid() });
+            var genre = _fixture.GetExampleGenre(categoriesIdsList: new List<Guid>() { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() });
 
             genre.RemoveAllCategories();
 
