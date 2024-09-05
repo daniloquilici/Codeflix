@@ -1,4 +1,6 @@
-﻿namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.Common
+﻿using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
+
+namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.Common
 {
     public class GenreModelOuput
     {
@@ -16,5 +18,7 @@
             CreatedAt = createdAt;
             Categories = categories;
         }
+
+        public static GenreModelOuput FromGenre(DomainEntity.Genre genre) => new GenreModelOuput(genre.Id, genre.Name, genre.IsActive, genre.CreatedAt, genre.Categories);
     }
 }

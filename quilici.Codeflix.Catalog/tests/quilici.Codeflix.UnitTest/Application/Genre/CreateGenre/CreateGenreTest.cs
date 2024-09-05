@@ -45,5 +45,32 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.CreateGenre
             (output.CreatedAt >= dateTimeBefore).Should().BeTrue();
             (output.CreatedAt <= dateTimeAfter).Should().BeTrue();
         }
+
+        [Fact(DisplayName = nameof(CreateWithRelatedCategories))]
+        [Trait("Aplication", "CreateGenre - Use cases")]
+        public async Task CreateWithRelatedCategories()
+        {
+            var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
+            var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+
+            var usesCases = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object);
+
+            var input = _fixture.GetExampleInputWithCategories();
+
+            var output = await usesCases.Handle(input, CancellationToken.None);
+
+            genreRepositoryMock.Verify(x => x.Insert(It.IsAny<DomianEntity.Genre>(),
+                                                     It.IsAny<CancellationToken>()), Times.Once);
+
+            unitOfWorkMock.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
+
+            output.Should().NotBeNull();
+            output.Id.Should().NotBeEmpty();
+            output.Name.Should().Be(input.Name);
+            output.IsActive.Should().Be(input.IsActive);
+            output.Categories.Should().HaveCount(input.CategoriesIds?.Count ?? 0);
+            input.CategoriesIds?.ForEach(id => output.Categories.Should().Contain(id));
+            output.CreatedAt.Should().NotBeSameDateAs(default);
+        }
     }
 }
