@@ -14,6 +14,8 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.CreateGenre
     {
         public Mock<IGenreRepository> GetGenreRepositoryMock() => new Mock<IGenreRepository>();
 
+        public Mock<ICategoryRepository> GetCategoryRepositoryMock() => new Mock<ICategoryRepository>();
+
         public Mock<IUnitOfWork> GetUnitOfWorkMock() => new Mock<IUnitOfWork>();
 
         public CreateGenreInput GetExampleInput() => new CreateGenreInput(GetValidGenreName(), GetRandoBoolean());

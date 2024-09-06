@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
 using Moq;
+using quilici.Codeflix.Catalog.Application.Exceptions;
 using Xunit;
-using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre;
 using DomianEntity = quilici.Codeflix.Catalog.Domain.Entity;
+using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.CreateGenre
 {
@@ -21,9 +22,10 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.CreateGenre
         public async Task CreateGenre()
         {
             var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
+            var categoryRepositoryMock = _fixture.GetCategoryRepositoryMock();
             var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
 
-            var usesCases = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object);
+            var usesCases = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object, categoryRepositoryMock.Object);
 
             var input = _fixture.GetExampleInput();
 
@@ -50,12 +52,17 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.CreateGenre
         [Trait("Aplication", "CreateGenre - Use cases")]
         public async Task CreateWithRelatedCategories()
         {
+            var input = _fixture.GetExampleInputWithCategories();
             var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
+            var categoryRepositoryMock = _fixture.GetCategoryRepositoryMock();
             var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
 
-            var usesCases = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object);
+            categoryRepositoryMock.Setup(x => x.GetIdsListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()))
+                    .ReturnsAsync((IReadOnlyList<Guid>)input.CategoriesIds!);
 
-            var input = _fixture.GetExampleInputWithCategories();
+            var usesCases = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object, categoryRepositoryMock.Object);
+
+            
 
             var output = await usesCases.Handle(input, CancellationToken.None);
 
@@ -71,6 +78,27 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.CreateGenre
             output.Categories.Should().HaveCount(input.CategoriesIds?.Count ?? 0);
             input.CategoriesIds?.ForEach(id => output.Categories.Should().Contain(id));
             output.CreatedAt.Should().NotBeSameDateAs(default);
+        }
+
+        [Fact(DisplayName = nameof(CreateThrowWhenRelatedCategoryNotFound))]
+        [Trait("Aplication", "CreateGenre - Use cases")]
+        public async Task CreateThrowWhenRelatedCategoryNotFound()
+        {
+            var input = _fixture.GetExampleInputWithCategories();
+            var exampleGuid = input.CategoriesIds![^1];
+            var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
+            var categoryRepositoryMock = _fixture.GetCategoryRepositoryMock();
+            var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+
+            categoryRepositoryMock.Setup(x => x.GetIdsListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()))
+                    .ReturnsAsync((IReadOnlyList<Guid>)input.CategoriesIds.FindAll(x => x != exampleGuid));
+
+
+            var usesCases = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object, categoryRepositoryMock.Object);
+
+            var action = async () => await usesCases.Handle(input, CancellationToken.None);
+            await action.Should().ThrowAsync<RelatedAggregateException>().WithMessage($"Related category Id(s) not found: {exampleGuid}");
+            categoryRepositoryMock.Verify(x => x.GetIdsListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }
