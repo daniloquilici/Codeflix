@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using quilici.Codeflix.Catalog.Application.Exceptions;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
 using Xunit;
 using DomianEntity = quilici.Codeflix.Catalog.Domain.Entity;
 using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre;
@@ -99,6 +100,24 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.CreateGenre
             var action = async () => await usesCases.Handle(input, CancellationToken.None);
             await action.Should().ThrowAsync<RelatedAggregateException>().WithMessage($"Related category Id(s) not found: {exampleGuid}");
             categoryRepositoryMock.Verify(x => x.GetIdsListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Theory(DisplayName = nameof(CreateThrowWhenRelatedCategoryNotFound))]
+        [Trait("Aplication", "CreateGenre - Use cases")]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task ThrowWhenNameIsInvalid(string? name)
+        {
+            var input = _fixture.GetExampleInput(name);
+            var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
+            var categoryRepositoryMock = _fixture.GetCategoryRepositoryMock();
+            var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+
+            var usesCases = new UseCase.CreateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object, categoryRepositoryMock.Object);
+
+            var action = async () => await usesCases.Handle(input, CancellationToken.None);
+            await action.Should().ThrowAsync<EntityValidationException>().WithMessage("Name should not be empty or null");
         }
     }
 }
