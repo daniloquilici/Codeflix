@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using Moq;
+using quilici.Codeflix.Catalog.Application.Exceptions;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.Genre.GetGenre;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.UpdateGenre;
 using Xunit;
 using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Genre.GetGenre;
@@ -45,6 +47,25 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.GetGenre
             }
 
             genreRepositoryMock.Verify(x => x.Get(It.Is<Guid>(x => x == exampleGenre.Id), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact(DisplayName = nameof(ThrowWhenNotFound))]
+        [Trait("Aplication", "GetGenre - Use cases")]
+        public async Task ThrowWhenNotFound()
+        {
+            var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
+            var exampleId = Guid.NewGuid();
+
+            genreRepositoryMock.Setup(x => x.Get(It.Is<Guid>(x => x == exampleId), It.IsAny<CancellationToken>())).ThrowsAsync(new NotFoundException($"Genre '{exampleId}' not found"));
+
+            var useCase = new UseCase.GetGenre(genreRepositoryMock.Object);
+
+            var input = new GetGenreInput(exampleId);
+
+            var action = async () => await useCase.Handle(input, CancellationToken.None);
+            await action.Should().ThrowAsync<NotFoundException>().WithMessage($"Genre '{exampleId}' not found");
+
+            genreRepositoryMock.Verify(x => x.Get(It.Is<Guid>(x => x == exampleId), It.IsAny<CancellationToken>()), Times.Once);                       
         }
     }
 }
