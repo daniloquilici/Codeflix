@@ -9,12 +9,6 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.CreateGenre
 
     public class CreateGenreTestFixture : GenreUsesCaseBaseFixture
     {
-        public Mock<IGenreRepository> GetGenreRepositoryMock() => new Mock<IGenreRepository>();
-
-        public Mock<ICategoryRepository> GetCategoryRepositoryMock() => new Mock<ICategoryRepository>();
-
-        public Mock<IUnitOfWork> GetUnitOfWorkMock() => new Mock<IUnitOfWork>();
-
         public CreateGenreInput GetExampleInput() => new CreateGenreInput(GetValidGenreName(), GetRandoBoolean());
 
         public CreateGenreInput GetExampleInput(string? name) => new CreateGenreInput(name, GetRandoBoolean());

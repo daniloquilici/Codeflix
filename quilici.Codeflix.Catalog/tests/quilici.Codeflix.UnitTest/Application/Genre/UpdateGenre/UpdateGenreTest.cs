@@ -2,8 +2,9 @@
 using Moq;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.Common;
 using Xunit;
-using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Genre;
+using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Genre.UpdateGenre;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
+using quilici.Codeflix.Catalog.Application.UseCases.Genre.UpdateGenre;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
 {
@@ -29,9 +30,9 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
 
             genreRepositoryMock.Setup(x => x.Get(It.Is<Guid>(x => x == exampleGenre.Id), It.IsAny<CancellationToken>())).ReturnsAsync(exampleGenre);
 
-            var useCase = new UseCase.UpdateGenre(genreRepositoryMock.Object, unitOfWorkMock.Object, _fixture.GetCategoryRepositoryMock().Object);
+            var useCase = new UseCase.UpdateGenre(unitOfWorkMock.Object, genreRepositoryMock.Object, _fixture.GetCategoryRepositoryMock().Object);
 
-            var input = new UpdateGenreInput(newNameExample, newIsActiove);
+            var input = new UpdateGenreInput(exampleGenre.Id, newNameExample, newIsActiove);
 
             GenreModelOuput output = await useCase.Handle(input, CancellationToken.None);
 
