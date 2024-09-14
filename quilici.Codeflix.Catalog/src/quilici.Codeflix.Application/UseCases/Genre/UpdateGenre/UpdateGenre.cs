@@ -31,11 +31,14 @@ namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.UpdateGenre
                 else
                     genre.Deactivate();
 
-            if ((request.CategoriesIds?.Count ?? 0) > 0)
+            if (request.CategoriesIds is not null)
             {
-                await ValidateCategoriesIds(request, cancellationToken);
                 genre.RemoveAllCategories();
-                request.CategoriesIds?.ForEach(genre.AddCategory);
+                if (request.CategoriesIds.Count > 0)
+                {
+                    await ValidateCategoriesIds(request, cancellationToken);
+                    request.CategoriesIds?.ForEach(genre.AddCategory);
+                }
             }
 
             await _genreRepository.Update(genre, cancellationToken);
