@@ -8,16 +8,16 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.Commom
 {
     public class GenreUsesCaseBaseFixture : BaseFixture
     {
-        public string GetValidGenreName() 
+        public string GetValidGenreName()
             => Faker.Commerce.Categories(1)[0];
 
-        public Mock<IGenreRepository> GetGenreRepositoryMock() 
+        public Mock<IGenreRepository> GetGenreRepositoryMock()
             => new Mock<IGenreRepository>();
 
-        public Mock<IUnitOfWork> GetUnitOfWorkMock() 
+        public Mock<IUnitOfWork> GetUnitOfWorkMock()
             => new Mock<IUnitOfWork>();
 
-        public Mock<ICategoryRepository> GetCategoryRepositoryMock() 
+        public Mock<ICategoryRepository> GetCategoryRepositoryMock()
             => new Mock<ICategoryRepository>();
 
         public DomainEntity.Genre GetExampleGenre(bool? isActive = null, List<Guid>? categoriesIds = null)

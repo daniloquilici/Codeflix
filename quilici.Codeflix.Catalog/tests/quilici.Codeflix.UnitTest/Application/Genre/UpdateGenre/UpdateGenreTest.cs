@@ -181,5 +181,34 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
             genreRepositoryMock.Verify(x => x.Update(It.Is<DomainEntity.Genre>(x => x.Id == exampleGenre.Id), It.IsAny<CancellationToken>()), Times.Once);
             unitOfWorkMock.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
+
+
+        [Fact(DisplayName = nameof(ThrowWhenCategorieNotFound))]
+        [Trait("Aplication", "UpdateGenre - Use cases")]
+        public async Task ThrowWhenCategorieNotFound()
+        {
+            var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+            var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
+            var categoryRepositoryMock = _fixture.GetCategoryRepositoryMock();
+
+            var exampleGenre = _fixture.GetExampleGenre(categoriesIds: _fixture.GetRandomIdsList());
+            var newNameExample = _fixture.GetValidGenreName();
+            var newIsActiove = !exampleGenre.IsActive;
+            var exampleNewCategoriesIdsList = _fixture.GetRandomIdsList(10);
+            var listReturnedByCategoryRepository = exampleNewCategoriesIdsList.GetRange(0, exampleNewCategoriesIdsList.Count - 2);
+            var idsNotReturnedByCategoryRepository = exampleNewCategoriesIdsList.GetRange(exampleNewCategoriesIdsList.Count - 2, 2);
+
+            genreRepositoryMock.Setup(x => x.Get(It.Is<Guid>(x => x == exampleGenre.Id), It.IsAny<CancellationToken>())).ReturnsAsync(exampleGenre);
+            categoryRepositoryMock.Setup(x => x.GetIdsListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>())).ReturnsAsync(listReturnedByCategoryRepository);
+
+            var useCase = new UseCase.UpdateGenre(unitOfWorkMock.Object, genreRepositoryMock.Object, categoryRepositoryMock.Object);
+
+            var input = new UpdateGenreInput(exampleGenre.Id, newNameExample, newIsActiove, exampleNewCategoriesIdsList);
+
+            var action = async () => await useCase.Handle(input, CancellationToken.None);
+
+            var notFoundIdsAsString = string.Join(", ", idsNotReturnedByCategoryRepository);
+            await action.Should().ThrowAsync<RelatedAggregateException>().WithMessage($"Related category Id(s) not found: {notFoundIdsAsString}");
+        }
     }
 }
