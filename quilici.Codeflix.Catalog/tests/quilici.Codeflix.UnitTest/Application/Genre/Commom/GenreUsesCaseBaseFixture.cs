@@ -16,6 +16,6 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.Commom
 
         public Mock<ICategoryRepository> GetCategoryRepositoryMock() => new Mock<ICategoryRepository>();
 
-        public DomainEntity.Genre GetExampleGente() => new DomainEntity.Genre(GetValidGenreName(), GetRandoBoolean());
+        public DomainEntity.Genre GetExampleGente(bool? isActive = null) => new DomainEntity.Genre(GetValidGenreName(), isActive ?? GetRandoBoolean());
     }
 }

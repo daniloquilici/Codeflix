@@ -5,7 +5,7 @@ namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.UpdateGenre
 {
     public class UpdateGenreInput : IRequest<GenreModelOuput>
     {
-        public UpdateGenreInput(Guid id, string name, bool? isActive)
+        public UpdateGenreInput(Guid id, string name, bool? isActive = null)
         {
             Id = id;
             Name = name;
