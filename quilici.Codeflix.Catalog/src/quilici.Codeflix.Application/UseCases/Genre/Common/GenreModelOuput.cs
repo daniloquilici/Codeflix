@@ -19,6 +19,7 @@ namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.Common
             Categories = categories;
         }
 
-        public static GenreModelOuput FromGenre(DomainEntity.Genre genre) => new GenreModelOuput(genre.Id, genre.Name, genre.IsActive, genre.CreatedAt, genre.Categories);
+        public static GenreModelOuput FromGenre(DomainEntity.Genre genre) 
+            => new GenreModelOuput(genre.Id, genre.Name, genre.IsActive, genre.CreatedAt, genre.Categories);        
     }
 }

@@ -8,14 +8,26 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.Commom
 {
     public class GenreUsesCaseBaseFixture : BaseFixture
     {
-        public string GetValidGenreName() => Faker.Commerce.Categories(1)[0];
+        public string GetValidGenreName() 
+            => Faker.Commerce.Categories(1)[0];
 
-        public Mock<IGenreRepository> GetGenreRepositoryMock() => new Mock<IGenreRepository>();
+        public Mock<IGenreRepository> GetGenreRepositoryMock() 
+            => new Mock<IGenreRepository>();
 
-        public Mock<IUnitOfWork> GetUnitOfWorkMock() => new Mock<IUnitOfWork>();
+        public Mock<IUnitOfWork> GetUnitOfWorkMock() 
+            => new Mock<IUnitOfWork>();
 
-        public Mock<ICategoryRepository> GetCategoryRepositoryMock() => new Mock<ICategoryRepository>();
+        public Mock<ICategoryRepository> GetCategoryRepositoryMock() 
+            => new Mock<ICategoryRepository>();
 
-        public DomainEntity.Genre GetExampleGente(bool? isActive = null) => new DomainEntity.Genre(GetValidGenreName(), isActive ?? GetRandoBoolean());
+        public DomainEntity.Genre GetExampleGenre(bool? isActive = null, List<Guid>? categoriesIds = null)
+        {
+            var genre = new DomainEntity.Genre(GetValidGenreName(), isActive ?? GetRandoBoolean());
+            categoriesIds?.ForEach(genre.AddCategory);
+            return genre;
+        }
+
+        public List<Guid> GetRandomIdsList(int? count = null)
+            => Enumerable.Range(1, count ?? (new Random()).Next(1, 10)).Select(_ => Guid.NewGuid()).ToList();
     }
 }
