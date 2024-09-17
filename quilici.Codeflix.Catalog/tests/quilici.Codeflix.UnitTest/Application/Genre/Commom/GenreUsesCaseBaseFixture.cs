@@ -27,6 +27,16 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.Commom
             return genre;
         }
 
+        public List<DomainEntity.Genre> GetExampleGenresList(int count = 10)
+        {
+            return Enumerable.Range(1, count).Select(_ => 
+            {
+                var genre = new DomainEntity.Genre(GetValidGenreName(), GetRandoBoolean());
+                GetRandomIdsList().ForEach(genre.AddCategory);
+                return genre;
+            }).ToList();
+        }
+
         public List<Guid> GetRandomIdsList(int? count = null)
             => Enumerable.Range(1, count ?? (new Random()).Next(1, 10)).Select(_ => Guid.NewGuid()).ToList();
     }
