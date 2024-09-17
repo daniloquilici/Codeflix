@@ -18,5 +18,8 @@ namespace quilici.Codeflix.Catalog.Application.Common
             Sort = sort;
             Dir = dir;
         }
+
+        public SearchInput ToSearchInput()
+            => new(Page, PerPage, Search, Sort, Dir);
     }
 }
