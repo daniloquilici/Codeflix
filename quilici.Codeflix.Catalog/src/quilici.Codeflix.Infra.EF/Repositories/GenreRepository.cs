@@ -21,9 +21,12 @@ public class GenreRepository : IGenreRepository
         throw new NotImplementedException();
     }
 
-    public Task<Genre> Get(Guid id, CancellationToken cancellationToken)
+    public async Task<Genre> Get(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var genre = await _genres.FindAsync(id);
+        var categoryId = await _genresCategories.Where(x => x.GenreId == genre.Id).Select(x => x.CategoryId).ToListAsync();
+        categoryId.ForEach(genre.AddCategory);
+        return genre;
     }
 
     public async Task Insert(Genre genre, CancellationToken cancellationToken)
