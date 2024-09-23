@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using quilici.Codeflix.Catalog.Application.Exceptions;
 using quilici.Codeflix.Catalog.Domain.Entity;
 using quilici.Codeflix.Catalog.Domain.Repository;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
@@ -23,8 +24,9 @@ public class GenreRepository : IGenreRepository
 
     public async Task<Genre> Get(Guid id, CancellationToken cancellationToken)
     {
-        var genre = await _genres.FindAsync(id);
-        var categoryId = await _genresCategories.Where(x => x.GenreId == genre.Id).Select(x => x.CategoryId).ToListAsync();
+        var genre = await _genres.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        NotFoundException.ThrowIfNull(genre, $"Genre '{id}' not found.");
+        var categoryId = await _genresCategories.Where(x => x.GenreId == genre.Id).Select(x => x.CategoryId).ToListAsync(cancellationToken);
         categoryId.ForEach(genre.AddCategory);
         return genre;
     }
