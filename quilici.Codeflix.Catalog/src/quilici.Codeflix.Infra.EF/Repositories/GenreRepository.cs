@@ -17,9 +17,12 @@ public class GenreRepository : IGenreRepository
         _context = context;
     }
 
-    public Task Delete(Genre aggregate, CancellationToken cancellationToken)
+    public Task Delete(Genre genre, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _genresCategories.RemoveRange(
+                _genresCategories.Where(x => x.GenreId == genre.Id));
+        _genres.Remove(genre);
+        return Task.CompletedTask;
     }
 
     public async Task<Genre> Get(Guid id, CancellationToken cancellationToken)

@@ -126,7 +126,7 @@ public class GenreRepositoryTest
 
         var assertsDbContext = _fixture.CreateDbContext(true);
         var dbGenre = assertsDbContext.Genres.AsNoTracking().FirstOrDefault(x => x.Id == exampleGenre.Id);
-        dbGenre.Should().NotBeNull();
+        dbGenre.Should().BeNull();
         var categoriesIdList = await assertsDbContext.GenresCategories.AsNoTracking().Where(x => x.GenreId == exampleGenre.Id).Select(x => x.CategoryId).ToListAsync();
         categoriesIdList.Should().HaveCount(0);
     }
