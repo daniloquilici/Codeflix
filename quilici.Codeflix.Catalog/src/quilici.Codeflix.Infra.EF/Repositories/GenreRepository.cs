@@ -49,8 +49,14 @@ public class GenreRepository : IGenreRepository
         throw new NotImplementedException();
     }
 
-    public Task Update(Genre aggregate, CancellationToken cancellationToken)
+    public async Task Update(Genre genre, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _genres.Update(genre);
+        _genresCategories.RemoveRange(_genresCategories.Where(x => x.GenreId == genre.Id));
+        if (genre.Categories.Count > 0)
+        {
+            var relations = genre.Categories.Select(categoryId => new GenresCategories(categoryId, genre.Id));
+            await _genresCategories.AddRangeAsync(relations);
+        }
     }
 }
