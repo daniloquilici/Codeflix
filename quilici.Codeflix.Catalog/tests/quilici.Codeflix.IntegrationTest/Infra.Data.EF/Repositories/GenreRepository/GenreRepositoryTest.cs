@@ -430,7 +430,7 @@ public class GenreRepositoryTest
     public async Task SearchByText(string search, int page, int perPage, int expectedQuantityItemsReturned, int expectedQuantityItems)
     {
         CodeFlixCatalogDbContext dbContext = _fixture.CreateDbContext();
-        var exampleGenreList = _fixture.GeteExampleListGenreByNames(new List<string>() { "Action", "Horror", "Horror - Robots", "Horror - Based on Real Facts", "Drama", "Sci-fi IA", "Sci-fi Space", "Sci-fi Robots", "Sci-fi Future" });
+        var exampleGenreList = _fixture.GetExampleListGenreByNames(new List<string>() { "Action", "Horror", "Horror - Robots", "Horror - Based on Real Facts", "Drama", "Sci-fi IA", "Sci-fi Space", "Sci-fi Robots", "Sci-fi Future" });
         await dbContext.Genres.AddRangeAsync(exampleGenreList);
         var random = new Random();
         exampleGenreList.ForEach(exampleGenre =>
@@ -467,6 +467,51 @@ public class GenreRepositoryTest
             resultItem.CreatedAt.Should().Be(exampleGenre.CreatedAt);
             resultItem.Categories.Should().HaveCount(exampleGenre.Categories.Count);
             resultItem.Categories.Should().BeEquivalentTo(exampleGenre.Categories);
+        }
+    }
+
+    [Theory(DisplayName = nameof(SearchOrdered))]
+    [Trait("Integration/Infra.Data", "GenreRepository - Repositories")]
+    [InlineData("name", "asc")]
+    [InlineData("name", "desc")]
+    [InlineData("id", "asc")]
+    [InlineData("id", "desc")]
+    [InlineData("CreatedAt", "asc")]
+    [InlineData("CreatedAt", "desc")]
+    [InlineData("", "asc")]
+    public async Task SearchOrdered(string orderBy, string order)
+    {
+        CodeFlixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        var exampleGenreList = _fixture.GeteExampleListGenre(10);
+        await dbContext.Genres.AddRangeAsync(exampleGenreList);        
+        await dbContext.SaveChangesAsync();
+
+        var actDbContext = _fixture.CreateDbContext(true);
+        var genreRepository = new Repository.GenreRepository(actDbContext);
+        var searchOrder = order.ToLower() == "asc" ? SearchOrder.Asc : SearchOrder.Desc;
+        var searchInput = new SearchInput(1, 20, "", orderBy, searchOrder);
+        
+        var output = await genreRepository.Search(searchInput, CancellationToken.None);
+
+        var expectedOrderedList = _fixture.CloneGenreListOrdered(exampleGenreList, orderBy, searchOrder);
+
+        output.Should().NotBeNull();
+        output.Items.Should().NotBeNull();
+        output.CurrentPage.Should().Be(searchInput.Page);
+        output.PerPage.Should().Be(searchInput.PerPage);
+        output.Total.Should().Be(exampleGenreList.Count);
+        output.Items.Should().HaveCount(exampleGenreList.Count);
+        for (int i = 0; i < expectedOrderedList.Count; i++)
+        {
+            var expectedItem = expectedOrderedList[i];
+            var outputItem = output.Items[i];
+
+            expectedItem.Should().NotBeNull();
+            outputItem.Should().NotBeNull();
+            outputItem.Id.Should().Be(expectedItem.Id);
+            outputItem.Name.Should().Be(expectedItem.Name);
+            outputItem.IsActive.Should().Be(expectedItem.IsActive);
+            outputItem.CreatedAt.Should().Be(expectedItem.CreatedAt);
         }
     }
 }

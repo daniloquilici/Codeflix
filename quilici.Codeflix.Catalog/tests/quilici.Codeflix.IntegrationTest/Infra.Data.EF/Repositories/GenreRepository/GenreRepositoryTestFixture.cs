@@ -1,4 +1,5 @@
 ﻿using quilici.Codeflix.Catalog.Domain.Entity;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.IntegrationTest.Base;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
@@ -24,7 +25,7 @@ public class GenreRepositoryTestFixture : BaseFixture
 
     public List<DomainEntity.Genre> GeteExampleListGenre(int count = 10) => Enumerable.Range(1, count).Select(_ => GetExampleGenre()).ToList();
 
-    public List<DomainEntity.Genre> GeteExampleListGenreByNames(List<string> names) => names.Select(name => GetExampleGenre(name: name)).ToList();
+    public List<DomainEntity.Genre> GetExampleListGenreByNames(List<string> names) => names.Select(name => GetExampleGenre(name: name)).ToList();
 
     public string GetValidCategoryName()
     {
@@ -53,4 +54,22 @@ public class GenreRepositoryTestFixture : BaseFixture
 
     public List<Category> GetExampleCategoriesList(int length = 10) => Enumerable.Range(0, length)
         .Select(_ => GetExampleCategory()).ToList();
+
+    public List<Genre> CloneGenreListOrdered(List<Genre> genreList, string orderBy, SearchOrder order)
+    {
+        var listClone = new List<Genre>(genreList);
+
+        var orderedEnumerable = (orderBy.ToLower(), order) switch
+        {
+            ("name", SearchOrder.Asc) => listClone.OrderBy(x => x.Name).ThenBy(x => x.Id),
+            ("name", SearchOrder.Desc) => listClone.OrderByDescending(x => x.Name).ThenByDescending(x => x.Id),
+            ("id", SearchOrder.Asc) => listClone.OrderBy(x => x.Id),
+            ("id", SearchOrder.Desc) => listClone.OrderByDescending(x => x.Id),
+            ("createdat", SearchOrder.Asc) => listClone.OrderBy(x => x.CreatedAt),
+            ("createdat", SearchOrder.Desc) => listClone.OrderByDescending(x => x.CreatedAt),
+            _ => listClone.OrderBy(x => x.Name).ThenBy(x => x.Id),
+        };
+
+        return orderedEnumerable.ToList();
+    }
 }
