@@ -15,14 +15,16 @@ public class GenreRepositoryTestFixture : BaseFixture
 
     public bool GetRandoBoolean() => new Random().NextDouble() < 0.5;
 
-    public DomainEntity.Genre GetExampleGenre(bool? isActive = null, List<Guid>? categoriesIds = null)
+    public DomainEntity.Genre GetExampleGenre(bool? isActive = null, List<Guid>? categoriesIds = null, string? name = null)
     {
-        var genre = new DomainEntity.Genre(GetValidGenreName(), isActive ?? GetRandoBoolean());
+        var genre = new DomainEntity.Genre(name ?? GetValidGenreName(), isActive ?? GetRandoBoolean());
         categoriesIds?.ForEach(genre.AddCategory);
         return genre;
     }
 
     public List<DomainEntity.Genre> GeteExampleListGenre(int count = 10) => Enumerable.Range(1, count).Select(_ => GetExampleGenre()).ToList();
+
+    public List<DomainEntity.Genre> GeteExampleListGenreByNames(List<string> names) => names.Select(name => GetExampleGenre(name: name)).ToList();
 
     public string GetValidCategoryName()
     {
