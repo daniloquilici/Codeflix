@@ -4,6 +4,7 @@ using quilici.Codeflix.Catalog.Domain.Entity;
 using quilici.Codeflix.Catalog.Domain.Repository;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.Infra.Data.EF.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
 public class GenreRepository : IGenreRepository
@@ -44,9 +45,10 @@ public class GenreRepository : IGenreRepository
         }
     }
 
-    public Task<SearchOutput<Genre>> Search(SearchInput searchInput, CancellationToken cancellationToken)
+    public async Task<SearchOutput<Genre>> Search(SearchInput searchInput, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var genres = await _genres.ToListAsync();
+        return new SearchOutput<Genre>(searchInput.Page, searchInput.PerPage, genres.Count(), genres);
     }
 
     public async Task Update(Genre genre, CancellationToken cancellationToken)
