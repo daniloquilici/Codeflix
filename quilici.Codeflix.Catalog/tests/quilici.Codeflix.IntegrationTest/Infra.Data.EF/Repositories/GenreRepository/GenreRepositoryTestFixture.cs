@@ -22,6 +22,8 @@ public class GenreRepositoryTestFixture : BaseFixture
         return genre;
     }
 
+    public List<DomainEntity.Genre> GeteExampleListGenre(int count = 10) => Enumerable.Range(1, count).Select(_ => GetExampleGenre()).ToList();
+
     public string GetValidCategoryName()
     {
         var categoryName = string.Empty;
