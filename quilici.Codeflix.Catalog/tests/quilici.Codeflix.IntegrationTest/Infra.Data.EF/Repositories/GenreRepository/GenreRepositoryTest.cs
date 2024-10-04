@@ -280,7 +280,7 @@ public class GenreRepositoryTest
     public async Task SearchReturnsItemsAndTotal()
     {
         CodeFlixCatalogDbContext dbContext = _fixture.CreateDbContext();
-        var exampleGenreList = _fixture.GeteExampleListGenre(10);               
+        var exampleGenreList = _fixture.GetExampleListGenre(10);               
         await dbContext.Genres.AddRangeAsync(exampleGenreList);
         await dbContext.SaveChangesAsync();
 
@@ -311,7 +311,7 @@ public class GenreRepositoryTest
     public async Task SearchReturnsRelations()
     {
         CodeFlixCatalogDbContext dbContext = _fixture.CreateDbContext();
-        var exampleGenreList = _fixture.GeteExampleListGenre(10);      
+        var exampleGenreList = _fixture.GetExampleListGenre(10);      
         await dbContext.Genres.AddRangeAsync(exampleGenreList);
         var random = new Random();
         exampleGenreList.ForEach(exampleGenre =>
@@ -377,7 +377,7 @@ public class GenreRepositoryTest
     public async Task SearchReturnsPaginated(int quantityToGenerate, int page, int perPage, int expectedQuantityItems)
     {
         CodeFlixCatalogDbContext dbContext = _fixture.CreateDbContext();
-        var exampleGenreList = _fixture.GeteExampleListGenre(quantityToGenerate);
+        var exampleGenreList = _fixture.GetExampleListGenre(quantityToGenerate);
         await dbContext.Genres.AddRangeAsync(exampleGenreList);
         var random = new Random();
         exampleGenreList.ForEach(exampleGenre =>
@@ -482,7 +482,7 @@ public class GenreRepositoryTest
     public async Task SearchOrdered(string orderBy, string order)
     {
         CodeFlixCatalogDbContext dbContext = _fixture.CreateDbContext();
-        var exampleGenreList = _fixture.GeteExampleListGenre(10);
+        var exampleGenreList = _fixture.GetExampleListGenre(10);
         await dbContext.Genres.AddRangeAsync(exampleGenreList);        
         await dbContext.SaveChangesAsync();
 
