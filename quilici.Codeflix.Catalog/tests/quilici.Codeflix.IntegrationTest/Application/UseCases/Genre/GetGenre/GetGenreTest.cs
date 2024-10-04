@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using quilici.Codeflix.Catalog.Application.Exceptions;
 using quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
 using Xunit;
 using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Genre.GetGenre;
@@ -35,5 +36,23 @@ public class GetGenreTest
         output.Name.Should().Be(expectedGenre.Name);
         output.IsActive.Should().Be(expectedGenre.IsActive);
         output.CreatedAt.Should().Be(expectedGenre.CreatedAt);
+    }
+
+    [Fact(DisplayName = nameof(GetGenreThrowsWhenNotFound))]
+    [Trait("Integratrion/Applicatrion", "GetGenre - Use cases")]
+    public async Task GetGenreThrowsWhenNotFound()
+    {
+        var genreExampleList = _fixture.GetExampleListGenre(10);
+        var randomGuid = Guid.NewGuid();
+        var dbArrangeContext = _fixture.CreateDbContext();
+        await dbArrangeContext.Genres.AddRangeAsync(genreExampleList);
+        await dbArrangeContext.SaveChangesAsync();
+        var genreRepository = new GenreRepository(_fixture.CreateDbContext(true));
+        var useCase = new UseCase.GetGenre(genreRepository);
+        var input = new UseCase.GetGenreInput(randomGuid);
+
+        var action = async () => await useCase.Handle(input, CancellationToken.None);
+
+        await action.Should().ThrowAsync<NotFoundException>().WithMessage($"Genre '{randomGuid}' not found.");
     }
 }
