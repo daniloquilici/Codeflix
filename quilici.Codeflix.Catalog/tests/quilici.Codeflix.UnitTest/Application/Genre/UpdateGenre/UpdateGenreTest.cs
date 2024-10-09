@@ -147,7 +147,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
             output.IsActive.Should().Be(newIsActiove);
             output.CreatedAt.Should().BeSameDateAs(exampleGenre.CreatedAt);
             output.Categories.Should().HaveCount(exampleCategoriesIdsList.Count);
-            exampleCategoriesIdsList.ForEach(expectedId => output.Categories.Should().Contain(expectedId));
+            exampleCategoriesIdsList.ForEach(expectedId => output.Categories.Should().Contain(relation => relation.Id == expectedId));
 
             genreRepositoryMock.Verify(x => x.Update(It.Is<DomainEntity.Genre>(x => x.Id == exampleGenre.Id), It.IsAny<CancellationToken>()), Times.Once);
             unitOfWorkMock.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -180,7 +180,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
             output.IsActive.Should().Be(newIsActiove);
             output.CreatedAt.Should().BeSameDateAs(exampleGenre.CreatedAt);
             output.Categories.Should().HaveCount(exampleCategoriesIdsList.Count);
-            exampleCategoriesIdsList.ForEach(expectedId => output.Categories.Should().Contain(expectedId));
+            exampleCategoriesIdsList.ForEach(expectedId => output.Categories.Should().Contain(relation => relation.Id == expectedId));
 
             genreRepositoryMock.Verify(x => x.Update(It.Is<DomainEntity.Genre>(x => x.Id == exampleGenre.Id), It.IsAny<CancellationToken>()), Times.Once);
             unitOfWorkMock.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -241,7 +241,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
             output.IsActive.Should().Be(newIsActiove);
             output.CreatedAt.Should().BeSameDateAs(exampleGenre.CreatedAt);
             output.Categories.Should().HaveCount(exampleCategoriesIdsList.Count);
-            exampleCategoriesIdsList.ForEach(expectedId => output.Categories.Should().Contain(expectedId));
+            exampleCategoriesIdsList.ForEach(expectedId => output.Categories.Should().Contain(relation => relation.Id == expectedId));
 
             genreRepositoryMock.Verify(x => x.Update(It.Is<DomainEntity.Genre>(x => x.Id == exampleGenre.Id), It.IsAny<CancellationToken>()), Times.Once);
             unitOfWorkMock.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);

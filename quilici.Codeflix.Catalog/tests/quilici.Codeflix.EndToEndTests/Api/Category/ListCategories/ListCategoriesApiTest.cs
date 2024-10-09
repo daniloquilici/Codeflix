@@ -77,7 +77,8 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             output.Should().NotBeNull();
             output!.Data.Should().NotBeNull();
             output.Data!.Count.Should().Be(0);
-            output.Meta.Total.Should().Be(0);
+            output.Meta.Should().NotBeNull();
+            output.Meta!.Total.Should().Be(0);
         }
 
         [Fact(DisplayName = nameof(ListCategoriesAndTotal))]
@@ -98,7 +99,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             output.Should().NotBeNull();
             output!.Data.Should().NotBeNull();
             output.Meta.Should().NotBeNull();
-            output.Meta.Total.Should().Be(exempleCategoriesList.Count);
+            output.Meta!.Total.Should().Be(exempleCategoriesList.Count);
             output.Meta.CurrentPage.Should().Be(input.Page);
             output.Meta.PerPage.Should().Be(input.PerPage);
             output.Data!.Count.Should().Be(input.PerPage);
@@ -135,7 +136,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
             output.Should().NotBeNull();
             output!.Meta.Should().NotBeNull();
-            output.Meta.CurrentPage.Should().Be(input.Page);
+            output.Meta!.CurrentPage.Should().Be(input.Page);
             output.Meta.PerPage.Should().Be(input.PerPage);
             output.Meta.Total.Should().Be(exempleCategoriesList.Count);
             output.Data.Should().HaveCount(expectedQuantityItems);
@@ -177,7 +178,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
             output.Should().NotBeNull();
             output!.Meta.Should().NotBeNull();
-            output.Meta.CurrentPage.Should().Be(input.Page);
+            output.Meta!.CurrentPage.Should().Be(input.Page);
             output.Meta.PerPage.Should().Be(input.PerPage);
             output.Meta.Total.Should().Be(expectedQuantityItems);
             output.Data.Should().HaveCount(expectedQuantityItemsReturned);
@@ -216,7 +217,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
             output.Should().NotBeNull();
             output!.Meta.Should().NotBeNull();
-            output.Meta.CurrentPage.Should().Be(input.Page);
+            output.Meta!.CurrentPage.Should().Be(input.Page);
             output.Meta.PerPage.Should().Be(input.PerPage);
             output.Meta.Total.Should().Be(exempleCategoriesList.Count);
             output.Data.Should().HaveCount(exempleCategoriesList.Count);
@@ -269,7 +270,7 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
             response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
             output.Should().NotBeNull();
             output!.Meta.Should().NotBeNull();
-            output.Meta.CurrentPage.Should().Be(input.Page);
+            output.Meta!.CurrentPage.Should().Be(input.Page);
             output.Meta.PerPage.Should().Be(input.PerPage);
             output.Meta.Total.Should().Be(exempleCategoriesList.Count);
             output.Data.Should().HaveCount(exempleCategoriesList.Count);

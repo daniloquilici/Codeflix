@@ -62,7 +62,7 @@ public class GetGenreTest
     public async Task GetGenreWithCategoryRelations()
     {
         var genreExampleList = _fixture.GetExampleListGenre(10);
-        var categoriesExapleList = _fixture.GetExampleCategoriesList(5);        
+        var categoriesExapleList = _fixture.GetExampleCategoriesList(5);
         var expectedGenre = genreExampleList[5];
         categoriesExapleList.ForEach(category => expectedGenre.AddCategory(category.Id));
         var dbArrangeContext = _fixture.CreateDbContext();
@@ -82,6 +82,10 @@ public class GetGenreTest
         output.IsActive.Should().Be(expectedGenre.IsActive);
         output.CreatedAt.Should().Be(expectedGenre.CreatedAt);
         output.Categories.Should().HaveCount(expectedGenre.Categories.Count);
-        output.Categories.ToList().ForEach(id => expectedGenre.Categories.Should().Contain(id));
+        output.Categories.ToList().ForEach(relationModel =>
+        {
+            expectedGenre.Categories.Should().Contain(relationModel.Id);
+            relationModel.Name.Should().BeNull();
+        });
     }
 }

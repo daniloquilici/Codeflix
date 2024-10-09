@@ -30,8 +30,8 @@ public class GenreRepository : IGenreRepository
     {
         var genre = await _genres.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         NotFoundException.ThrowIfNull(genre, $"Genre '{id}' not found.");
-        var categoryId = await _genresCategories.Where(x => x.GenreId == genre.Id).Select(x => x.CategoryId).ToListAsync(cancellationToken);
-        categoryId.ForEach(genre.AddCategory);
+        var categoryId = await _genresCategories.Where(x => x.GenreId == genre!.Id).Select(x => x.CategoryId).ToListAsync(cancellationToken);
+        categoryId.ForEach(genre!.AddCategory);
         return genre;
     }
 

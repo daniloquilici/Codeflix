@@ -11,7 +11,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.CreateGenre
     {
         public CreateGenreInput GetExampleInput() => new CreateGenreInput(GetValidGenreName(), GetRandoBoolean());
 
-        public CreateGenreInput GetExampleInput(string? name) => new CreateGenreInput(name, GetRandoBoolean());
+        public CreateGenreInput GetExampleInput(string? name) => new CreateGenreInput(name!, GetRandoBoolean());
 
         public CreateGenreInput GetExampleInputWithCategories()
         {

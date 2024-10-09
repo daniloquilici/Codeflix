@@ -53,7 +53,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.ListGenres
 
                 foreach (var expectedId in repositoryGenre.Categories)
                 {
-                    outpuItem.Categories.Should().Contain(x => x == expectedId);
+                    outpuItem.Categories.Should().Contain(x => x.Id == expectedId);
                 }
             });
 
