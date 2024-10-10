@@ -7,6 +7,7 @@ using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 using quilici.Codeflix.Catalog.Infra.Data.EF.Models;
 using Microsoft.EntityFrameworkCore;
+using quilici.Codeflix.Catalog.Application.Exceptions;
 
 
 namespace quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.Genre.CreateGenre;
@@ -76,5 +77,25 @@ public class CreateGenreTest
         relations.Should().HaveCount(input.CategoriesIds.Count);
         var categoryIdsRelatedFromDb = relations.Select(relation => relation.CategoryId).ToList();
         categoryIdsRelatedFromDb.Should().BeEquivalentTo(input.CategoriesIds);
+    }
+
+    [Fact(DisplayName = nameof(CreateGenreThrowsWhenCategoryDoesExist))]
+    [Trait("Integratrion/Applicatrion", "CreateGenre - Use cases")]
+    public async Task CreateGenreThrowsWhenCategoryDoesExist()
+    {
+        List<DomainEntity.Category> exampleCategories = _fixture.GetExampleCategoriesList(5);
+        var arrangeDbContext = _fixture.CreateDbContext();
+        await arrangeDbContext.Categories.AddRangeAsync(exampleCategories);
+        await arrangeDbContext.SaveChangesAsync();
+        CreateGenreInput input = _fixture.GetExampleInput();
+        input.CategoriesIds = exampleCategories.Select(categoty => categoty.Id).ToList();
+        Guid randomGuid = Guid.NewGuid();
+        input.CategoriesIds.Add(randomGuid);
+        var actDbContext = _fixture.CreateDbContext(true);
+        UseCase.CreateGenre createGente = new UseCase.CreateGenre(new GenreRepository(actDbContext), new UnitOfWork(actDbContext), new CategoryRepository(actDbContext));
+        
+        var action =  async () => await createGente.Handle(input, CancellationToken.None);
+
+        await action.Should().ThrowAsync<RelatedAggregateException>().WithMessage($"Related category id(s) not found: {randomGuid}");
     }
 }
