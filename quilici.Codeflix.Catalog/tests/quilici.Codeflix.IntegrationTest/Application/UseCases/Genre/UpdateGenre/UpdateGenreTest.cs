@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using quilici.Codeflix.Catalog.Application.Exceptions;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.UpdateGenre;
 using quilici.Codeflix.Catalog.Infra.Data.EF;
@@ -95,5 +96,35 @@ public class UpdateGenreTest
             .ToListAsync();
         relationsFromDb.Should().NotBeNullOrEmpty();
         relationsFromDb.Should().BeEquivalentTo(input.CategoriesIds);
+    }
+
+    [Fact(DisplayName = nameof(UpdateGenreThrowsWhenCategoryDoesntExist))]
+    [Trait("Integratrion/Applicatrion", "UpdateGenre - Use cases")]
+    public async Task UpdateGenreThrowsWhenCategoryDoesntExist()
+    {
+        List<DomainEntity.Category> exampleCategories = _fixture.GetExampleCategoriesList(10);
+        List<DomainEntity.Genre> exampleGenres = _fixture.GetExampleListGenre(10);
+        DomainEntity.Genre targetGenre = exampleGenres[5];
+        var relatedCategories = exampleCategories.GetRange(0, 5);
+        var newRelatedCategories = exampleCategories.GetRange(5, 3);
+        relatedCategories.ForEach(category => targetGenre.AddCategory(category.Id));
+        List<GenresCategories> relations = targetGenre.Categories.Select(category => new GenresCategories(category, targetGenre.Id)).ToList();
+
+        var arrangeDbContext = _fixture.CreateDbContext();
+        await arrangeDbContext.AddRangeAsync(exampleGenres);
+        await arrangeDbContext.AddRangeAsync(exampleCategories);
+        await arrangeDbContext.AddRangeAsync(relations);
+        await arrangeDbContext.SaveChangesAsync();
+
+        var actDbContext = _fixture.CreateDbContext(true);
+        UseCase.UpdateGenre updateGenre = new UseCase.UpdateGenre(new UnitOfWork(actDbContext), new GenreRepository(actDbContext), new CategoryRepository(actDbContext));
+        var categoryIdsToRelate = newRelatedCategories.Select(category => category.Id).ToList();
+        Guid invalidCategoryId = Guid.NewGuid();
+        categoryIdsToRelate.Add(invalidCategoryId);
+        UpdateGenreInput input = new UpdateGenreInput(targetGenre.Id, _fixture.GetValidGenreName(), !targetGenre.IsActive, categoryIdsToRelate);
+
+        Func<Task<GenreModelOuput>> action = async () => await updateGenre.Handle(input, CancellationToken.None);
+
+        await action.Should().ThrowAsync<RelatedAggregateException>().WithMessage($"Related category id(s) not found: {invalidCategoryId}");
     }
 }
