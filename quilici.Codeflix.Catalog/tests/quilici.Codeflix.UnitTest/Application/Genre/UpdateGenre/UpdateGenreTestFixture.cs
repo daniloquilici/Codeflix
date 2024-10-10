@@ -7,7 +7,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
     public class UpdateGenreTestFixtureCollection : ICollectionFixture<UpdateGenreTestFixture> { }
 
 
-    public class UpdateGenreTestFixture : GenreUsesCaseBaseFixture
+    public class UpdateGenreTestFixture : GenreUseCaseBaseFixture
     {
     }
 }

@@ -9,7 +9,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.ListGenres
     public class ListGenreTestFixtureCollection : ICollectionFixture<ListGenreTestFixture> { }
 
 
-    public class ListGenreTestFixture : GenreUsesCaseBaseFixture
+    public class ListGenreTestFixture : GenreUseCaseBaseFixture
     {
         public ListGenresInput GetExampleInput()
         {

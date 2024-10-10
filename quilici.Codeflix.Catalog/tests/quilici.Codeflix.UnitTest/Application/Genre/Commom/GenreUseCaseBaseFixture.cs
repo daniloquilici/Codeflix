@@ -6,7 +6,7 @@ using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.Commom
 {
-    public class GenreUsesCaseBaseFixture : BaseFixture
+    public class GenreUseCaseBaseFixture : BaseFixture
     {
         public string GetValidGenreName()
             => Faker.Commerce.Categories(1)[0];

@@ -7,7 +7,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.CreateGenre
     [CollectionDefinition(nameof(CreateGenreTestFixture))]
     public class CreateGenreTestFixtureCollection : ICollectionFixture<CreateGenreTestFixture> { }
 
-    public class CreateGenreTestFixture : GenreUsesCaseBaseFixture
+    public class CreateGenreTestFixture : GenreUseCaseBaseFixture
     {
         public CreateGenreInput GetExampleInput() => new CreateGenreInput(GetValidGenreName(), GetRandoBoolean());
 
