@@ -1,15 +1,19 @@
-﻿using quilici.Codeflix.Catalog.EndToEndTests.Base;
+﻿using quilici.Codeflix.Catalog.EndToEndTests.Api.Category.Common;
+using quilici.Codeflix.Catalog.EndToEndTests.Base;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Genre.Common;
 public class GenreBaseFixture : BaseFixture
 {
     public GenrePersistence Persistence { get; set; }
+    public CategoryPersistence CategoryPersistence { get; set; }
 
     public GenreBaseFixture()
         : base()
     {
-        Persistence = new GenrePersistence(CreateDbContext());
+        var dbContext = CreateDbContext();
+        Persistence = new GenrePersistence(dbContext);
+        CategoryPersistence = new CategoryPersistence(dbContext);
     }
 
     public string GetValidGenreName()
