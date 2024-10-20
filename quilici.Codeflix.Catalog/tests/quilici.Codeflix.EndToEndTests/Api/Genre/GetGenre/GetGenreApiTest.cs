@@ -25,7 +25,7 @@ public class GetGenreApiTest
         var targetGenre = exampleGenres[5];
         await _fixture.Persistence.InsertList(exampleGenres);
 
-        var (response, output) = await _fixture.ApiClient.Get<ApiResponse<GenreModelOuput>>($"/genres/{targetGenre.Id}");
+        var (response, output) = await _fixture.ApiClient.Get<ApiResponse<GenreModelOutput>>($"/genres/{targetGenre.Id}");
 
         response.Should().NotBeNull();
         response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);

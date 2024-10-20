@@ -3,7 +3,7 @@ using quilici.Codeflix.Catalog.Application.UseCases.Genre.Common;
 
 namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.UpdateGenre
 {
-    public class UpdateGenreInput : IRequest<GenreModelOuput>
+    public class UpdateGenreInput : IRequest<GenreModelOutput>
     {
         public Guid Id { get; set; }
 

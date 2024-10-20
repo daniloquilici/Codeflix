@@ -5,18 +5,18 @@ using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
 namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.ListGenres
 {
-    public class ListGenresOutput : PaginatedListOutput<GenreModelOuput>
+    public class ListGenresOutput : PaginatedListOutput<GenreModelOutput>
     {
-        public ListGenresOutput(int page, int perPage, int total, IReadOnlyList<GenreModelOuput> items) : base(page, perPage, total, items)
+        public ListGenresOutput(int page, int perPage, int total, IReadOnlyList<GenreModelOutput> items) : base(page, perPage, total, items)
         {
         }
 
         public static ListGenresOutput FromSearchOutput(SearchOutput<DomainEntity.Genre> searhOutput)
-            => new(searhOutput.CurrentPage, searhOutput.PerPage, searhOutput.Total, searhOutput.Items.Select(GenreModelOuput.FromGenre).ToList());
+            => new(searhOutput.CurrentPage, searhOutput.PerPage, searhOutput.Total, searhOutput.Items.Select(GenreModelOutput.FromGenre).ToList());
 
         internal void FillWithCategoryName(IReadOnlyList<DomainEntity.Category> categories)
         {
-            foreach (GenreModelOuput item in Items)
+            foreach (GenreModelOutput item in Items)
             {
                 foreach (GenreModelOutputCategory categoryOutput in item.Categories)
                 {

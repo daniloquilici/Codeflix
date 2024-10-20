@@ -42,7 +42,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.ListGenres
             output.PerPage.Should().Be(outputRepositorySearch.PerPage);
             output.Total.Should().Be(outputRepositorySearch.Total);
             output.Items.Should().HaveCount(outputRepositorySearch.Items.Count);
-            ((List<GenreModelOuput>)output.Items).ForEach(outpuItem =>
+            ((List<GenreModelOutput>)output.Items).ForEach(outpuItem =>
             {
                 var repositoryGenre = outputRepositorySearch.Items.FirstOrDefault(y => y.Id == outpuItem.Id);
                 repositoryGenre.Should().NotBeNull();

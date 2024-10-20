@@ -36,7 +36,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
 
             var input = new UpdateGenreInput(exampleGenre.Id, newNameExample, newIsActiove);
 
-            GenreModelOuput output = await useCase.Handle(input, CancellationToken.None);
+            GenreModelOutput output = await useCase.Handle(input, CancellationToken.None);
 
             output.Should().NotBeNull();
             output.Id.Should().Be(exampleGenre.Id);
@@ -107,7 +107,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
 
             var input = new UpdateGenreInput(exampleGenre.Id, newNameExample);
 
-            GenreModelOuput output = await useCase.Handle(input, CancellationToken.None);
+            GenreModelOutput output = await useCase.Handle(input, CancellationToken.None);
 
             output.Should().NotBeNull();
             output.Id.Should().Be(exampleGenre.Id);
@@ -139,7 +139,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
 
             var input = new UpdateGenreInput(exampleGenre.Id, newNameExample, newIsActiove, exampleCategoriesIdsList);
 
-            GenreModelOuput output = await useCase.Handle(input, CancellationToken.None);
+            GenreModelOutput output = await useCase.Handle(input, CancellationToken.None);
 
             output.Should().NotBeNull();
             output.Id.Should().Be(exampleGenre.Id);
@@ -172,7 +172,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
 
             var input = new UpdateGenreInput(exampleGenre.Id, newNameExample, newIsActiove, exampleCategoriesIdsList);
 
-            GenreModelOuput output = await useCase.Handle(input, CancellationToken.None);
+            GenreModelOutput output = await useCase.Handle(input, CancellationToken.None);
 
             output.Should().NotBeNull();
             output.Id.Should().Be(exampleGenre.Id);
@@ -233,7 +233,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
 
             var input = new UpdateGenreInput(exampleGenre.Id, newNameExample, newIsActiove);
 
-            GenreModelOuput output = await useCase.Handle(input, CancellationToken.None);
+            GenreModelOutput output = await useCase.Handle(input, CancellationToken.None);
 
             output.Should().NotBeNull();
             output.Id.Should().Be(exampleGenre.Id);
@@ -266,7 +266,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.UpdateGenre
 
             var input = new UpdateGenreInput(exampleGenre.Id, newNameExample, newIsActiove, new List<Guid>());
 
-            GenreModelOuput output = await useCase.Handle(input, CancellationToken.None);
+            GenreModelOutput output = await useCase.Handle(input, CancellationToken.None);
 
             output.Should().NotBeNull();
             output.Id.Should().Be(exampleGenre.Id);

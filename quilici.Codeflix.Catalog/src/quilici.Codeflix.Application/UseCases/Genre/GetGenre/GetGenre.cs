@@ -12,10 +12,10 @@ namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.GetGenre
             _genreRepository = genreRepository;
         }
 
-        public async Task<GenreModelOuput> Handle(GetGenreInput request, CancellationToken cancellationToken)
+        public async Task<GenreModelOutput> Handle(GetGenreInput request, CancellationToken cancellationToken)
         {
             var genre = await _genreRepository.Get(request.Id, cancellationToken);
-            return GenreModelOuput.FromGenre(genre);
+            return GenreModelOutput.FromGenre(genre);
         }
     }
 }

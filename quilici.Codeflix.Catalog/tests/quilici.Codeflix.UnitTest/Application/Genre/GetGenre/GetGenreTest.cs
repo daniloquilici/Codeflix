@@ -32,7 +32,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.GetGenre
 
             var input = new GetGenreInput(exampleGenre.Id);
 
-            GenreModelOuput output = await useCase.Handle(input, CancellationToken.None);
+            GenreModelOutput output = await useCase.Handle(input, CancellationToken.None);
 
             output.Should().NotBeNull();
             output.Id.Should().Be(exampleGenre.Id);

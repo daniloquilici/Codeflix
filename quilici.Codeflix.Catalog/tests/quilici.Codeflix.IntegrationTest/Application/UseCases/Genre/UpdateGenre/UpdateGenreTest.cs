@@ -36,7 +36,7 @@ public class UpdateGenreTest
         UseCase.UpdateGenre updateGenre = new UseCase.UpdateGenre(new UnitOfWork(actDbContext), new GenreRepository(actDbContext), new CategoryRepository(actDbContext));
         UpdateGenreInput input = new UpdateGenreInput(targetGenre.Id, _fixture.GetValidGenreName(), !targetGenre.IsActive);
 
-        GenreModelOuput output = await updateGenre.Handle(input, CancellationToken.None);
+        GenreModelOutput output = await updateGenre.Handle(input, CancellationToken.None);
 
         output.Should().NotBeNull();
         output.Id.Should().Be(targetGenre.Id);
@@ -73,7 +73,7 @@ public class UpdateGenreTest
         UseCase.UpdateGenre updateGenre = new UseCase.UpdateGenre(new UnitOfWork(actDbContext), new GenreRepository(actDbContext), new CategoryRepository(actDbContext));
         UpdateGenreInput input = new UpdateGenreInput(targetGenre.Id, _fixture.GetValidGenreName(), !targetGenre.IsActive, newRelatedCategories.Select(category => category.Id).ToList());
 
-        GenreModelOuput output = await updateGenre.Handle(input, CancellationToken.None);
+        GenreModelOutput output = await updateGenre.Handle(input, CancellationToken.None);
 
         output.Should().NotBeNull();
         output.Id.Should().Be(targetGenre.Id);
@@ -123,7 +123,7 @@ public class UpdateGenreTest
         categoryIdsToRelate.Add(invalidCategoryId);
         UpdateGenreInput input = new UpdateGenreInput(targetGenre.Id, _fixture.GetValidGenreName(), !targetGenre.IsActive, categoryIdsToRelate);
 
-        Func<Task<GenreModelOuput>> action = async () => await updateGenre.Handle(input, CancellationToken.None);
+        Func<Task<GenreModelOutput>> action = async () => await updateGenre.Handle(input, CancellationToken.None);
 
         await action.Should().ThrowAsync<RelatedAggregateException>().WithMessage($"Related category id(s) not found: {invalidCategoryId}");
     }
@@ -169,7 +169,7 @@ public class UpdateGenreTest
         UseCase.UpdateGenre updateGenre = new UseCase.UpdateGenre(new UnitOfWork(actDbContext), new GenreRepository(actDbContext), new CategoryRepository(actDbContext));
         UpdateGenreInput input = new UpdateGenreInput(targetGenre.Id, _fixture.GetValidGenreName(), !targetGenre.IsActive);
 
-        GenreModelOuput output = await updateGenre.Handle(input, CancellationToken.None);
+        GenreModelOutput output = await updateGenre.Handle(input, CancellationToken.None);
 
         output.Should().NotBeNull();
         output.Id.Should().Be(targetGenre.Id);
@@ -216,7 +216,7 @@ public class UpdateGenreTest
         UseCase.UpdateGenre updateGenre = new UseCase.UpdateGenre(new UnitOfWork(actDbContext), new GenreRepository(actDbContext), new CategoryRepository(actDbContext));
         UpdateGenreInput input = new UpdateGenreInput(targetGenre.Id, _fixture.GetValidGenreName(), !targetGenre.IsActive, new List<Guid>());
 
-        GenreModelOuput output = await updateGenre.Handle(input, CancellationToken.None);
+        GenreModelOutput output = await updateGenre.Handle(input, CancellationToken.None);
 
         output.Should().NotBeNull();
         output.Id.Should().Be(targetGenre.Id);

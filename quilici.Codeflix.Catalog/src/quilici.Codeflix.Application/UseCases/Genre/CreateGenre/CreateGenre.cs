@@ -20,7 +20,7 @@ namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<GenreModelOuput> Handle(CreateGenreInput request, CancellationToken cancellationToken)
+        public async Task<GenreModelOutput> Handle(CreateGenreInput request, CancellationToken cancellationToken)
         {
             var genre = new DomainEntity.Genre(request.Name, request.IsActive);
 
@@ -32,7 +32,7 @@ namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre
 
             await _genreRepository.Insert(genre, cancellationToken);
             await _unitOfWork.CommitAsync(cancellationToken);
-            return GenreModelOuput.FromGenre(genre);
+            return GenreModelOutput.FromGenre(genre);
         }
 
         private async Task ValidateCategoriesIds(CreateGenreInput request, CancellationToken cancellationToken) 
