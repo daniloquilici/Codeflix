@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.Infra.Data.EF.Models;
 using quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
 using Xunit;
@@ -241,5 +242,74 @@ public class ListGenresTest
                 outputCategory.Name.Should().Be(exampleCategory!.Name);
             });
         });
+    }
+
+    [Theory(DisplayName = nameof(Ordered))]
+    [Trait("Integration/Application", "ListGenres - UseCases")]
+    [InlineData("name", "asc")]
+    [InlineData("name", "desc")]
+    [InlineData("id", "asc")]
+    [InlineData("id", "desc")]
+    [InlineData("CreatedAt", "asc")]
+    [InlineData("CreatedAt", "desc")]
+    [InlineData("", "asc")]
+    public async void Ordered(string orderBy, string order)
+    {
+        List<DomainEntity.Genre> exampleGenres = _fixture.GetExampleListGenre(10);
+        List<DomainEntity.Category> exampleCategories = _fixture.GetExampleCategoriesList();
+        Random random = new Random();
+        exampleGenres.ForEach(genres =>
+        {
+            int relationsCount = random.Next(0, 3);
+            for (int i = 0; i < relationsCount; i++)
+            {
+                var selected = exampleCategories[random.Next(0, exampleCategories.Count - 1)];
+                if (!genres.Categories.Contains(selected.Id))
+                    genres.AddCategory(selected.Id);
+            }
+        });
+        var genresCategories = new List<GenresCategories>();
+        exampleGenres.ForEach(genre =>
+            genre.Categories.ToList().ForEach(categoryId => genresCategories.Add(new GenresCategories(categoryId, genre.Id)))
+            );
+        var arrangeDbContext = _fixture.CreateDbContext();
+        await arrangeDbContext.Genres.AddRangeAsync(exampleGenres);
+        await arrangeDbContext.Categories.AddRangeAsync(exampleCategories);
+        await arrangeDbContext.GenresCategories.AddRangeAsync(genresCategories);
+        await arrangeDbContext.SaveChangesAsync();
+
+        var actDbContext = _fixture.CreateDbContext(true);
+        var useCase = new UseCase.ListGenres(new GenreRepository(actDbContext), new CategoryRepository(actDbContext));
+
+        var orderEnum = order.ToLower() == "asc" ? SearchOrder.Asc : SearchOrder.Desc;
+        var input = new UseCase.ListGenresInput(1, 20, "", orderBy, orderEnum);
+        var output = await useCase.Handle(input, CancellationToken.None);
+
+        var expectedOrderedList = _fixture.CloneGenreListOrdered(exampleGenres, orderBy, orderEnum);
+
+        output.Should().NotBeNull();
+        output.Page.Should().Be(input.Page);
+        output.PerPage.Should().Be(input.PerPage);
+        output.Total.Should().Be(exampleGenres.Count);
+        output.Items.Should().HaveCount(exampleGenres.Count);
+
+        for (int i = 0; i < expectedOrderedList.Count; i++)
+        {
+            var expectedItem = expectedOrderedList[i];
+            var outputItem = output.Items[i];
+
+            expectedItem.Should().NotBeNull();
+            outputItem.Name.Should().Be(expectedItem!.Name);
+            outputItem.IsActive.Should().Be(expectedItem.IsActive);
+            var outputItemCategoryIds = outputItem.Categories.Select(x => x.Id).ToList();
+            outputItemCategoryIds.Should().BeEquivalentTo(expectedItem.Categories);
+
+            outputItem.Categories.ToList().ForEach(outputCategory =>
+            {
+                var exampleCategory = exampleCategories.Find(x => x.Id == outputCategory.Id);
+                exampleCategory.Should().NotBeNull();
+                outputCategory.Name.Should().Be(exampleCategory!.Name);
+            });
+        }
     }
 }
