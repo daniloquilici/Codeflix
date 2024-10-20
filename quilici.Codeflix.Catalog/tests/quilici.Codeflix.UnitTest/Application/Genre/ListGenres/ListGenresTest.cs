@@ -23,6 +23,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.ListGenres
         public async Task ListGenres()
         {
             var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
+            var categoryRepositoryMock = _fixture.GetCategoryRepositoryMock();
             var genreListExample = _fixture.GetExampleGenresList();
             var input = _fixture.GetExampleInput();
             var outputRepositorySearch = new SearchOutput<DomainEntity.Genre>(
@@ -33,7 +34,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.ListGenres
 
             genreRepositoryMock.Setup(x => x.Search(It.IsAny<SearchInput>(), It.IsAny<CancellationToken>())).ReturnsAsync(outputRepositorySearch);
 
-            var useCase = new UseCase.ListGenres(genreRepositoryMock.Object);
+            var useCase = new UseCase.ListGenres(genreRepositoryMock.Object, categoryRepositoryMock.Object);
 
             UseCase.ListGenresOutput output = await useCase.Handle(input, CancellationToken.None);
 
@@ -63,6 +64,13 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.ListGenres
                     && searchInput.Search == input.Search
                     && searchInput.OrderBy == input.Sort
                     && searchInput.Order == input.Dir), It.IsAny<CancellationToken>()), Times.Once);
+
+            var expectedIds = genreListExample.SelectMany(genre => genre.Categories).Distinct().ToList();
+            categoryRepositoryMock.Verify(x => x.GetListByIds(
+                        It.Is<List<Guid>>(parameterList => parameterList.All(id => expectedIds.Contains(id)
+                        && parameterList.Count == expectedIds.Count
+                    )), 
+                    It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact(DisplayName = nameof(ListEmpty))]
@@ -70,6 +78,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.ListGenres
         public async Task ListEmpty()
         {
             var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
+            var categoryRepositoryMock = _fixture.GetCategoryRepositoryMock();
             var input = _fixture.GetExampleInput();
             var outputRepositorySearch = new SearchOutput<DomainEntity.Genre>(
                         currentPage: input.Page,
@@ -79,7 +88,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.ListGenres
 
             genreRepositoryMock.Setup(x => x.Search(It.IsAny<SearchInput>(), It.IsAny<CancellationToken>())).ReturnsAsync(outputRepositorySearch);
 
-            var useCase = new UseCase.ListGenres(genreRepositoryMock.Object);
+            var useCase = new UseCase.ListGenres(genreRepositoryMock.Object, categoryRepositoryMock.Object);
 
             UseCase.ListGenresOutput output = await useCase.Handle(input, CancellationToken.None);
 
@@ -101,6 +110,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.ListGenres
         public async Task ListUsingDefaultInputValues()
         {
             var genreRepositoryMock = _fixture.GetGenreRepositoryMock();
+            var categoryRepositoryMock = _fixture.GetCategoryRepositoryMock();
             var outputRepositorySearch = new SearchOutput<DomainEntity.Genre>(
                         currentPage: 1,
                         perPage: 15,
@@ -109,7 +119,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.ListGenres
 
             genreRepositoryMock.Setup(x => x.Search(It.IsAny<SearchInput>(), It.IsAny<CancellationToken>())).ReturnsAsync(outputRepositorySearch);
 
-            var useCase = new UseCase.ListGenres(genreRepositoryMock.Object);
+            var useCase = new UseCase.ListGenres(genreRepositoryMock.Object, categoryRepositoryMock.Object);
 
             UseCase.ListGenresOutput output = await useCase.Handle(new UseCase.ListGenresInput(), CancellationToken.None);
 

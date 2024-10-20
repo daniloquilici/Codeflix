@@ -12,6 +12,17 @@ namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.ListGenres
         }
 
         public static ListGenresOutput FromSearchOutput(SearchOutput<DomainEntity.Genre> searhOutput)
-            => new(searhOutput.CurrentPage, searhOutput.PerPage, searhOutput.Total, searhOutput.Items.Select(GenreModelOuput.FromGenre).ToList());        
+            => new(searhOutput.CurrentPage, searhOutput.PerPage, searhOutput.Total, searhOutput.Items.Select(GenreModelOuput.FromGenre).ToList());
+
+        internal void FillWithCategoryName(IReadOnlyList<DomainEntity.Category> categories)
+        {
+            foreach (GenreModelOuput item in Items)
+            {
+                foreach (GenreModelOutputCategory categoryOutput in item.Categories)
+                {
+                    categoryOutput.Name = categories?.FirstOrDefault(category => category.Id == categoryOutput.Id)?.Name;
+                }
+            }
+        }
     }
 }

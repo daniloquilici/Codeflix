@@ -26,7 +26,8 @@ public class ListGenresTest
         await arrangeDbContext.Genres.AddRangeAsync(exampleGenres);
         await arrangeDbContext.SaveChangesAsync();
 
-        var useCase = new UseCase.ListGenres(new GenreRepository(_fixture.CreateDbContext(true)));
+        var actDbContex = _fixture.CreateDbContext(true);
+        var useCase = new UseCase.ListGenres(new GenreRepository(actDbContex), new CategoryRepository(actDbContex));
         var input = new UseCase.ListGenresInput(1, 20);
         var output = await useCase.Handle(input, CancellationToken.None);
 
@@ -48,7 +49,8 @@ public class ListGenresTest
     [Trait("Integration/Application", "ListGenres - UseCases")]
     public async void ListGenresReturnsEmptyWhenPersistenceIsEmpty()
     {
-        var useCase = new UseCase.ListGenres(new GenreRepository(_fixture.CreateDbContext()));
+        var actDbContext = _fixture.CreateDbContext();
+        var useCase = new UseCase.ListGenres(new GenreRepository(actDbContext), new CategoryRepository(actDbContext));
         var input = new UseCase.ListGenresInput(1, 20);
         var output = await useCase.Handle(input, CancellationToken.None);
 
@@ -86,7 +88,8 @@ public class ListGenresTest
         await arrangeDbContext.GenresCategories.AddRangeAsync(genresCategories);
         await arrangeDbContext.SaveChangesAsync();
 
-        var useCase = new UseCase.ListGenres(new GenreRepository(_fixture.CreateDbContext(true)));
+        var actDbContext = _fixture.CreateDbContext(true);
+        var useCase = new UseCase.ListGenres(new GenreRepository(actDbContext), new CategoryRepository(actDbContext));
         var input = new UseCase.ListGenresInput(1, 20);
         var output = await useCase.Handle(input, CancellationToken.None);
 
