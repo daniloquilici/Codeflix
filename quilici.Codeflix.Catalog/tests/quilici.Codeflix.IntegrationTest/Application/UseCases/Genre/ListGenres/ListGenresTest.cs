@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using quilici.Codeflix.Catalog.Infra.Data.EF.Models;
 using quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
-using System.Runtime.InteropServices;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Genre.ListGenres;
@@ -36,7 +35,7 @@ public class ListGenresTest
         output.PerPage.Should().Be(input.PerPage);
         output.Total.Should().Be(exampleGenres.Count);
         output.Items.Should().HaveCount(exampleGenres.Count);
-        output.Items.ToList().ForEach(outputItem => 
+        output.Items.ToList().ForEach(outputItem =>
         {
             DomainEntity.Genre? exampleItem = exampleGenres.Find(example => example.Id == outputItem.Id);
             exampleItem.Should().NotBeNull();
@@ -70,9 +69,9 @@ public class ListGenresTest
         exampleGenres.ForEach(genres =>
         {
             int relationsCount = random.Next(0, 3);
-            for (int i = 0; i < relationsCount; i++) 
+            for (int i = 0; i < relationsCount; i++)
             {
-                var selected = exampleCategories[random.Next(0, exampleCategories.Count-1)];
+                var selected = exampleCategories[random.Next(0, exampleCategories.Count - 1)];
                 if (!genres.Categories.Contains(selected.Id))
                     genres.AddCategory(selected.Id);
             }
@@ -105,6 +104,13 @@ public class ListGenresTest
 
             var outputItemCategoryIds = outputItem.Categories.Select(x => x.Id).ToList();
             outputItemCategoryIds.Should().BeEquivalentTo(exampleItem.Categories);
+
+            outputItem.Categories.ToList().ForEach(outputCategory => 
+            {
+                var exampleCategory = exampleCategories.Find(x => x.Id == outputCategory.Id);
+                exampleCategory.Should().NotBeNull();
+                outputCategory.Name.Should().Be(exampleCategory!.Name);
+            });
         });
     }
 }
