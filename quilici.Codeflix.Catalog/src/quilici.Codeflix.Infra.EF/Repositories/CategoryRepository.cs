@@ -71,9 +71,14 @@ namespace quilici.Codeflix.Catalog.Infra.Data.EF.Repositories
 
         public Task Update(Category aggregate, CancellationToken _) => Task.FromResult(_categories.Update(aggregate));
 
-        public async Task<IReadOnlyCollection<Guid>> GetIdsListByIds(List<Guid> ids, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<Guid>> GetIdsListByIds(List<Guid> ids, CancellationToken cancellationToken)
         {
             return await _categories.AsNoTracking().Where(category => ids.Contains(category.Id)).Select(category => category.Id).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<Category>> GetListByIds(List<Guid> ids, CancellationToken cancellationToken)
+        {
+            return await _categories.AsNoTracking().Where(category => ids.Contains(category.Id)).ToListAsync();
         }
     }
 }

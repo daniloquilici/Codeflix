@@ -171,9 +171,9 @@ namespace quilici.Codeflix.Catalog.IntegrationTest.Infra.Data.EF.Repositories.Ca
             }).Distinct().ToList();
             await dbContext.AddRangeAsync(exampleCategoryList);
             await dbContext.SaveChangesAsync(CancellationToken.None);
-            var categoryRepository = new Repository.CategoryRepository(dbContext);            
+            var categoryRepository = new Repository.CategoryRepository(dbContext);
 
-            IReadOnlyList<Category> categoriesList = await categoryRepository.ListByIds(categoriesIdsToGet, CancellationToken.None);
+            IReadOnlyList<Category> categoriesList = await categoryRepository.GetListByIds(categoriesIdsToGet, CancellationToken.None);
 
             categoriesList.Should().NotBeNull();
             categoriesList.Should().HaveCount(categoriesIdsToGet.Count);            
