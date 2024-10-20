@@ -3,6 +3,7 @@ using quilici.Codeflix.Catalog.Application.Exceptions;
 using quilici.Codeflix.Catalog.Domain.Entity;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.Infra.Data.EF;
+using System.Collections.Generic;
 using Xunit;
 using Repository = quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
 
@@ -146,6 +147,37 @@ namespace quilici.Codeflix.Catalog.IntegrationTest.Infra.Data.EF.Repositories.Ca
             output.Total.Should().Be(exampleCategoryList.Count);
             output.Items.Should().HaveCount(exampleCategoryList.Count);
             foreach (Category outputItem in output.Items)
+            {
+                var exampleItem = exampleCategoryList.Find(x => x.Id == outputItem.Id);
+                exampleItem.Should().NotBeNull();
+                outputItem.Should().NotBeNull();
+                outputItem.Name.Should().Be(exampleItem!.Name);
+                outputItem.Description.Should().Be(exampleItem.Description);
+                outputItem.IsActive.Should().Be(exampleItem.IsActive);
+                outputItem.CreatedAt.Should().Be(exampleItem.CreatedAt);
+            }
+        }
+
+        [Fact(DisplayName = nameof(ListByIds))]
+        [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+        public async Task ListByIds()
+        {
+            CodeFlixCatalogDbContext dbContext = _fixture.CreateDbContext();
+            var exampleCategoryList = _fixture.GetExampleCategoriesList(15);
+            var categoriesIdsToGet = Enumerable.Range(1, 3).Select(_ =>
+            {
+                int indexToGet = (new Random()).Next(0, exampleCategoryList.Count - 1);
+                return exampleCategoryList[indexToGet].Id;
+            }).Distinct().ToList();
+            await dbContext.AddRangeAsync(exampleCategoryList);
+            await dbContext.SaveChangesAsync(CancellationToken.None);
+            var categoryRepository = new Repository.CategoryRepository(dbContext);            
+
+            IReadOnlyList<Category> categoriesList = await categoryRepository.ListByIds(categoriesIdsToGet, CancellationToken.None);
+
+            categoriesList.Should().NotBeNull();
+            categoriesList.Should().HaveCount(categoriesIdsToGet.Count);            
+            foreach (Category outputItem in categoriesList)
             {
                 var exampleItem = exampleCategoryList.Find(x => x.Id == outputItem.Id);
                 exampleItem.Should().NotBeNull();
