@@ -4,7 +4,6 @@ using quilici.Codeflix.Catalog.Domain.Entity;
 using quilici.Codeflix.Catalog.Domain.Repository;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.Infra.Data.EF.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
 public class GenreRepository : IGenreRepository

@@ -1,6 +1,4 @@
-﻿using quilici.Codeflix.Catalog.Domain.SeedWork;
-
-namespace quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository
+﻿namespace quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository
 {
     public interface ISearchableRepository<TAggregate> where TAggregate : AggregateRoot
     {

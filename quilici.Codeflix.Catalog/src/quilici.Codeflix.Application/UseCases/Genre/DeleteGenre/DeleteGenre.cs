@@ -1,5 +1,4 @@
-﻿using MediatR;
-using quilici.Codeflix.Catalog.Application.Interfaces;
+﻿using quilici.Codeflix.Catalog.Application.Interfaces;
 using quilici.Codeflix.Catalog.Domain.Repository;
 
 namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.DeleteGenre

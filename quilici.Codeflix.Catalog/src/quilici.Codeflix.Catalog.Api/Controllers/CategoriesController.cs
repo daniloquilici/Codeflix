@@ -46,6 +46,7 @@ namespace quilici.Codeflix.Catalog.Api.Controllers
 
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(ApiResponse<CategoryModelOutput>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var output = await _mediator.Send(new GetCategoryInput(id), cancellationToken);
