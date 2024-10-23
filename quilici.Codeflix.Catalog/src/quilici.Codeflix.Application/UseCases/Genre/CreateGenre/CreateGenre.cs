@@ -1,9 +1,7 @@
-﻿using MediatR;
-using quilici.Codeflix.Catalog.Application.Exceptions;
+﻿using quilici.Codeflix.Catalog.Application.Exceptions;
 using quilici.Codeflix.Catalog.Application.Interfaces;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.Common;
 using quilici.Codeflix.Catalog.Domain.Repository;
-using System.Threading;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
 namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre
@@ -35,7 +33,7 @@ namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre
             return GenreModelOutput.FromGenre(genre);
         }
 
-        private async Task ValidateCategoriesIds(CreateGenreInput request, CancellationToken cancellationToken) 
+        private async Task ValidateCategoriesIds(CreateGenreInput request, CancellationToken cancellationToken)
         {
             var idsInPersistence = await _categoryRepository.GetIdsListByIds(request.CategoriesIds!, cancellationToken);
             if (idsInPersistence.Count < request.CategoriesIds!.Count)

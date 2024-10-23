@@ -8,6 +8,7 @@ using quilici.Codeflix.Catalog.Application.UseCases.Category.DeleteCategory;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.GetCategory;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
+using quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 
 namespace quilici.Codeflix.Catalog.Api.Controllers
