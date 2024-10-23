@@ -38,8 +38,7 @@ namespace quilici.Codeflix.Catalog.Api.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<GenreModelOutput>), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreateGenreInput input, CancellationToken cancellationToken)
         {
             var output = await _mediator.Send(input, cancellationToken);
