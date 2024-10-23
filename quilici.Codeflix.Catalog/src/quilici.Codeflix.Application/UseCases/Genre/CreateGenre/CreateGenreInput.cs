@@ -9,10 +9,10 @@ namespace quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre
         public bool IsActive { get; set; }
         public List<Guid>? CategoriesIds { get; set; }
 
-        public CreateGenreInput(string name, bool isActve, List<Guid>? categoriesIds = null)
+        public CreateGenreInput(string name, bool isActive, List<Guid>? categoriesIds = null)
         {
             Name = name;
-            IsActive = isActve;
+            IsActive = isActive;
             CategoriesIds = categoriesIds;
         }
     }

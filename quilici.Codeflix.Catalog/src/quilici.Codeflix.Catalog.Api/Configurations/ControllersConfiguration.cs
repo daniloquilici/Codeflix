@@ -5,11 +5,11 @@ namespace quilici.Codeflix.Catalog.Api.Configurations
 {
     public static class ControllersConfiguration
     {
-        public static IServiceCollection AddAndConfigureControllers(this IServiceCollection services) 
+        public static IServiceCollection AddAndConfigureControllers(this IServiceCollection services)
         {
-            services.AddControllers(options => 
+            services.AddControllers(options =>
                 options.Filters.Add(typeof(ApiGlobalExceptionFilter))
-            ).AddJsonOptions(jsonOptions => 
+            ).AddJsonOptions(jsonOptions =>
             {
                 jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = new JsonSnakeCasePolicy();
             });
