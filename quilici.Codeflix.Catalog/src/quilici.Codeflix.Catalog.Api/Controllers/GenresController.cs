@@ -50,7 +50,8 @@ namespace quilici.Codeflix.Catalog.Api.Controllers
 
         [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(ApiResponse<GenreModelOutput>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> Update([FromBody] UpdateGenreApiInput input, [FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var output = await _mediator.Send(new UpdateGenreInput(id, input.Name, input.IsActive, input.CategoriesIds), cancellationToken);
