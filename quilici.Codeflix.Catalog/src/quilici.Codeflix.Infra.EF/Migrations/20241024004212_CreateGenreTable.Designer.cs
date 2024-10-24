@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using quilici.Codeflix.Catalog.Infra.Data.EF;
 
@@ -10,9 +11,11 @@ using quilici.Codeflix.Catalog.Infra.Data.EF;
 namespace quilici.Codeflix.Catalog.Infra.Data.EF.Migrations
 {
     [DbContext(typeof(CodeFlixCatalogDbContext))]
-    partial class CodeFlixCatalogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241024004212_CreateGenreTable")]
+    partial class CreateGenreTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
