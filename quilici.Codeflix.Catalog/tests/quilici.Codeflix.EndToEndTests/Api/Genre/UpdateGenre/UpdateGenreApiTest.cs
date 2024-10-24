@@ -34,11 +34,11 @@ public class UpdateGenreApiTest
         output.Should().NotBeNull();
         output!.Data.Id.Should().Be(targetGenre.Id);
         output.Data.Name.Should().Be(input.Name);
-        output.Data.IsActive.Should().Be(input.IsActive);
+        output.Data.IsActive.Should().Be((bool)input.IsActive!);
 
         var genreFromDb = await _fixture.Persistence.GetById(output.Data.Id);
         genreFromDb.Should().NotBeNull();
         genreFromDb!.Name.Should().Be(input.Name);
-        genreFromDb.IsActive.Should().Be(input.IsActive);
+        genreFromDb.IsActive.Should().Be((bool)input.IsActive);
     }
 }
