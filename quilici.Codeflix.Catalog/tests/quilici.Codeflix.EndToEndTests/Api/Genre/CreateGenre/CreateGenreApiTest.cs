@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using quilici.Codeflix.Catalog.Api.ApiModels.Response;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre;
@@ -72,5 +73,27 @@ public class CreateGenreApiTest
         relationsFromDb.Should().HaveCount(relatedCategories.Count);
         var relatedCategoriesIdsFromDb = relationsFromDb.Select(x => x.CategoryId).ToList();
         relatedCategoriesIdsFromDb.Should().BeEquivalentTo(relatedCategories);
+    }
+
+    [Fact(DisplayName = nameof(ErrorWithInvalidRelations))]
+    [Trait("EndToEnd/Api", "Genre/CreateGenre - Endpoints")]
+    public async Task ErrorWithInvalidRelations()
+    {
+        var exampleCategories = _fixture.GetExampleCategoriesList(10);
+        await _fixture.CategoryPersistence.InsertList(exampleCategories);
+        var relatedCategories = exampleCategories.Skip(3).Take(3).Select(x => x.Id).ToList();
+
+        var invalidCategoryId = Guid.NewGuid();
+        relatedCategories.Add(invalidCategoryId);
+
+        var input = new CreateGenreInput(_fixture.GetValidGenreName(), _fixture.GetRandoBoolean(), relatedCategories);
+
+        var (response, output) = await _fixture.ApiClient.Post<ProblemDetails>("/genres", input);
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status422UnprocessableEntity);
+        output.Should().NotBeNull();
+        output!.Type.Should().Be("RelatedAggregate");
+        output.Detail.Should().Be($"Related category id(s) not found: {invalidCategoryId}");
     }
 }
