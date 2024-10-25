@@ -108,5 +108,43 @@ public class ListGenresApiTest : IDisposable
         });
     }
 
+    [Theory(DisplayName = nameof(SeachByText))]
+    [Trait("EndtoEnd/Api", "Genre/ListGenres - Endpoints")]
+    [InlineData("Action", 1, 5, 1, 1)]
+    [InlineData("Horror", 1, 5, 3, 3)]
+    [InlineData("Horror", 2, 5, 0, 3)]
+    [InlineData("Sci-fi", 1, 5, 4, 4)]
+    [InlineData("Sci-fi", 1, 2, 2, 4)]
+    [InlineData("Sci-fi", 2, 3, 1, 4)]
+    [InlineData("Sci-fi Other", 1, 3, 0, 0)]
+    [InlineData("Robots", 1, 5, 2, 2)]
+    public async Task SeachByText(string search, int page, int perPage, int expectedQuantityItemsReturned, int expectedQuantityItems)
+    {
+        var exampleGenres = _fixture.GetExampleListGenreByNames(new List<string>() { "Action", "Horror", "Horror - Robots", "Horror - Based on Real Facts", "Drama", "Sci-fi IA", "Sci-fi Space", "Sci-fi Robots", "Sci-fi Future" });
+        await _fixture.Persistence.InsertList(exampleGenres);
+
+        var input = new ListGenresInput(page, perPage, search);
+
+        var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<GenreModelOutput>>("/genres", input);
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be(HttpStatusCode.OK);
+        output.Should().NotBeNull();
+        output!.Meta.Should().NotBeNull();
+        output.Data.Should().NotBeNull();
+        output.Meta!.CurrentPage.Should().Be(input.Page);
+        output.Meta.PerPage.Should().Be(input.PerPage);
+        output.Meta.Total.Should().Be(expectedQuantityItems);
+        output.Data!.Count.Should().Be(expectedQuantityItemsReturned);
+        output.Data.ToList().ForEach(outputItem =>
+        {
+            var exampleItem = exampleGenres.First(x => x.Id == outputItem.Id);
+            exampleItem.Should().NotBeNull();
+            exampleItem.Name.Should().Be(outputItem.Name);
+            exampleItem.IsActive.Should().Be(outputItem.IsActive);
+            exampleItem.CreatedAt.TrimMillisseconds().Should().Be(outputItem.CreatedAt.TrimMillisseconds());
+        });
+    }
+
 
 }
