@@ -21,6 +21,14 @@ public class CastMember : AggregateRoot
         Validate();
     }
 
+    public void Update(string name, CastMemberType type) 
+    {
+        Name = name;
+        Type = type;
+
+        Validate();
+    }
+
     private void Validate()
     {
         DomainValidation.NotNullOrEmpty(Name, nameof(Name));

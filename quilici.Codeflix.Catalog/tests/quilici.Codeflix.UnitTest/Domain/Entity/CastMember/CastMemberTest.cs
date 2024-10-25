@@ -46,4 +46,18 @@ public class CastMemberTest
         var action = () => new DomainEntity.CastMember(name!, type);
         action.Should().Throw<EntityValidationException>().WithMessage($"Name should not be empty or null");
     }
+
+    [Fact(DisplayName = nameof(Update))]
+    [Trait("Domain", "CastMember - Aggregates")]
+    public void Update()
+    {
+        var newName = _fixture.GetValidName();
+        var newType = _fixture.GetRandomCastMemberType();
+        var castMember = _fixture.GetExempleCastMember();
+
+        castMember.Update(newName, newType);
+
+        castMember.Name.Should().Be(newName);
+        castMember.Type.Should().Be(newType);
+    }
 }
