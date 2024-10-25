@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.ListGenres;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.EndToEndTests.Extensions;
 using quilici.Codeflix.Catalog.EndToEndTests.Models;
 using System.Net;
@@ -146,5 +147,45 @@ public class ListGenresApiTest : IDisposable
         });
     }
 
+    [Theory(DisplayName = nameof(Ordered))]
+    [Trait("EndtoEnd/Api", "Genre/ListGenres - Endpoints")]
+    [Trait("Integration/Application", "ListGenres - UseCases")]
+    [InlineData("name", "asc")]
+    [InlineData("name", "desc")]
+    [InlineData("id", "asc")]
+    [InlineData("id", "desc")]
+    [InlineData("CreatedAt", "asc")]
+    [InlineData("CreatedAt", "desc")]
+    [InlineData("", "asc")]
+    public async Task Ordered(string orderBy, string order)
+    {
+        var exampleGenres = _fixture.GetExampleListGenre(10);
+        await _fixture.Persistence.InsertList(exampleGenres);
 
+        var orderEnum = order.ToLower() == "asc" ? SearchOrder.Asc : SearchOrder.Desc;
+        var input = new ListGenresInput(1, 10, "", orderBy, orderEnum);
+
+        var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<GenreModelOutput>>("/genres", input);
+
+        var expectedOrderedList = _fixture.CloneGenreListOrdered(exampleGenres, orderBy, orderEnum);
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be(HttpStatusCode.OK);
+        output.Should().NotBeNull();
+        output!.Meta.Should().NotBeNull();
+        output.Data.Should().NotBeNull();
+        output.Meta!.CurrentPage.Should().Be(input.Page);
+        output.Meta.PerPage.Should().Be(input.PerPage);
+        output.Meta.Total.Should().Be(10);
+        output.Data!.Count.Should().Be(10);
+        for (int i = 0; i < expectedOrderedList.Count; i++)
+        {
+            var outputItem = output.Data[i];
+            var exampleItem = exampleGenres.First(x => x.Id == outputItem.Id);
+            exampleItem.Should().NotBeNull();
+            exampleItem.Name.Should().Be(outputItem.Name);
+            exampleItem.IsActive.Should().Be(outputItem.IsActive);
+            exampleItem.CreatedAt.TrimMillisseconds().Should().Be(outputItem.CreatedAt.TrimMillisseconds());
+        };
+    }
 }
