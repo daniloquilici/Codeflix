@@ -4,6 +4,7 @@ using quilici.Codeflix.Catalog.Application.UseCases.Genre.ListGenres;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.EndToEndTests.Extensions;
 using quilici.Codeflix.Catalog.EndToEndTests.Models;
+using quilici.Codeflix.Catalog.Infra.Data.EF.Models;
 using System.Net;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
@@ -187,5 +188,63 @@ public class ListGenresApiTest : IDisposable
             exampleItem.IsActive.Should().Be(outputItem.IsActive);
             exampleItem.CreatedAt.TrimMillisseconds().Should().Be(outputItem.CreatedAt.TrimMillisseconds());
         };
+    }
+
+    [Fact(DisplayName = nameof(ListWithRelations))]
+    [Trait("EndtoEnd/Api", "Genre/ListGenres - Endpoints")]
+    public async Task ListWithRelations()
+    {
+        List<DomainEntity.Genre> exampleGenres = _fixture.GetExampleListGenre(15);
+        List<DomainEntity.Category> exampleCategories = _fixture.GetExampleCategoriesList(10);
+        Random random = new Random();
+        exampleGenres.ForEach(genres =>
+        {
+            int relationsCount = random.Next(2, exampleCategories.Count - 1);
+            for (int i = 0; i < relationsCount; i++)
+            {
+                var selected = exampleCategories[random.Next(0, exampleCategories.Count - 1)];
+                if (!genres.Categories.Contains(selected.Id))
+                    genres.AddCategory(selected.Id);
+            }
+        });
+        var genresCategories = new List<GenresCategories>();
+        exampleGenres.ForEach(genre =>
+            genre.Categories.ToList().ForEach(categoryId => genresCategories.Add(new GenresCategories(categoryId, genre.Id)))
+            );
+
+        await _fixture.Persistence.InsertList(exampleGenres);
+        await _fixture.CategoryPersistence.InsertList(exampleCategories);
+        await _fixture.Persistence.InsertGenresCategoriesRelationsList(genresCategories);
+
+        var input = new ListGenresInput(1, exampleGenres.Count);
+
+        var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<GenreModelOutput>>("/genres", input);
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be(HttpStatusCode.OK);
+        output.Should().NotBeNull();
+        output!.Meta.Should().NotBeNull();
+        output.Data.Should().NotBeNull();
+        output.Meta!.CurrentPage.Should().Be(input.Page);
+        output.Meta.PerPage.Should().Be(input.PerPage);
+        output.Meta.Total.Should().Be(exampleGenres.Count);
+        output.Data!.Count.Should().Be(exampleGenres.Count);
+        output.Data.ToList().ForEach(outputItem =>
+        {
+            var exampleItem = exampleGenres.First(x => x.Id == outputItem.Id);
+            exampleItem.Should().NotBeNull();
+            exampleItem.Name.Should().Be(outputItem.Name);
+            exampleItem.IsActive.Should().Be(outputItem.IsActive);
+            exampleItem.CreatedAt.TrimMillisseconds().Should().Be(outputItem.CreatedAt.TrimMillisseconds());
+
+            var relatedCategoriesIds = outputItem.Categories.Select(x => x.Id).ToList();
+            relatedCategoriesIds.Should().BeEquivalentTo(exampleItem.Categories);
+            outputItem.Categories.ToList().ForEach(outputRelatedCategory =>
+            {
+                var exampleCategory = exampleCategories.Find(x => x.Id == outputRelatedCategory.Id);
+                exampleCategory.Should().NotBeNull();
+                exampleCategory!.Name.Should().Be(outputRelatedCategory.Name);
+            });
+        });
     }
 }
