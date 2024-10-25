@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using quilici.Codeflix.Catalog.Domain.Enum;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
@@ -20,8 +21,8 @@ public class CastMemberTest
     public void Instantiate()
     {
         var dateTimeBefore = DateTime.Now.AddSeconds(-1);
-        var name = "Danilo";
-        var type = CastMemberType.Director;
+        var name = _fixture.GetValidName();
+        var type = _fixture.GetRandomCastMemberType();
 
         var castMember = new DomainEntity.CastMember(name, type);
         var dateTimeAfter = DateTime.Now.AddSeconds(1);
@@ -31,5 +32,18 @@ public class CastMemberTest
         castMember.Type.Should().Be(type);
         (castMember.CreatedAt >= dateTimeBefore).Should().BeTrue();
         (castMember.CreatedAt <= dateTimeAfter).Should().BeTrue();
+    }
+
+    [Theory(DisplayName = nameof(Instantiate))]
+    [Trait("Domain", "CastMember - Aggregates")]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData(null)]
+    public void ThrowErrorWhenNameIsInvalid(string? name)
+    {
+        var type = _fixture.GetRandomCastMemberType();
+       
+        var action = () => new DomainEntity.CastMember(name!, type);
+        action.Should().Throw<EntityValidationException>().WithMessage($"Name should not be empty or null");
     }
 }

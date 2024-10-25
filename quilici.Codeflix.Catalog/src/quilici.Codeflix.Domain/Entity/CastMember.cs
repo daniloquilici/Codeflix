@@ -1,5 +1,6 @@
 ﻿using quilici.Codeflix.Catalog.Domain.Enum;
 using quilici.Codeflix.Catalog.Domain.SeedWork;
+using quilici.Codeflix.Catalog.Domain.Validation;
 
 namespace quilici.Codeflix.Catalog.Domain.Entity;
 public class CastMember : AggregateRoot
@@ -13,8 +14,15 @@ public class CastMember : AggregateRoot
     public CastMember(string name, CastMemberType type)
         : base()
     {
-        Name = name;
-        CreatedAt = DateTime.Now;
+        Name = name;        
         Type = type;
+        CreatedAt = DateTime.Now;
+
+        Validate();
+    }
+
+    private void Validate()
+    {
+        DomainValidation.NotNullOrEmpty(Name, nameof(Name));
     }
 }
