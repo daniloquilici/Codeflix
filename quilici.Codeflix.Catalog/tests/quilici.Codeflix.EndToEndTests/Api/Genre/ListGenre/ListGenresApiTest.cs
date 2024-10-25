@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using quilici.Codeflix.Catalog.Api.ApiModels.Response;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.ListGenres;
 using quilici.Codeflix.Catalog.EndToEndTests.Extensions;
@@ -17,6 +16,11 @@ public class ListGenresApiTest : IDisposable
     public ListGenresApiTest(ListGenresApiTestFixture fixture)
     {
         _fixture = fixture;
+    }
+
+    public void Dispose()
+    {
+        _fixture.CleanPersistence();
     }
 
     [Fact(DisplayName = nameof(ListGenres))]
@@ -104,8 +108,5 @@ public class ListGenresApiTest : IDisposable
         });
     }
 
-    public void Dispose()
-    {
-        _fixture.CleanPersistence();
-    }
+
 }

@@ -10,13 +10,18 @@ using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Genre.GetGenre;
 
 [Collection(nameof(GetGenreApiTestFixture))]
-public class GetGenreApiTest
+public class GetGenreApiTest : IDisposable
 {
     private readonly GetGenreApiTestFixture _fixture;
 
     public GetGenreApiTest(GetGenreApiTestFixture fixture)
     {
         _fixture = fixture;
+    }
+
+    public void Dispose()
+    {
+        _fixture.CleanPersistence();
     }
 
     [Fact(DisplayName = nameof(GetGenre))]
@@ -64,7 +69,7 @@ public class GetGenreApiTest
         Random random = new Random();
         exampleGenres.ForEach(genres =>
         {
-            int relationsCount = random.Next(2, exampleCategories.Count-1);
+            int relationsCount = random.Next(2, exampleCategories.Count - 1);
             for (int i = 0; i < relationsCount; i++)
             {
                 var selected = exampleCategories[random.Next(0, exampleCategories.Count - 1)];
@@ -82,7 +87,7 @@ public class GetGenreApiTest
         await _fixture.Persistence.InsertGenresCategoriesRelationsList(genresCategories);
 
         var (response, output) = await _fixture.ApiClient.Get<ApiResponse<GenreModelOutput>>($"/genres/{targetGenre.Id}");
-        
+
         response.Should().NotBeNull();
         response!.StatusCode.Should().Be(HttpStatusCode.OK);
         output.Should().NotBeNull();

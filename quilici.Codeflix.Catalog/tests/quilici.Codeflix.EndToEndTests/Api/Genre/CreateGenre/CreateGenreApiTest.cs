@@ -9,13 +9,18 @@ using System.Net;
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Genre.CreateGenre;
 
 [Collection(nameof(CreateGenreApiTestFixture))]
-public class CreateGenreApiTest
+public class CreateGenreApiTest : IDisposable
 {
     private readonly CreateGenreApiTestFixture _fixture;
 
     public CreateGenreApiTest(CreateGenreApiTestFixture fixture)
     {
         _fixture = fixture;
+    }
+
+    public void Dispose()
+    {
+        _fixture.CleanPersistence();
     }
 
     [Fact(DisplayName = nameof(CreateGenre))]
@@ -48,7 +53,7 @@ public class CreateGenreApiTest
         var exampleCategories = _fixture.GetExampleCategoriesList(10);
         await _fixture.CategoryPersistence.InsertList(exampleCategories);
         var relatedCategories = exampleCategories.Skip(3).Take(3).Select(x => x.Id).ToList();
-        
+
         var input = new CreateGenreInput(_fixture.GetValidGenreName(), _fixture.GetRandoBoolean(), relatedCategories);
 
         var (response, output) = await _fixture.ApiClient.Post<ApiResponse<GenreModelOutput>>("/genres", input);

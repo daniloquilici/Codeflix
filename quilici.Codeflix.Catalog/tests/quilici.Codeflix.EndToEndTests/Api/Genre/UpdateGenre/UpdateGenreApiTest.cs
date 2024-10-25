@@ -11,13 +11,18 @@ using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Genre.UpdateGenre;
 
 [Collection(nameof(UpdateGenreTestFixture))]
-public class UpdateGenreApiTest
+public class UpdateGenreApiTest : IDisposable
 {
     private readonly UpdateGenreTestFixture _fixture;
 
     public UpdateGenreApiTest(UpdateGenreTestFixture fixture)
     {
         _fixture = fixture;
+    }
+
+    public void Dispose()
+    {
+        _fixture.CleanPersistence();
     }
 
     [Fact(DisplayName = nameof(UpdateGenre))]
@@ -165,7 +170,7 @@ public class UpdateGenreApiTest
         var genresCategories = new List<GenresCategories>();
         exampleGenres.ForEach(genre =>
             genre.Categories.ToList().ForEach(categoryId => genresCategories.Add(new GenresCategories(categoryId, genre.Id)))
-            );        
+            );
 
         await _fixture.Persistence.InsertList(exampleGenres);
         await _fixture.CategoryPersistence.InsertList(exampleCategories);

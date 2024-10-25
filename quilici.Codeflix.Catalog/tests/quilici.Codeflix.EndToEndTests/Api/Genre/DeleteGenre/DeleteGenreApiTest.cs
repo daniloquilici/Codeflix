@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using quilici.Codeflix.Catalog.Api.ApiModels.Response;
-using quilici.Codeflix.Catalog.Application.UseCases.Genre.Common;
 using quilici.Codeflix.Catalog.Infra.Data.EF.Models;
 using System.Net;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
@@ -10,13 +8,18 @@ using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Genre.DeleteGenre;
 
 [Collection(nameof(DeleteGenreApiTestFixture))]
-public class DeleteGenreApiTest
+public class DeleteGenreApiTest : IDisposable
 {
     private readonly DeleteGenreApiTestFixture _fixture;
 
     public DeleteGenreApiTest(DeleteGenreApiTestFixture fixture)
     {
         _fixture = fixture;
+    }
+
+    public void Dispose()
+    {
+        _fixture.CleanPersistence();
     }
 
     [Fact(DisplayName = nameof(DeleteGenre))]
