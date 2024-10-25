@@ -2,11 +2,15 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using quilici.Codeflix.Catalog.Api.ApiModels.Genre;
 using quilici.Codeflix.Catalog.Api.ApiModels.Response;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.DeleteGenre;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.GetGenre;
+using quilici.Codeflix.Catalog.Application.UseCases.Genre.ListGenres;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.UpdateGenre;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 
 namespace quilici.Codeflix.Catalog.Api.Controllers
 {
@@ -56,6 +60,26 @@ namespace quilici.Codeflix.Catalog.Api.Controllers
         {
             var output = await _mediator.Send(new UpdateGenreInput(id, input.Name, input.IsActive, input.CategoriesIds), cancellationToken);
             return Ok(new ApiResponse<GenreModelOutput>(output));
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(ListGenresOutput), StatusCodes.Status200OK)]
+        public async Task<IActionResult> List(CancellationToken cancellationToken,
+                                             [FromQuery] int? page = null,
+                                             [FromQuery(Name = "per_page")] int? perPage = null,
+                                             [FromQuery] string? search = null,
+                                             [FromQuery] string? sort = null,
+                                             [FromQuery] SearchOrder? dir = null)
+        {
+            var input = new ListGenresInput();
+            if (page is not null) input.Page = page.Value;
+            if (perPage is not null) input.PerPage = perPage.Value;
+            if (!String.IsNullOrWhiteSpace(search)) input.Search = search;
+            if (!String.IsNullOrWhiteSpace(sort)) input.Sort = sort;
+            if (dir is not null) input.Dir = dir.Value;
+
+            var output = await _mediator.Send(input, cancellationToken);
+            return Ok(new ApiResponseList<GenreModelOutput>(output));
         }
     }
 }
