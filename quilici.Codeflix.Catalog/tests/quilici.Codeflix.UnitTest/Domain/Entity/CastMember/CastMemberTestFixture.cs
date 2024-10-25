@@ -1,4 +1,5 @@
-﻿using quilici.Codeflix.Catalog.UnitTest.Common;
+﻿using quilici.Codeflix.Catalog.Domain.Enum;
+using quilici.Codeflix.Catalog.UnitTest.Common;
 using Xunit;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.CastMember;
@@ -12,5 +13,5 @@ public class CastMemberTestFixture : BaseFixture
         => Faker.Name.FullName();
 
     public CastMemberType GetRandomCastMemberType()
-        => (new Random().Next(1, 2)) as CastMemberType;
+        => (CastMemberType)(new Random().Next(1, 2));
 }
