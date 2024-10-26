@@ -1,9 +1,12 @@
 ﻿using FluentAssertions;
 using Moq;
 using quilici.Codeflix.Catalog.Application.Interfaces;
+using quilici.Codeflix.Catalog.Application.UseCases.CastMember.CreateCastMember;
 using quilici.Codeflix.Catalog.Domain.Enum;
+using quilici.Codeflix.Catalog.Domain.Repository;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
+using UseCase = quilici.Codeflix.Catalog.Application.UseCases.CastMember.CreateCastMember;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Application.CastMember.CreateCastMember;
 
@@ -19,14 +22,14 @@ public class CreateCastMemberTest
 
     [Fact(DisplayName = nameof(Create))]
     [Trait("Aplication", "CreateCastMember - Use cases")]
-    public void Create()
+    public async Task Create()
     {
         var input = new CreateCastMemberInput("Danilo", CastMemberType.Director);
 
         var repositoryMock = new Mock<ICastMemberRepository>();
         var unitOfWork = new Mock<IUnitOfWork>();
 
-        var useCase = new CreateCastMember(repositoryMock, unitOfWork);
+        var useCase = new UseCase.CreateCastMember(unitOfWork.Object, repositoryMock.Object);
 
         var output = await useCase.Handle(input, CancellationToken.None);
 
