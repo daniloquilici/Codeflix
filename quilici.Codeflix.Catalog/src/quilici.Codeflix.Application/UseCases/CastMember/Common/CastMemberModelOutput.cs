@@ -1,4 +1,5 @@
 ﻿using quilici.Codeflix.Catalog.Domain.Enum;
+using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
 namespace quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
 public class CastMemberModelOutput
@@ -18,4 +19,7 @@ public class CastMemberModelOutput
         Type = type;
         CreatedAt = createdAt;
     }
+
+    public static CastMemberModelOutput FromCastMember(DomainEntity.CastMember castMember)
+        => new CastMemberModelOutput(castMember.Id, castMember.Name, castMember.Type, castMember.CreatedAt);
 }

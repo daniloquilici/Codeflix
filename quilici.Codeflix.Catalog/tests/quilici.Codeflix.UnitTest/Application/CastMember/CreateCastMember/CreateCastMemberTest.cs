@@ -2,7 +2,6 @@
 using Moq;
 using quilici.Codeflix.Catalog.Application.Interfaces;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.CreateCastMember;
-using quilici.Codeflix.Catalog.Domain.Enum;
 using quilici.Codeflix.Catalog.Domain.Repository;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
@@ -24,7 +23,7 @@ public class CreateCastMemberTest
     [Trait("Aplication", "CreateCastMember - Use cases")]
     public async Task Create()
     {
-        var input = new CreateCastMemberInput("Danilo", CastMemberType.Director);
+        var input = new CreateCastMemberInput(_fixture.GetValidName(), _fixture.GetRandomCastMemberType());
 
         var repositoryMock = new Mock<ICastMemberRepository>();
         var unitOfWork = new Mock<IUnitOfWork>();
