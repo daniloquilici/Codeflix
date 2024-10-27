@@ -1,7 +1,8 @@
-﻿using Moq;
+﻿using FluentAssertions;
+using Moq;
 using quilici.Codeflix.Catalog.Domain.Repository;
 using Xunit;
-using UseCase = quilici.Codeflix.Catalog.Application.UseCases.CastMember.CreateCastMember;
+using UseCase = quilici.Codeflix.Catalog.Application.UseCases.CastMember.GetCastMember;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Application.CastMember.GetCastMember;
 
