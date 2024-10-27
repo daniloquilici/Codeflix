@@ -1,5 +1,6 @@
 ﻿using quilici.Codeflix.Catalog.Domain.Enum;
 using quilici.Codeflix.Catalog.UnitTest.Common;
+using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Application.CastMember.Common;
 public class CastMemberUsesCasesBaseFixture : BaseFixture
@@ -9,4 +10,7 @@ public class CastMemberUsesCasesBaseFixture : BaseFixture
 
     public CastMemberType GetRandomCastMemberType()
         => (CastMemberType)(new Random().Next(1, 2));
+
+    public DomainEntity.CastMember GetCastMember()
+        => new DomainEntity.CastMember(GetValidName(), GetRandomCastMemberType());
 }
