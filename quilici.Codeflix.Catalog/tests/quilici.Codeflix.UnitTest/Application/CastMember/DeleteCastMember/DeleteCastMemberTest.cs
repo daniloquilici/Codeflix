@@ -3,8 +3,8 @@ using Moq;
 using quilici.Codeflix.Catalog.Application.Interfaces;
 using quilici.Codeflix.Catalog.Domain.Repository;
 using Xunit;
-using UseCase = quilici.Codeflix.Catalog.Application.UseCases.CastMember.DeleteCastMember;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
+using UseCase = quilici.Codeflix.Catalog.Application.UseCases.CastMember.DeleteCastMember;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Application.CastMember.DeleteCastMember;
 
@@ -20,7 +20,7 @@ public class DeleteCastMemberTest
 
     [Fact(DisplayName = nameof(DeleteCastMember))]
     [Trait("Application", "DeleteCastMember - Use cases")]
-    public async Task DeleteCastMember() 
+    public async Task DeleteCastMember()
     {
         var unitOfWorkMock = new Mock<IUnitOfWork>();
         var castMemberRepositoryMock = new Mock<ICastMemberRepository>();
@@ -28,14 +28,14 @@ public class DeleteCastMemberTest
 
         castMemberRepositoryMock.Setup(x => x.Get(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(castMemberExample);
 
-        var input = UseCase.DeleteCastMemberInput(castMemberExample.Id);
-        var useCase = UseCase.DeleteCastMember(unitOfWorkMock.Object, castMemberRepositoryMock.Object);
-        
+        var input = new UseCase.DeleteCastMemberInput(castMemberExample.Id);
+        var useCase = new UseCase.DeleteCastMember(unitOfWorkMock.Object, castMemberRepositoryMock.Object);
+
         var action = async () => await useCase.Handle(input, CancellationToken.None);
         await action.Should().NotThrowAsync();
 
         castMemberRepositoryMock.Verify(x => x.Get(It.Is<Guid>(x => x == input.Id), It.IsAny<CancellationToken>()), Times.Once);
-        castMemberRepositoryMock.Verify(x => x.Delete(It.Is<DomainEntity.CastMember>(x => x == input.Id), It.IsAny<CancellationToken>()), Times.Once);
+        castMemberRepositoryMock.Verify(x => x.Delete(It.Is<DomainEntity.CastMember>(x => x.Id == input.Id), It.IsAny<CancellationToken>()), Times.Once);
         unitOfWorkMock.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 }
