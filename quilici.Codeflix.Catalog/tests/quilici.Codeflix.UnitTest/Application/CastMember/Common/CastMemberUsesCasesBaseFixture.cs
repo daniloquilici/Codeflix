@@ -11,6 +11,6 @@ public class CastMemberUsesCasesBaseFixture : BaseFixture
     public CastMemberType GetRandomCastMemberType()
         => (CastMemberType)(new Random().Next(1, 2));
 
-    public DomainEntity.CastMember GetCastMember()
+    public DomainEntity.CastMember GetExampleCastMember()
         => new DomainEntity.CastMember(GetValidName(), GetRandomCastMemberType());
 }

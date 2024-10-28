@@ -21,7 +21,7 @@ public class GetCastMemberTest
     [Trait("Application", "GetCastMember - Use cases")]
     public async Task GetCastMember()
     {
-        var casMemberExample = _fixture.GetCastMember();
+        var casMemberExample = _fixture.GetExampleCastMember();
         var castMemberRepositoryMock = new Mock<ICastMemberRepository>();
         castMemberRepositoryMock.Setup(x => x.Get(It.IsAny<Guid>(), It.IsNotIn<CancellationToken>())).ReturnsAsync(casMemberExample);
 
