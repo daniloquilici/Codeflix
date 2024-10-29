@@ -16,14 +16,12 @@ public class CastMemberRepository : ICastMemberRepository
     }
 
     public Task Delete(CastMember aggregate, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+        => Task.FromResult(_castMembers.Remove(aggregate));
 
     public async Task<CastMember> Get(Guid id, CancellationToken cancellationToken)
-    { 
+    {
         var castMember = await _castMembers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        NotFoundException.ThrowIfNull(castMember, $"CastMember '{id}' not found.");        
+        NotFoundException.ThrowIfNull(castMember, $"CastMember '{id}' not found.");
         return castMember!;
     }
 
