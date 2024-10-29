@@ -51,4 +51,32 @@ public class ListCastMemberTest
                                                                                 && x.OrderBy == input.Sort), It.IsAny<CancellationToken>()), Times.Once);
 
     }
+
+    [Fact(DisplayName = nameof(ReturnsEmptyWhenIsEmpty))]
+    [Trait("Application", "ListCastMember - Use Cases")]
+    public async Task ReturnsEmptyWhenIsEmpty()
+    {
+        var castMembersListExample = new List<DomainEntity.CastMember>();
+        var repositorySearchOutput = new SearchOutput<DomainEntity.CastMember>(1, 10, castMembersListExample.Count, (IReadOnlyList<DomainEntity.CastMember>)castMembersListExample);
+        var castMemberRepositoryMock = new Mock<ICastMemberRepository>();
+        castMemberRepositoryMock.Setup(x => x.Search(It.IsAny<SearchInput>(), It.IsAny<CancellationToken>())).ReturnsAsync(repositorySearchOutput);
+
+        var input = new UseCase.ListCastMembersInput(1, 10, "", "", SearchOrder.Asc);
+        var useCase = new UseCase.ListCastMembers(castMemberRepositoryMock.Object);
+
+        var output = await useCase.Handle(input, CancellationToken.None);
+
+        output.Should().NotBeNull();
+        output.Page.Should().Be(repositorySearchOutput.CurrentPage);
+        output.PerPage.Should().Be(repositorySearchOutput.PerPage);
+        output.Total.Should().Be(repositorySearchOutput.Total);
+        output.Items.Should().HaveCount(castMembersListExample.Count);
+
+        castMemberRepositoryMock.Verify(x => x.Search(It.Is<SearchInput>(x => x.Page == input.Page
+                                                                                && x.PerPage == input.PerPage
+                                                                                && x.Search == input.Search
+                                                                                && x.Order == input.Dir
+                                                                                && x.OrderBy == input.Sort), It.IsAny<CancellationToken>()), Times.Once);
+
+    }
 }
