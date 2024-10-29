@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using quilici.Codeflix.Catalog.Application.Exceptions;
 using quilici.Codeflix.Catalog.Domain.Entity;
 using quilici.Codeflix.Catalog.Domain.Repository;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
@@ -21,7 +22,9 @@ public class CastMemberRepository : ICastMemberRepository
 
     public async Task<CastMember> Get(Guid id, CancellationToken cancellationToken)
     { 
-        return await _castMembers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken); 
+        var castMember = await _castMembers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        NotFoundException.ThrowIfNull(castMember, $"CastMember '{id}' not found.");        
+        return castMember!;
     }
 
     public async Task Insert(CastMember aggregate, CancellationToken cancellationToken)

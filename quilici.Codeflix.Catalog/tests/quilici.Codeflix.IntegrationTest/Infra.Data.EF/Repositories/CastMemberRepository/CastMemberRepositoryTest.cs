@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using quilici.Codeflix.Catalog.Application.Exceptions;
 using Xunit;
 using Repository = quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
 
@@ -51,5 +52,17 @@ public class CastMemberRepositoryTest
         itemFromRepository.Should().NotBeNull();
         itemFromRepository!.Name.Should().Be(castMemberExample.Name);
         itemFromRepository.Type.Should().Be(castMemberExample.Type);
+    }
+
+    [Fact(DisplayName = nameof(ThrowsWhenNotFound))]
+    [Trait("Integration/Infra.Data", "CastMemberRepository - Repositories")]
+    public async Task ThrowsWhenNotFound()
+    {
+        var randomGuid = Guid.NewGuid();
+
+        var repository = new Repository.CastMemberRepository(_fixture.CreateDbContext(true));
+
+        var action = async () =>  await repository.Get(randomGuid, CancellationToken.None);
+        await action.Should().ThrowAsync<NotFoundException>().WithMessage($"CastMember '{randomGuid}' not found.");
     }
 }
