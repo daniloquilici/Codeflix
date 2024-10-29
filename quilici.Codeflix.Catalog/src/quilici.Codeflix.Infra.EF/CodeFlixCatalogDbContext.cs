@@ -10,6 +10,7 @@ namespace quilici.Codeflix.Catalog.Infra.Data.EF
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<Genre> Genres => Set<Genre>();
         public DbSet<GenresCategories> GenresCategories => Set<GenresCategories>();
+        public DbSet<CastMember> CastMembers => Set<CastMember>();
 
         public CodeFlixCatalogDbContext(DbContextOptions<CodeFlixCatalogDbContext> options) : base(options)
         {

@@ -1,4 +1,7 @@
-﻿using Xunit;
+﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Xunit;
+using Repository = quilici.Codeflix.Catalog.Infra.Data.EF.Repositories;
 
 namespace quilici.Codeflix.Catalog.IntegrationTest.Infra.Data.EF.Repositories.CastMemberRepository;
 
@@ -6,7 +9,7 @@ namespace quilici.Codeflix.Catalog.IntegrationTest.Infra.Data.EF.Repositories.Ca
 public class CastMemberRepositoryTest
 {
     private readonly CastMemberRepositoryTestFixture _fixture;
-    
+
     public CastMemberRepositoryTest(CastMemberRepositoryTestFixture fixture)
     {
         _fixture = fixture;
@@ -14,19 +17,20 @@ public class CastMemberRepositoryTest
 
     [Fact(DisplayName = nameof(Insert))]
     [Trait("Integration/Infra.Data", "CastMemberRepository - Repositories")]
-    public async Task Insert() 
+    public async Task Insert()
     {
         var castMemberExample = _fixture.GetExampleCastMember();
 
         var context = _fixture.CreateDbContext();
-        var repository = new CastMemberRepository(context);
+        var repository = new Repository.CastMemberRepository(context);
 
         await repository.Insert(castMemberExample, CancellationToken.None);
         context.SaveChanges();
 
         var assertionContext = _fixture.CreateDbContext(true);
-        var castMemberFromDb = assertionContext.CastMembers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == castMemberExample.Id);
-        castMemberFromDb.Name.Should().Be(castMemberExample.Name);
+        var castMemberFromDb = await assertionContext.CastMembers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == castMemberExample.Id);
+        castMemberFromDb.Should().NotBeNull();
+        castMemberFromDb!.Name.Should().Be(castMemberExample.Name);
         castMemberFromDb.Type.Should().Be(castMemberExample.Type);
     }
 }
