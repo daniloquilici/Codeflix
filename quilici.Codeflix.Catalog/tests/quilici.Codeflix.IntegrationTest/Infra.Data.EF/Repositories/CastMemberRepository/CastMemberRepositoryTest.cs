@@ -95,4 +95,31 @@ public class CastMemberRepositoryTest
         itemsInDataBase.Should().HaveCount(4);
         itemsInDataBase.Should().NotContain(castMemberExample);
     }
+
+    [Fact(DisplayName = nameof(Update))]
+    [Trait("Integration/Infra.Data", "CastMemberRepository - Repositories")]
+    public async Task Update()
+    {
+        //Arrange
+        var castMemberExampleList = _fixture.GetExampleCastMembersList(5);        
+        var arrangeContext = _fixture.CreateDbContext();
+        await arrangeContext.AddRangeAsync(castMemberExampleList);
+        await arrangeContext.SaveChangesAsync();
+
+        var castMemberExample = castMemberExampleList[3];
+        castMemberExample.Update(_fixture.GetValidName(), _fixture.GetRandomCastMemberType());
+
+        //Act
+        var actDbContext = _fixture.CreateDbContext(true);
+        var repository = new Repository.CastMemberRepository(actDbContext);
+        await repository.Update(castMemberExample, CancellationToken.None);
+        await actDbContext.SaveChangesAsync();
+
+        //assert
+        var assertionContext = _fixture.CreateDbContext(true);
+        var castMemberFromDb = await assertionContext.CastMembers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == castMemberExample.Id);
+        castMemberFromDb.Should().NotBeNull();
+        castMemberFromDb!.Name.Should().Be(castMemberExample.Name);
+        castMemberFromDb.Type.Should().Be(castMemberExample.Type);
+    }
 }
