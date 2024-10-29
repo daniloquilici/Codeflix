@@ -1,7 +1,4 @@
-﻿
-using quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
-using quilici.Codeflix.Catalog.Domain.Repository;
-using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
+﻿using quilici.Codeflix.Catalog.Domain.Repository;
 
 namespace quilici.Codeflix.Catalog.Application.UseCases.CastMember.ListCastMemebers;
 public class ListCastMembers : IListCastMembers
@@ -15,8 +12,7 @@ public class ListCastMembers : IListCastMembers
 
     public async Task<ListCastMembersOutput> Handle(ListCastMembersInput request, CancellationToken cancellationToken)
     {
-        var searchOutput = await _castMemberRepository.Search(new SearchInput(request.Page, request.PerPage, request.Search, request.Sort, request.Dir), cancellationToken);
-
-        return new ListCastMembersOutput(searchOutput.CurrentPage, searchOutput.PerPage, searchOutput.Total, searchOutput.Items.Select(castMember => CastMemberModelOutput.FromCastMember(castMember)).ToList().AsReadOnly());
+        var searchOutput = await _castMemberRepository.Search(request.ToSearchInput(), cancellationToken);
+        return ListCastMembersOutput.FromSearchOutput(searchOutput);
     }
 }
