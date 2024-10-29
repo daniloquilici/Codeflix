@@ -28,9 +28,10 @@ public class CastMemberRepository : ICastMemberRepository
     public async Task Insert(CastMember aggregate, CancellationToken cancellationToken)
         => await _castMembers.AddAsync(aggregate, cancellationToken);
 
-    public Task<SearchOutput<CastMember>> Search(SearchInput searchInput, CancellationToken cancellationToken)
+    public async Task<SearchOutput<CastMember>> Search(SearchInput searchInput, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var items = await _castMembers.AsNoTracking().ToListAsync();
+        return new SearchOutput<CastMember>(searchInput.Page, searchInput.PerPage, items.Count, items.AsReadOnly());
     }
 
     public Task Update(CastMember aggregate, CancellationToken _)
