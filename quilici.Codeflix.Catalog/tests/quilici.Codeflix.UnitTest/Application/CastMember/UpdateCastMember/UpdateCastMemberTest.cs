@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using Moq;
+using quilici.Codeflix.Catalog.Application.Exceptions;
 using quilici.Codeflix.Catalog.Application.Interfaces;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
 using quilici.Codeflix.Catalog.Domain.Repository;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
@@ -43,5 +45,36 @@ public class UpdateCastMemberTest
         output.Id.Should().Be(exampleCastMember.Id);
         output.Name.Should().Be(input.Name);
         output.Type.Should().Be(input.Type);
+    }
+
+    [Fact(DisplayName = nameof(ThrowWhenNotFound))]
+    [Trait("Application", "UpdateCastMember - UseCases")]
+    public async Task ThrowWhenNotFound()
+    {
+        var unitOfWork = new Mock<IUnitOfWork>();
+        var castMemberRepository = new Mock<ICastMemberRepository>();
+        castMemberRepository.Setup(x => x.Get(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ThrowsAsync(new NotFoundException("notFound"));
+
+        var input = new UseCase.UpdateCastMemberInput(Guid.NewGuid(), _fixture.GetValidName(), _fixture.GetRandomCastMemberType());
+        var useCase = new UseCase.UpdateCastMember(unitOfWork.Object, castMemberRepository.Object);
+
+        var action = async () => await useCase.Handle(input, CancellationToken.None);
+        await action.Should().ThrowAsync<NotFoundException>();
+    }
+
+    [Fact(DisplayName = nameof(ThrowWhenInvalidName))]
+    [Trait("Application", "UpdateCastMember - UseCases")]
+    public async Task ThrowWhenInvalidName()
+    {
+        var castMemberExample = _fixture.GetExampleCastMember();
+        var unitOfWork = new Mock<IUnitOfWork>();
+        var castMemberRepository = new Mock<ICastMemberRepository>();
+        castMemberRepository.Setup(x => x.Get(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(castMemberExample);
+
+        var input = new UseCase.UpdateCastMemberInput(Guid.NewGuid(), null!, _fixture.GetRandomCastMemberType());
+        var useCase = new UseCase.UpdateCastMember(unitOfWork.Object, castMemberRepository.Object);
+
+        var action = async () => await useCase.Handle(input, CancellationToken.None);
+        await action.Should().ThrowAsync<EntityValidationException>().WithMessage("Name should not be empty or null");
     }
 }
