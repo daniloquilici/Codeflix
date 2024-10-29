@@ -19,9 +19,9 @@ public class CastMemberRepository : ICastMemberRepository
         throw new NotImplementedException();
     }
 
-    public Task<CastMember> Get(Guid id, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
+    public async Task<CastMember> Get(Guid id, CancellationToken cancellationToken)
+    { 
+        return await _castMembers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken); 
     }
 
     public async Task Insert(CastMember aggregate, CancellationToken cancellationToken)

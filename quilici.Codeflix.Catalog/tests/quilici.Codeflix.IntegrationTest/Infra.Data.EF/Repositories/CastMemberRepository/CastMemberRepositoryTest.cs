@@ -42,16 +42,14 @@ public class CastMemberRepositoryTest
         var castMemberExample = castMemberExampleList[3];
 
         var arrangeContext = _fixture.CreateDbContext();
-        await arrangeContext.AddAsync(castMemberExampleList);
+        await arrangeContext.AddRangeAsync(castMemberExampleList);
         await arrangeContext.SaveChangesAsync();
         var repository = new Repository.CastMemberRepository(_fixture.CreateDbContext(true));
 
         var itemFromRepository = await repository.Get(castMemberExample.Id, CancellationToken.None);
 
-        var assertionContext = _fixture.CreateDbContext(true);
-        var castMemberFromDb = await assertionContext.CastMembers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == castMemberExample.Id);
-        castMemberFromDb.Should().NotBeNull();
-        castMemberFromDb!.Name.Should().Be(castMemberExample.Name);
-        castMemberFromDb.Type.Should().Be(castMemberExample.Type);
+        itemFromRepository.Should().NotBeNull();
+        itemFromRepository!.Name.Should().Be(castMemberExample.Name);
+        itemFromRepository.Type.Should().Be(castMemberExample.Type);
     }
 }
