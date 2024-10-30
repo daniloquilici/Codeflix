@@ -124,9 +124,9 @@ public class CastMemberRepositoryTest
         castMemberFromDb.Type.Should().Be(castMemberExample.Type);
     }
 
-    [Fact(DisplayName = nameof(Update))]
+    [Fact(DisplayName = nameof(Search))]
     [Trait("Integration/Infra.Data", "CastMemberRepository - Repositories")]
-    public async Task Search() 
+    public async Task Search()
     {
         var exampleList = _fixture.GetExampleCastMembersList(10);
         var arrangeDbContext = _fixture.CreateDbContext();
@@ -142,6 +142,85 @@ public class CastMemberRepositoryTest
         searchResult.Total.Should().Be(10);
         searchResult.Items.Should().HaveCount(10);
         searchResult.Items.ToList().ForEach(resultItem => 
+        {
+            var example = exampleList.Find(x => x.Id == resultItem.Id);
+            example.Should().NotBeNull();
+            resultItem.Name.Should().Be(resultItem.Name);
+            resultItem.Type.Should().Be(resultItem.Type);
+        });
+    }
+
+    [Fact(DisplayName = nameof(SearchReturnsEmptyWhenEmpty))]
+    [Trait("Integration/Infra.Data", "CastMemberRepository - Repositories")]
+    public async Task SearchReturnsEmptyWhenEmpty()
+    {
+        var castMemberRepository = new Repository.CastMemberRepository(_fixture.CreateDbContext());
+        var searchResult = await castMemberRepository.Search(new SearchInput(1, 20, "", "", SearchOrder.Asc), CancellationToken.None);
+
+        searchResult.Should().NotBeNull();
+        searchResult.CurrentPage.Should().Be(1);
+        searchResult.PerPage.Should().Be(20);
+        searchResult.Total.Should().Be(0);
+        searchResult.Items.Should().HaveCount(0);
+    }
+
+    [Theory(DisplayName = nameof(SearchWithPagination))]
+    [Trait("Integration/Infra.Data", "CastMemberRepository - Repositories")]
+    [InlineData(10, 1, 5, 5)]
+    [InlineData(10, 2, 5, 5)]
+    [InlineData(7, 2, 5, 2)]
+    [InlineData(7, 3, 5, 0)]
+    public async Task SearchWithPagination(int quantityGenerate, int page, int perPage, int expectedQuantityItems)
+    {
+        var exampleList = _fixture.GetExampleCastMembersList(quantityGenerate);
+        var arrangeDbContext = _fixture.CreateDbContext();
+        await arrangeDbContext.AddRangeAsync(exampleList);
+        await arrangeDbContext.SaveChangesAsync();
+
+        var castMemberRepository = new Repository.CastMemberRepository(_fixture.CreateDbContext(true));
+        var searchResult = await castMemberRepository.Search(new SearchInput(page, perPage, "", "", SearchOrder.Asc), CancellationToken.None);
+
+        searchResult.Should().NotBeNull();
+        searchResult.CurrentPage.Should().Be(page);
+        searchResult.PerPage.Should().Be(perPage);
+        searchResult.Total.Should().Be(quantityGenerate);
+        searchResult.Items.Should().HaveCount(expectedQuantityItems);
+        searchResult.Items.ToList().ForEach(resultItem =>
+        {
+            var example = exampleList.Find(x => x.Id == resultItem.Id);
+            example.Should().NotBeNull();
+            resultItem.Name.Should().Be(resultItem.Name);
+            resultItem.Type.Should().Be(resultItem.Type);
+        });
+    }
+
+    [Theory(DisplayName = nameof(SearchByText))]
+    [Trait("Integration/Infra.Data", "CastMemberRepository - Repositories")]
+    [InlineData("Action", 1, 5, 1, 1)]
+    [InlineData("Horror", 1, 5, 3, 3)]
+    [InlineData("Horror", 2, 5, 0, 3)]
+    [InlineData("Sci-fi", 1, 5, 4, 4)]
+    [InlineData("Sci-fi", 1, 2, 2, 4)]
+    [InlineData("Sci-fi", 2, 3, 1, 4)]
+    [InlineData("Sci-fi Other", 1, 3, 0, 0)]
+    [InlineData("Robots", 1, 5, 2, 2)]
+    public async Task SearchByText(string search, int page, int perPage, int expectedQuantityItemsReturned, int expectedQuantityItems)
+    {
+        var namesToGenerate = new List<string>() { "Action", "Horror", "Horror - Robots", "Horror - Based on Real Facts", "Drama", "Sci-fi IA", "Sci-fi Space", "Sci-fi Robots", "Sci-fi Future" };
+        var exampleList = _fixture.GetExampleCastMembersListByNames(namesToGenerate);
+        var arrangeDbContext = _fixture.CreateDbContext();
+        await arrangeDbContext.AddRangeAsync(exampleList);
+        await arrangeDbContext.SaveChangesAsync();
+
+        var castMemberRepository = new Repository.CastMemberRepository(_fixture.CreateDbContext(true));
+        var searchResult = await castMemberRepository.Search(new SearchInput(page, perPage, search, "", SearchOrder.Asc), CancellationToken.None);
+
+        searchResult.Should().NotBeNull();
+        searchResult.CurrentPage.Should().Be(page);
+        searchResult.PerPage.Should().Be(perPage);
+        searchResult.Total.Should().Be(expectedQuantityItems);
+        searchResult.Items.Should().HaveCount(expectedQuantityItemsReturned);
+        searchResult.Items.ToList().ForEach(resultItem =>
         {
             var example = exampleList.Find(x => x.Id == resultItem.Id);
             example.Should().NotBeNull();

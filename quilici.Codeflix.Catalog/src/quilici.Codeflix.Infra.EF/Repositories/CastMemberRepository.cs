@@ -30,8 +30,15 @@ public class CastMemberRepository : ICastMemberRepository
 
     public async Task<SearchOutput<CastMember>> Search(SearchInput searchInput, CancellationToken cancellationToken)
     {
-        var items = await _castMembers.AsNoTracking().ToListAsync();
-        return new SearchOutput<CastMember>(searchInput.Page, searchInput.PerPage, items.Count, items.AsReadOnly());
+        var toSkip = (searchInput.Page - 1) * searchInput.PerPage;
+        var query = _castMembers.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(searchInput.Search))
+            query = query.Where(x => x.Name.Contains(searchInput.Search));
+
+        var items = await query.Skip(toSkip).Take(searchInput.PerPage).ToListAsync();
+        var count = query.Count();
+        return new SearchOutput<CastMember>(searchInput.Page, searchInput.PerPage, count, items.AsReadOnly());
     }
 
     public Task Update(CastMember aggregate, CancellationToken _)
