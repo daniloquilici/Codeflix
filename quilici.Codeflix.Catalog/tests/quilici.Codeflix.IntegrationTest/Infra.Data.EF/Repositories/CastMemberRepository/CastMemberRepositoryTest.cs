@@ -228,4 +228,39 @@ public class CastMemberRepositoryTest
             resultItem.Type.Should().Be(resultItem.Type);
         });
     }
+
+    [Theory(DisplayName = nameof(SearchOrdened))]
+    [Trait("Integration/Infra.Data", "CastMemberRepository - Repositories")]
+    [InlineData("name", "asc")]
+    [InlineData("name", "desc")]
+    [InlineData("id", "asc")]
+    [InlineData("id", "desc")]
+    [InlineData("CreatedAt", "asc")]
+    [InlineData("CreatedAt", "desc")]
+    [InlineData("", "asc")]
+    public async Task SearchOrdened(string orderBy, string order)
+    {        
+        var exampleList = _fixture.GetExampleCastMembersList(5);
+        var arrangeDbContext = _fixture.CreateDbContext();
+        await arrangeDbContext.AddRangeAsync(exampleList);
+        await arrangeDbContext.SaveChangesAsync();
+
+        var searchOrder = order.ToLower() == "asc" ? SearchOrder.Asc : SearchOrder.Desc;
+        var castMemberRepository = new Repository.CastMemberRepository(_fixture.CreateDbContext(true));
+        var searchResult = await castMemberRepository.Search(new SearchInput(1, 10, "", orderBy, searchOrder), CancellationToken.None);
+
+        var orderedList = _fixture.CloneListOrdered(exampleList, orderBy, searchOrder);
+
+        searchResult.Should().NotBeNull();
+        searchResult.CurrentPage.Should().Be(1);
+        searchResult.PerPage.Should().Be(10);
+        searchResult.Total.Should().Be(exampleList.Count);
+        searchResult.Items.Should().HaveCount(exampleList.Count);
+
+        for (int i = 0; i < orderedList.Count; i++) 
+        {
+            searchResult.Items[i].Name.Should().Be(orderedList[i].Name);
+            searchResult.Items[i].Type.Should().Be(orderedList[i].Type);
+        }        
+    }
 }

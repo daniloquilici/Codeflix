@@ -1,4 +1,6 @@
-﻿using quilici.Codeflix.Catalog.Domain.Enum;
+﻿using quilici.Codeflix.Catalog.Domain.Entity;
+using quilici.Codeflix.Catalog.Domain.Enum;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.IntegrationTest.Base;
 using System.ComponentModel.DataAnnotations;
 using Xunit;
@@ -30,4 +32,22 @@ public class CastMemberRepositoryTestFixture : BaseFixture
         example.Update(name, example.Type);
         return example;
     }).ToList();
+
+    public List<DomainEntity.CastMember> CloneListOrdered(List<DomainEntity.CastMember> castMemberList, string orderBy, SearchOrder order)
+    {
+        var listClone = new List<DomainEntity.CastMember>(castMemberList);
+
+        var orderedEnumerable = (orderBy.ToLower(), order) switch
+        {
+            ("name", SearchOrder.Asc) => listClone.OrderBy(x => x.Name).ThenBy(x => x.Id),
+            ("name", SearchOrder.Desc) => listClone.OrderByDescending(x => x.Name).ThenByDescending(x => x.Id),
+            ("id", SearchOrder.Asc) => listClone.OrderBy(x => x.Id),
+            ("id", SearchOrder.Desc) => listClone.OrderByDescending(x => x.Id),
+            ("createdat", SearchOrder.Asc) => listClone.OrderBy(x => x.CreatedAt),
+            ("createdat", SearchOrder.Desc) => listClone.OrderByDescending(x => x.CreatedAt),
+            _ => listClone.OrderBy(x => x.Name).ThenBy(x => x.Id),
+        };
+
+        return orderedEnumerable.ToList();
+    }
 }
