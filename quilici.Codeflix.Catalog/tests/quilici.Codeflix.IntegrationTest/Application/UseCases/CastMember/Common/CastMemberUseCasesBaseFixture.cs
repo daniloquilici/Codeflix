@@ -1,9 +1,14 @@
 ﻿using quilici.Codeflix.Catalog.Domain.Enum;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.IntegrationTest.Base;
+using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
 namespace quilici.Codeflix.Catalog.IntegrationTest.Application.UseCases.CastMember.Common;
+
+[CollectionDefinition(nameof(CastMemberUseCasesBaseFixture))]
+public class CastMemberUseCasesBaseFixtureCollection : ICollectionFixture<CastMemberUseCasesBaseFixture> { }
+
 public class CastMemberUseCasesBaseFixture : BaseFixture
 {
     public string GetValidName()
