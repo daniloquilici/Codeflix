@@ -2,8 +2,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using quilici.Codeflix.Catalog.Api.ApiModels.Genre;
 using quilici.Codeflix.Catalog.Api.ApiModels.Response;
-using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
-using quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.CreateGenre;
 using quilici.Codeflix.Catalog.Application.UseCases.Genre.DeleteGenre;
