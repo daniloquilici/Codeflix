@@ -45,4 +45,21 @@ public class ListCastMembersTest
             exampleItem.Should().BeEquivalentTo(outputItem);
         });
     }
+
+    [Fact(DisplayName = nameof(Empty))]
+    [Trait("Intagration/Application", "ListCastMembers - Use Cases")]
+    public async Task Empty()
+    {
+        var actDbContext = _fixture.CreateDbContext();
+        var castMemberRepository = new CastMemberRepository(actDbContext);
+        var input = new UseCase.ListCastMembersInput(1, 10, "", "", SearchOrder.Asc);
+        var useCase = new UseCase.ListCastMembers(castMemberRepository);
+        var output = await useCase.Handle(input, CancellationToken.None);
+
+        output.Should().NotBeNull();
+        output.Page.Should().Be(input.Page);
+        output.PerPage.Should().Be(input.PerPage);
+        output.Total.Should().Be(0);
+        output.Items.Should().HaveCount(0);        
+    }
 }
