@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using quilici.Codeflix.Catalog.Api.ApiModels.Response;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.CastMember.DeleteCastMember;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.GetCastMember;
 
 namespace quilici.Codeflix.Catalog.Api.Controllers;
@@ -24,5 +25,14 @@ public class CastMemberController : ControllerBase
     {
         var output = await _mediator.Send(new GetCastMemberInput(id), cancellationToken);
         return Ok(new ApiResponse<CastMemberModelOutput>(output));
+    }
+
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(typeof(ApiResponse<CastMemberModelOutput>), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DeleteCastMemberInput(id), cancellationToken);
+        return NoContent();
     }
 }
