@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using quilici.Codeflix.Catalog.Api.ApiModels.Response;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
 using quilici.Codeflix.Catalog.EndToEndTests.Api.CastMember.Common;
@@ -19,7 +20,7 @@ public class GetCastMemberApiTest
 
     [Fact(DisplayName = nameof(Get))]
     [Trait("EndToEnd/API", "CastMembers/Get - EndPoints")]
-    public async Task Get() 
+    public async Task Get()
     {
         var examples = _fixture.GetExampleCastMembersList(5);
         var example = examples[2];
@@ -34,5 +35,20 @@ public class GetCastMemberApiTest
         output.Data.Id.Should().Be(example.Id);
         output.Data.Name.Should().Be(example.Name);
         output.Data.Type.Should().Be(example.Type);
+    }
+
+    [Fact(DisplayName = nameof(NotFound))]
+    [Trait("EndToEnd/API", "CastMembers/Get - EndPoints")]
+    public async Task NotFound()
+    {
+        var randomGuid = Guid.NewGuid();
+
+        var (response, output) = await _fixture.ApiClient.Get<ProblemDetails>($"castmember/{randomGuid}");
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status404NotFound);
+        output.Should().NotBeNull();
+        output!.Title.Should().Be("Not Found");
+        output.Detail.Should().Be($"CastMember '{randomGuid}' not found.");
     }
 }
