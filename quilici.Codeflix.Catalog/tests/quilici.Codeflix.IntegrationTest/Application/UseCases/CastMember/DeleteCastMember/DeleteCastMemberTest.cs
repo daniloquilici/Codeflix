@@ -55,6 +55,6 @@ public class DeleteCastMemberTest
         var input = new UseCase.DeleteCastMemberInput(randomGuid);
         var useCase = new UseCase.DeleteCastMember(unitOfWork, castMemberRepository);
         var action = async () => await useCase.Handle(input, CancellationToken.None);
-        await action.Should().ThrowAsync<NotFoundException>().WithMessage($"CastMember {randomGuid} not found.");
+        await action.Should().ThrowAsync<NotFoundException>().WithMessage($"CastMember '{randomGuid}' not found.");
     }
 }
