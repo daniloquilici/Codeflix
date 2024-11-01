@@ -8,7 +8,7 @@ namespace quilici.Codeflix.Catalog.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CastMemberController : Controller
+public class CastMemberController : ControllerBase
 {
     private readonly IMediator _mediator;
 
