@@ -1,11 +1,23 @@
 ﻿using quilici.Codeflix.Catalog.Domain.Enum;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.EndToEndTests.Base;
+using System.Runtime.InteropServices.ObjectiveC;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.CastMember.Common;
-public class CastMemberBaseFixture : BaseFixture
+
+[CollectionDefinition(nameof(CastMemberApiBaseFixture))]
+public class CastMemberApiBaseFixtureCollection : ICollectionFixture<CastMemberApiBaseFixture> { }
+
+public class CastMemberApiBaseFixture : BaseFixture
 {
+    public CastMemberPesistence Persistence;
+
+    public CastMemberApiBaseFixture() 
+    {
+        Persistence = new CastMemberPesistence(CreateDbContext());
+    }
+
     public string GetValidName()
     => Faker.Name.FullName();
 
