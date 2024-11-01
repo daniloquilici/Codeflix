@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using quilici.Codeflix.Catalog.Api.ApiModels.Response;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
 using quilici.Codeflix.Catalog.EndToEndTests.Api.CastMember.Common;
@@ -32,5 +33,20 @@ public class DeleteCastMemberApiTest
         
         var castMemberExample = await _fixture.Persistence.GetById(example.Id);
         castMemberExample.Should().BeNull();
+    }
+
+    [Fact(DisplayName = nameof(NotFound))]
+    [Trait("EndToEnd/API", "CastMembers/Delete - EndPoints")]
+    public async Task NotFound()
+    {
+        var randomGuid = Guid.NewGuid();
+
+        var (response, output) = await _fixture.ApiClient.Delete<ProblemDetails>($"castmember/{randomGuid}");
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status404NotFound);
+        output.Should().NotBeNull();
+        output!.Title.Should().Be("Not Found");
+        output.Detail.Should().Be($"CastMember '{randomGuid}' not found.");
     }
 }
