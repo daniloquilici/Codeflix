@@ -9,4 +9,9 @@ public class ListCastMembersInput : PaginatedListInput, IRequest<ListCastMembers
         : base(page, perPage, search, sort, dir)
     {
     }
+
+    public ListCastMembersInput()
+    : base(1, 15, "", "", SearchOrder.Asc)
+    {
+    }
 }

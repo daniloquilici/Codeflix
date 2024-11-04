@@ -7,6 +7,7 @@ using quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.CreateCastMember;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.DeleteCastMember;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.GetCastMember;
+using quilici.Codeflix.Catalog.Application.UseCases.CastMember.ListCastMemebers;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.UpdateCastMember;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
@@ -62,5 +63,14 @@ public class CastMemberController : ControllerBase
         var input = new UpdateCastMemberInput(id, apiInput.Name, apiInput.Type);
         var output = await _mediator.Send(input, cancellationToken);
         return Ok(new ApiResponse<CastMemberModelOutput>(output));
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(ApiResponseList<CastMemberModelOutput>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> List(CancellationToken cancellationToken) 
+    {
+        var input = new ListCastMembersInput();
+        var output = await _mediator.Send(input, cancellationToken);
+        return Ok(new ApiResponseList<CastMemberModelOutput>(output));
     }
 }

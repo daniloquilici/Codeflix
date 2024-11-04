@@ -24,7 +24,7 @@ public class ListCastMembersApiTest
         var examples = _fixture.GetExampleCastMembersList(5);
         await _fixture.Persistence.InsertList(examples);
 
-        var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CastMemberModelOutput>>("castmembers");
+        var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CastMemberModelOutput>>("castmember");
 
         response.Should().NotBeNull();
         response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
