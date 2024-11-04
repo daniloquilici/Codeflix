@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using quilici.Codeflix.Catalog.Api.ApiModels.CastMember;
 using quilici.Codeflix.Catalog.Api.ApiModels.Response;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
@@ -42,5 +43,24 @@ public class UpdateCastMemberApiTest
         castMemberFromDb.Should().NotBeNull();
         castMemberFromDb!.Name.Should().Be(newName);
         castMemberFromDb.Type.Should().Be(newType);
+    }
+
+    [Fact(DisplayName = nameof(NotFound))]
+    [Trait("EndToEnd/API", "CastMembers/Update")]
+    public async Task NotFound()
+    {
+        var examples = _fixture.GetExampleCastMembersList(5);
+        var randomGuid = Guid.NewGuid();
+        var newName = _fixture.GetValidName();
+        var newType = _fixture.GetRandomCastMemberType();
+        await _fixture.Persistence.InsertList(examples);
+
+        var (response, output) = await _fixture.ApiClient.Put<ProblemDetails>($"castmember/{randomGuid}", new UpdateCastMemberApiInput(newName, newType));
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status404NotFound);
+        output.Should().NotBeNull();
+        output!.Title.Should().Be("Not Found");
+        output.Detail.Should().Be($"CastMember '{randomGuid}' not found.");
     }
 }
