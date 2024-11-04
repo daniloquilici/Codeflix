@@ -1,12 +1,15 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using quilici.Codeflix.Catalog.Api.ApiModels.CastMember;
+using quilici.Codeflix.Catalog.Api.ApiModels.Category;
 using quilici.Codeflix.Catalog.Api.ApiModels.Response;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.CreateCastMember;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.DeleteCastMember;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.GetCastMember;
+using quilici.Codeflix.Catalog.Application.UseCases.CastMember.UpdateCastMember;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
-using quilici.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 
 namespace quilici.Codeflix.Catalog.Api.Controllers;
 
@@ -47,5 +50,17 @@ public class CastMemberController : ControllerBase
     {
         await _mediator.Send(new DeleteCastMemberInput(id), cancellationToken);
         return NoContent();
+    }
+
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(ApiResponse<CastMemberModelOutput>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> Update([FromBody] UpdateCastMemberApiInput apiInput, [FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var input = new UpdateCastMemberInput(id, apiInput.Name, apiInput.Type);
+        var output = await _mediator.Send(input, cancellationToken);
+        return Ok(new ApiResponse<CastMemberModelOutput>(output));
     }
 }

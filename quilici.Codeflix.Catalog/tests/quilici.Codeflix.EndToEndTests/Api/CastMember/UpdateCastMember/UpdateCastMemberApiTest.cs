@@ -8,7 +8,7 @@ using System.Net;
 
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.CastMember.UpdateCastMember;
 
-[CollectionDefinition(nameof(CastMemberApiBaseFixture))]
+[Collection(nameof(CastMemberApiBaseFixture))]
 public class UpdateCastMemberApiTest
 {
     private readonly CastMemberApiBaseFixture _fixture;
