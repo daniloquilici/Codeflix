@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using quilici.Codeflix.Catalog.Api.ApiModels.CastMember;
 using quilici.Codeflix.Catalog.Api.ApiModels.Response;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
-using quilici.Codeflix.Catalog.Application.UseCases.CastMember.UpdateCastMember;
 using quilici.Codeflix.Catalog.EndToEndTests.Api.CastMember.Common;
 using System.Net;
 
@@ -28,7 +28,7 @@ public class UpdateCastMemberApiTest
         var newType = _fixture.GetRandomCastMemberType();
         await _fixture.Persistence.InsertList(examples);
 
-        var (response, output) = await _fixture.ApiClient.Put<ApiResponse<CastMemberModelOutput>>($"castmember/{example.Id}", new UpdateCastMemberInput(example.Id, newName, newType));
+        var (response, output) = await _fixture.ApiClient.Put<ApiResponse<CastMemberModelOutput>>($"castmember/{example.Id}", new UpdateCastMemberApiInput(newName, newType));
 
         response.Should().NotBeNull();
         response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);

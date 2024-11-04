@@ -57,7 +57,7 @@ public class CastMemberController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> Update([FromBody] UpdateCastMemberApiInput apiInput, [FromRoute] Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCastMemberApiInput apiInput, CancellationToken cancellationToken)
     {
         var input = new UpdateCastMemberInput(id, apiInput.Name, apiInput.Type);
         var output = await _mediator.Send(input, cancellationToken);
