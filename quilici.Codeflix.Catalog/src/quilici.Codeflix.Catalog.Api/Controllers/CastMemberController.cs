@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using quilici.Codeflix.Catalog.Api.ApiModels.Response;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.CastMember.CreateCastMember;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.DeleteCastMember;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.GetCastMember;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 
 namespace quilici.Codeflix.Catalog.Api.Controllers;
 
@@ -16,6 +19,16 @@ public class CastMemberController : ControllerBase
     public CastMemberController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    [HttpPost]
+    [ProducesResponseType(typeof(ApiResponse<CastMemberModelOutput>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> Create([FromBody] CreateCastMemberInput input, CancellationToken cancellationToken)
+    {
+        var output = await _mediator.Send(input, cancellationToken);
+        return CreatedAtAction(nameof(GetById), new { output.Id }, new ApiResponse<CastMemberModelOutput>(output));
     }
 
     [HttpGet("{id:guid}")]
