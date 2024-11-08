@@ -1,7 +1,7 @@
 ﻿namespace quilici.Codeflix.Catalog.Domain.Validation;
 public abstract class Validator
 {
-    private readonly ValidationHandler _handler;
+    protected readonly ValidationHandler _handler;
 
     protected Validator(ValidationHandler handler)
     {

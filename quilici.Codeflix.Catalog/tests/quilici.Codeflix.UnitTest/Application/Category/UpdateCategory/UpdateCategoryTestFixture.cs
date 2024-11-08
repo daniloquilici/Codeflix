@@ -11,7 +11,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.UpdateCategory
 
     public class UpdateCategoryTestFixture : CategoryUsesCaseBaseFixture
     {
-        public UpdateCategoryInput GetValidInput(Guid? id = null) => new(id ?? Guid.NewGuid(), GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
+        public UpdateCategoryInput GetValidInput(Guid? id = null) => new(id ?? Guid.NewGuid(), GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
 
         public UpdateCategoryInput GetInvalidInputShortName()
         {

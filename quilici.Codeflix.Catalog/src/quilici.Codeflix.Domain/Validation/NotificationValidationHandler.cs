@@ -6,7 +6,7 @@ public class NotificationValidationHandler : ValidationHandler
     public NotificationValidationHandler()
         => _errors = new List<ValidationError>();
 
-    public IReadOnlyCollection<ValidationError> Errors 
+    public IReadOnlyList<ValidationError> Errors 
         => _errors.AsReadOnly();
 
     public bool HasErrors()

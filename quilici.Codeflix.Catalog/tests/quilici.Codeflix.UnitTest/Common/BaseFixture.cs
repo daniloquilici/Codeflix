@@ -8,6 +8,6 @@ namespace quilici.Codeflix.Catalog.UnitTest.Common
 
         public BaseFixture() => Faker = new Faker("pt_BR");
 
-        public bool GetRandoBoolean() => new Random().NextDouble() < 0.5;
+        public bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
     }
 }

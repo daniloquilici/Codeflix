@@ -11,7 +11,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Category.CreateCategory
 
     public class CreateCategoryTestFixture : CategoryUsesCaseBaseFixture
     {
-        public CreateCategoryInput GetInput() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandoBoolean());
+        public CreateCategoryInput GetInput() => new(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
 
         public CreateCategoryInput GetInvalidInputShortName()
         {

@@ -1,5 +1,7 @@
-﻿using Xunit;
-using FluentAssertions;
+﻿using FluentAssertions;
+using quilici.Codeflix.Catalog.Domain.Validation;
+using Xunit;
+using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Video;
 
@@ -15,15 +17,30 @@ public class VideoValidatorTest
 
     [Fact(DisplayName = nameof(ReturnsValidWhenVideoIsValid))]
     [Trait("Domain", "Video Validator - Validators")]
-    public void ReturnsValidWhenVideoIsValid() 
+    public void ReturnsValidWhenVideoIsValid()
     {
         var validVideo = _fixture.GetValidVideo();
-        var notificationValidationHandle = new NotificationValidationHandle();
-        var videoValidator = new VideoValidatorTest(videoValidator, notificationValidationHandle);
+        var notificationValidationHandler = new NotificationValidationHandler();
+        var videoValidator = new VideoValidator(validVideo, notificationValidationHandler);
 
         videoValidator.Validate();
 
-        notificationValidationHandle.HasErros().Should().BeFalse();
-        notificationValidationHandle.GetErrors().Should().HaveCount(0);
+        notificationValidationHandler.HasErrors().Should().BeFalse();
+        notificationValidationHandler.Errors.Should().HaveCount(0);
+    }
+
+    [Fact(DisplayName = nameof(ReturnsErrorWhenTitleIsTooLong))]
+    [Trait("Domain", "Video Validator - Validators")]
+    public void ReturnsErrorWhenTitleIsTooLong()
+    {
+        var invalidVideo = new DomainEntity.Video(_fixture.GetTooLongTitle(), _fixture.GetValidDescription(), _fixture.GetRandomBoolean(), _fixture.GetRandomBoolean(), _fixture.GetValidYearLaunched(), _fixture.GetValidDuration());
+        var notificationValidationHandler = new NotificationValidationHandler();
+        var videoValidator = new VideoValidator(invalidVideo, notificationValidationHandler);
+
+        videoValidator.Validate();
+
+        notificationValidationHandler.HasErrors().Should().BeTrue();
+        notificationValidationHandler.Errors.Should().HaveCount(1);
+        notificationValidationHandler.Errors.First().Message.Should().Be("'Title' should be less or equal 255 characters long");
     }
 }

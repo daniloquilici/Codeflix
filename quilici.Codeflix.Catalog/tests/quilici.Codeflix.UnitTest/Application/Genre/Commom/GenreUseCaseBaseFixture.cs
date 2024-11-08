@@ -22,7 +22,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.Commom
 
         public DomainEntity.Genre GetExampleGenre(bool? isActive = null, List<Guid>? categoriesIds = null)
         {
-            var genre = new DomainEntity.Genre(GetValidGenreName(), isActive ?? GetRandoBoolean());
+            var genre = new DomainEntity.Genre(GetValidGenreName(), isActive ?? GetRandomBoolean());
             categoriesIds?.ForEach(genre.AddCategory);
             return genre;
         }
@@ -31,7 +31,7 @@ namespace quilici.Codeflix.Catalog.UnitTest.Application.Genre.Commom
         {
             return Enumerable.Range(1, count).Select(_ => 
             {
-                var genre = new DomainEntity.Genre(GetValidGenreName(), GetRandoBoolean());
+                var genre = new DomainEntity.Genre(GetValidGenreName(), GetRandomBoolean());
                 GetRandomIdsList().ForEach(genre.AddCategory);
                 return genre;
             }).ToList();
