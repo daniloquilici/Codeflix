@@ -1,21 +1,24 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using quilici.Codeflix.Catalog.Api.ApiModels.Response;
-using quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
 using quilici.Codeflix.Catalog.EndToEndTests.Api.CastMember.Common;
 using System.Net;
 
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.CastMember.DeleteCastMember;
 
 [Collection(nameof(CastMemberApiBaseFixture))]
-public class DeleteCastMemberApiTest
+public class DeleteCastMemberApiTest : IDisposable
 {
     private readonly CastMemberApiBaseFixture _fixture;
 
     public DeleteCastMemberApiTest(CastMemberApiBaseFixture fixture)
     {
         _fixture = fixture;
+    }
+
+    public void Dispose()
+    {
+        _fixture.CleanPersistence();
     }
 
     [Fact(DisplayName = nameof(Delete))]
@@ -30,7 +33,7 @@ public class DeleteCastMemberApiTest
 
         response.Should().NotBeNull();
         response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status204NoContent);
-        
+
         var castMemberExample = await _fixture.Persistence.GetById(example.Id);
         castMemberExample.Should().BeNull();
     }

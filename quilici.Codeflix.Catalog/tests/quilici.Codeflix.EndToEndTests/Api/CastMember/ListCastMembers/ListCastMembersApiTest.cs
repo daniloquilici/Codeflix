@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
+using quilici.Codeflix.Catalog.Application.UseCases.CastMember.ListCastMemebers;
 using quilici.Codeflix.Catalog.EndToEndTests.Api.CastMember.Common;
 using quilici.Codeflix.Catalog.EndToEndTests.Models;
 using System.Net;
@@ -63,5 +64,37 @@ public class ListCastMembersApiTest : IDisposable
         output.Meta.Total.Should().Be(0);
         output.Data.Should().NotBeNull();
         output!.Data.Should().HaveCount(0);
+    }
+
+    [Theory(DisplayName = nameof(Paginated))]
+    [Trait("EndToEnd/API", "CastMember/List")]
+    [InlineData(10, 1, 5, 5)]
+    [InlineData(10, 2, 5, 5)]
+    [InlineData(7, 2, 5, 2)]
+    [InlineData(7, 3, 5, 0)]
+    public async Task Paginated(int quantityToGenerate, int page, int perPage, int expectedQuantityItems)
+    {
+        var examples = _fixture.GetExampleCastMembersList(quantityToGenerate);
+        await _fixture.Persistence.InsertList(examples);
+
+        var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CastMemberModelOutput>>("castmember", new ListCastMembersInput() { Page = page, PerPage = perPage });
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
+        output!.Should().NotBeNull();
+        output!.Meta.Should().NotBeNull();
+        output.Meta!.CurrentPage.Should().Be(page);
+        output.Meta!.PerPage.Should().Be(perPage);
+        output.Meta.Total.Should().Be(examples.Count);
+        output.Data.Should().NotBeNull();
+        output!.Data.Should().HaveCount(expectedQuantityItems);
+        output.Data!.ForEach(outputItem =>
+        {
+            var exampleItem = examples.FirstOrDefault(x => x.Id == outputItem.Id);
+            exampleItem.Should().NotBeNull();
+            outputItem.Id.Should().Be(exampleItem!.Id);
+            outputItem.Name.Should().Be(exampleItem!.Name);
+            outputItem.Type.Should().Be(exampleItem!.Type);
+        });
     }
 }

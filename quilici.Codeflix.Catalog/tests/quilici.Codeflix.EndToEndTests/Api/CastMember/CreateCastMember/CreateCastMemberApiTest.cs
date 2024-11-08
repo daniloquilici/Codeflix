@@ -10,13 +10,18 @@ using System.Net;
 namespace quilici.Codeflix.Catalog.EndToEndTests.Api.CastMember.CreateCastMember;
 
 [Collection(nameof(CastMemberApiBaseFixture))]
-public class CreateCastMemberApiTest
+public class CreateCastMemberApiTest : IDisposable
 {
     private readonly CastMemberApiBaseFixture _fixture;
 
     public CreateCastMemberApiTest(CastMemberApiBaseFixture fixture)
     {
         _fixture = fixture;
+    }
+
+    public void Dispose()
+    {
+        _fixture.CleanPersistence();
     }
 
     [Fact(DisplayName = nameof(Create))]

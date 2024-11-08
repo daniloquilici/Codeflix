@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using quilici.Codeflix.Catalog.Api.ApiModels.Response;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
@@ -19,8 +18,8 @@ namespace quilici.Codeflix.Catalog.EndToEndTests.Api.Category.ListCategories
         private readonly ITestOutputHelper _testOutputHelper;
 
         public ListCategoriesApiTest(ListCategotiesApiTestFixture fixture, ITestOutputHelper testOutputHelper)
-        { 
-            _fixture = fixture; 
+        {
+            _fixture = fixture;
             _testOutputHelper = testOutputHelper;
         }
 

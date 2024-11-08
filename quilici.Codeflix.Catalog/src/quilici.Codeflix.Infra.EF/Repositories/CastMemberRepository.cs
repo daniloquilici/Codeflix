@@ -37,9 +37,9 @@ public class CastMemberRepository : ICastMemberRepository
         if (!string.IsNullOrWhiteSpace(searchInput.Search))
             query = query.Where(x => x.Name.Contains(searchInput.Search));
 
+        var total = await query.CountAsync();
         var items = await query.Skip(toSkip).Take(searchInput.PerPage).ToListAsync();
-        var count = query.Count();
-        return new SearchOutput<CastMember>(searchInput.Page, searchInput.PerPage, count, items.AsReadOnly());
+        return new(searchInput.Page, searchInput.PerPage, total, items.AsReadOnly());
     }
 
     private IQueryable<CastMember> AddOrderToQuery(IQueryable<CastMember> query, string orderProperty, SearchOrder order)
