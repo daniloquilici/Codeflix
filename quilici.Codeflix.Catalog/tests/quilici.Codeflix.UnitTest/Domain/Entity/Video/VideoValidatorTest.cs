@@ -43,4 +43,19 @@ public class VideoValidatorTest
         notificationValidationHandler.Errors.Should().HaveCount(1);
         notificationValidationHandler.Errors.First().Message.Should().Be("'Title' should be less or equal 255 characters long");
     }
+
+    [Fact(DisplayName = nameof(ReturnsErrorWhenTitleIsEmpty))]
+    [Trait("Domain", "Video Validator - Validators")]
+    public void ReturnsErrorWhenTitleIsEmpty()
+    {
+        var invalidVideo = new DomainEntity.Video("", _fixture.GetValidDescription(), _fixture.GetRandomBoolean(), _fixture.GetRandomBoolean(), _fixture.GetValidYearLaunched(), _fixture.GetValidDuration());
+        var notificationValidationHandler = new NotificationValidationHandler();
+        var videoValidator = new VideoValidator(invalidVideo, notificationValidationHandler);
+
+        videoValidator.Validate();
+
+        notificationValidationHandler.HasErrors().Should().BeTrue();
+        notificationValidationHandler.Errors.Should().HaveCount(1);
+        notificationValidationHandler.Errors.First().Message.Should().Be("'Title' is requered");
+    }
 }
