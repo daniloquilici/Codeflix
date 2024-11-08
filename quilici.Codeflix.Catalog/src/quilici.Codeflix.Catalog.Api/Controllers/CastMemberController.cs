@@ -69,11 +69,13 @@ public class CastMemberController : ControllerBase
     [ProducesResponseType(typeof(ApiResponseList<CastMemberModelOutput>), StatusCodes.Status200OK)]
     public async Task<IActionResult> List([FromQuery] int? page,
         [FromQuery(Name = "per_page")] int? perPage,
+        [FromQuery] string? search,
         CancellationToken cancellationToken) 
     {
         var input = new ListCastMembersInput();
         if (page is not null) input.Page = page.Value;
         if (perPage is not null) input.PerPage = perPage.Value;
+        if (search is not null) input.Search = search;
         var output = await _mediator.Send(input, cancellationToken);
         return Ok(new ApiResponseList<CastMemberModelOutput>(output));
     }

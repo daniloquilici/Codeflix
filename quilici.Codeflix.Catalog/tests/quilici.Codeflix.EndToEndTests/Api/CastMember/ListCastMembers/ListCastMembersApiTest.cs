@@ -97,4 +97,42 @@ public class ListCastMembersApiTest : IDisposable
             outputItem.Type.Should().Be(exampleItem!.Type);
         });
     }
+
+    [Theory(DisplayName = nameof(SearchByText))]
+    [Trait("EndToEnd/API", "CastMember/List")]
+    [InlineData("Action", 1, 5, 1, 1)]
+    [InlineData("Horror", 1, 5, 3, 3)]
+    [InlineData("Horror", 2, 5, 0, 3)]
+    [InlineData("Sci-fi", 1, 5, 4, 4)]
+    [InlineData("Sci-fi", 1, 2, 2, 4)]
+    [InlineData("Sci-fi", 2, 3, 1, 4)]
+    [InlineData("Sci-fi Other", 1, 3, 0, 0)]
+    [InlineData("Robots", 1, 5, 2, 2)]
+    public async Task SearchByText(string search, int page, int perPage, int expectedQuantityItemsReturned, int expectedQuantityItems)
+    {
+        var namesToGenerate = new List<string>() { "Action", "Horror", "Horror - Robots", "Horror - Based on Real Facts", "Drama", "Sci-fi IA", "Sci-fi Space", "Sci-fi Robots", "Sci-fi Future" };
+
+        var examples = _fixture.GetExampleCastMembersListByNames(namesToGenerate);
+        await _fixture.Persistence.InsertList(examples);
+
+        var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CastMemberModelOutput>>("castmember", new ListCastMembersInput() { Page = page, PerPage = perPage, Search = search });
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
+        output!.Should().NotBeNull();
+        output!.Meta.Should().NotBeNull();
+        output.Meta!.CurrentPage.Should().Be(page);
+        output.Meta!.PerPage.Should().Be(perPage);
+        output.Meta.Total.Should().Be(expectedQuantityItems);
+        output.Data.Should().NotBeNull();
+        output!.Data.Should().HaveCount(expectedQuantityItemsReturned);
+        output.Data!.ForEach(outputItem =>
+        {
+            var exampleItem = examples.FirstOrDefault(x => x.Id == outputItem.Id);
+            exampleItem.Should().NotBeNull();
+            outputItem.Id.Should().Be(exampleItem!.Id);
+            outputItem.Name.Should().Be(exampleItem!.Name);
+            outputItem.Type.Should().Be(exampleItem!.Type);
+        });
+    }
 }
