@@ -11,6 +11,7 @@ using quilici.Codeflix.Catalog.Application.UseCases.CastMember.ListCastMemebers;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.UpdateCastMember;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 
 namespace quilici.Codeflix.Catalog.Api.Controllers;
 
@@ -70,12 +71,16 @@ public class CastMemberController : ControllerBase
     public async Task<IActionResult> List([FromQuery] int? page,
         [FromQuery(Name = "per_page")] int? perPage,
         [FromQuery] string? search,
+        [FromQuery] string? sort,
+        [FromQuery] string? dir,
         CancellationToken cancellationToken) 
     {
         var input = new ListCastMembersInput();
         if (page is not null) input.Page = page.Value;
         if (perPage is not null) input.PerPage = perPage.Value;
         if (search is not null) input.Search = search;
+        if (sort is not null) input.Sort = sort;
+        if (dir is not null) input.Dir = dir.ToLower() == "asc" ? SearchOrder.Asc : SearchOrder.Desc; ;
         var output = await _mediator.Send(input, cancellationToken);
         return Ok(new ApiResponseList<CastMemberModelOutput>(output));
     }

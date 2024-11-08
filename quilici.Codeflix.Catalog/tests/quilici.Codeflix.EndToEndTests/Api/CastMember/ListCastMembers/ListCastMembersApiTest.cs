@@ -153,7 +153,7 @@ public class ListCastMembersApiTest : IDisposable
         await _fixture.Persistence.InsertList(examples);
 
         var searchOrder = order.ToLower() == "asc" ? SearchOrder.Asc : SearchOrder.Desc;
-        var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CastMemberModelOutput>>("castmember", new ListCastMembersInput() { Sort = orderBy, Dir = searchOrder });
+        var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CastMemberModelOutput>>("castmember", new { Sort = orderBy, Dir = order });
 
         response.Should().NotBeNull();
         response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
