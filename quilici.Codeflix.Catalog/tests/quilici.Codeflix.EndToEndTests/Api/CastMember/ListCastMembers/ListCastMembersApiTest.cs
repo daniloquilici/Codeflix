@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.CastMember.ListCastMemebers;
+using quilici.Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using quilici.Codeflix.Catalog.EndToEndTests.Api.CastMember.Common;
+using quilici.Codeflix.Catalog.EndToEndTests.Extensions;
 using quilici.Codeflix.Catalog.EndToEndTests.Models;
 using System.Net;
 
@@ -134,5 +136,42 @@ public class ListCastMembersApiTest : IDisposable
             outputItem.Name.Should().Be(exampleItem!.Name);
             outputItem.Type.Should().Be(exampleItem!.Type);
         });
+    }
+
+    [Theory(DisplayName = nameof(SearchOrdened))]
+    [Trait("EndToEnd/API", "CastMember/List")]
+    [InlineData("name", "asc")]
+    [InlineData("name", "desc")]
+    [InlineData("id", "asc")]
+    [InlineData("id", "desc")]
+    [InlineData("CreatedAt", "asc")]
+    [InlineData("CreatedAt", "desc")]
+    [InlineData("", "asc")]
+    public async Task SearchOrdened(string orderBy, string order)
+    {
+        var examples = _fixture.GetExampleCastMembersList(10);
+        await _fixture.Persistence.InsertList(examples);
+
+        var searchOrder = order.ToLower() == "asc" ? SearchOrder.Asc : SearchOrder.Desc;
+        var (response, output) = await _fixture.ApiClient.Get<TestApiResponseList<CastMemberModelOutput>>("castmember", new ListCastMembersInput() { Sort = orderBy, Dir = searchOrder });
+
+        response.Should().NotBeNull();
+        response!.StatusCode.Should().Be((HttpStatusCode)StatusCodes.Status200OK);
+        output!.Should().NotBeNull();
+        output!.Meta.Should().NotBeNull();
+        output.Meta!.CurrentPage.Should().Be(1);
+        output.Meta.Total.Should().Be(examples.Count);
+        output.Data.Should().NotBeNull();
+        output!.Data.Should().HaveCount(examples.Count);
+
+        var orderedList = _fixture.CloneListOrdered(examples, orderBy, searchOrder);
+        for (int i = 0; i < orderedList.Count; i++)
+        {
+            output.Data.Should().NotBeNull();
+            output.Data![i].Id.Should().Be(orderedList[i].Id);
+            output.Data![i].Name.Should().Be(orderedList[i].Name);
+            output.Data![i].Type.Should().Be(orderedList[i].Type);
+            output.Data![i].CreatedAt.TrimMillisseconds().Should().Be(orderedList[i].CreatedAt.TrimMillisseconds());
+        }
     }
 }
