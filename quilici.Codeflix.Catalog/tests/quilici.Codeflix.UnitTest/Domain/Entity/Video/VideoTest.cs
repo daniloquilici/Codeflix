@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
@@ -25,6 +26,7 @@ public class VideoTest
         var expectedYearLaunched = _fixture.GetValidYearLaunched();
         var expectedDuration = _fixture.GetValidDuration();
 
+        var expectedCreatedDate = DateTime.UtcNow;
         var video = new DomainEntity.Video(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration);
 
         video.Title.Should().Be(expectedTitle);
@@ -33,5 +35,22 @@ public class VideoTest
         video.Published.Should().Be(expectedPublished);
         video.YearLaunched.Should().Be(expectedYearLaunched);
         video.Druration.Should().Be(expectedDuration);
+        video.CreatedAt.Should().BeCloseTo(expectedCreatedDate, TimeSpan.FromSeconds(10));
+    }
+
+    [Fact(DisplayName = nameof(InstantiateThrowExceptionWhenNotValid))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void InstantiateThrowExceptionWhenNotValid()
+    {
+        var expectedTitle = "";
+        var expectedDescription = _fixture.GetTooLongDescription();
+        var expectedOpened = _fixture.GetRandomBoolean();
+        var expectedPublished = _fixture.GetRandomBoolean();
+        var expectedYearLaunched = _fixture.GetValidYearLaunched();
+        var expectedDuration = _fixture.GetValidDuration();
+
+        var expectedCreatedDate = DateTime.UtcNow;
+        var action = () => new DomainEntity.Video(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration);
+        action.Should().Throw<EntityValidationException>().WithMessage("Validation errors");
     }
 }
