@@ -16,7 +16,10 @@ public class VideoTestFixture : BaseFixture
         => Faker.Lorem.Letter(100);
 
     public string GetTooLongTitle()
-    => Faker.Lorem.Letter(400);
+        => Faker.Lorem.Letter(400);
+
+    public string GetTooLongDescription()
+        => Faker.Lorem.Letter(4001);
 
     public string GetValidDescription()
         => Faker.Commerce.ProductName();
