@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using quilici.Codeflix.Catalog.Domain.Exceptions;
+using quilici.Codeflix.Catalog.Domain.Validation;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
@@ -26,7 +27,7 @@ public class VideoTest
         var expectedYearLaunched = _fixture.GetValidYearLaunched();
         var expectedDuration = _fixture.GetValidDuration();
 
-        var expectedCreatedDate = DateTime.UtcNow;
+        var expectedCreatedDate = DateTime.Now;
         var video = new DomainEntity.Video(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration);
 
         video.Title.Should().Be(expectedTitle);
@@ -38,19 +39,39 @@ public class VideoTest
         video.CreatedAt.Should().BeCloseTo(expectedCreatedDate, TimeSpan.FromSeconds(10));
     }
 
-    [Fact(DisplayName = nameof(InstantiateThrowExceptionWhenNotValid))]
+    [Fact(DisplayName = nameof(ValidateWhenValidState))]
     [Trait("Domain", "Video - Aggregate")]
-    public void InstantiateThrowExceptionWhenNotValid()
+    public void ValidateWhenValidState()
     {
-        var expectedTitle = "";
-        var expectedDescription = _fixture.GetTooLongDescription();
-        var expectedOpened = _fixture.GetRandomBoolean();
-        var expectedPublished = _fixture.GetRandomBoolean();
-        var expectedYearLaunched = _fixture.GetValidYearLaunched();
-        var expectedDuration = _fixture.GetValidDuration();
+        var video = _fixture.GetValidVideo();
+        var notificationValidationHandler = new NotificationValidationHandler();
 
-        var expectedCreatedDate = DateTime.UtcNow;
-        var action = () => new DomainEntity.Video(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration);
-        action.Should().Throw<EntityValidationException>().WithMessage("Validation errors");
+        video.Validate(notificationValidationHandler);
+        
+        notificationValidationHandler.HasErrors().Should().BeFalse();
+    }
+
+    [Fact(DisplayName = nameof(ValidateWithErrorWhenInvalidState))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void ValidateWithErrorWhenInvalidState()
+    {
+        var video = new DomainEntity.Video(
+            _fixture.GetTooLongTitle(),
+            _fixture.GetTooLongDescription(),
+            _fixture.GetRandomBoolean(),
+            _fixture.GetRandomBoolean(),
+            _fixture.GetValidYearLaunched(),
+            _fixture.GetValidDuration());
+
+        var notificationValidationHandler = new NotificationValidationHandler();
+
+        video.Validate(notificationValidationHandler);
+
+        notificationValidationHandler.HasErrors().Should().BeTrue();
+        notificationValidationHandler.Errors.Should().BeEquivalentTo(new List<ValidationError>() 
+        {
+            new ValidationError("'Title' should be less or equal 255 characters long"),
+            new ValidationError("'Description' should be less or equal 4000 characters long")
+        });
     }
 }

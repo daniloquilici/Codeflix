@@ -1,6 +1,4 @@
-﻿using quilici.Codeflix.Catalog.Domain.Exceptions;
-using quilici.Codeflix.Catalog.Domain.Validation;
-using System.Linq.Expressions;
+﻿using quilici.Codeflix.Catalog.Domain.Validation;
 
 namespace quilici.Codeflix.Catalog.Domain.Entity;
 public class Video
@@ -31,17 +29,8 @@ public class Video
         YearLaunched = yearLaunched;
         Druration = druration;
         CreatedAt = DateTime.Now;
-
-        Validate();
     }
 
-    private void Validate() 
-    {
-        var notificationValidationHandler = new NotificationValidationHandler();
-        var validator = new VideoValidator(this, notificationValidationHandler);
-        validator.Validate();
-        if (notificationValidationHandler.HasErrors())
-            throw new EntityValidationException("Validation errors");
-
-    }
+    public void Validate(ValidationHandler handler)
+        => new VideoValidator(this, handler).Validate();
 }

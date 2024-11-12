@@ -3,7 +3,7 @@ using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 public class VideoValidator : Validator
 {
     private const int TitleMaxLength = 255;
-    private const int DescriptionMaxLength = 400;
+    private const int DescriptionMaxLength = 4000;
 
     private readonly DomainEntity.Video _video;
 

@@ -1,9 +1,14 @@
-﻿namespace quilici.Codeflix.Catalog.Domain.Exceptions
+﻿using quilici.Codeflix.Catalog.Domain.Validation;
+
+namespace quilici.Codeflix.Catalog.Domain.Exceptions
 {
     public class EntityValidationException : Exception
     {
-        public EntityValidationException(string? message) : base(message)
+        public IReadOnlyCollection<ValidationError>? Errors { get; }
+
+        public EntityValidationException(string? message, IReadOnlyCollection<ValidationError>? errors = null) : base(message)
         {
+            Errors = errors;
         }
     }
 }
