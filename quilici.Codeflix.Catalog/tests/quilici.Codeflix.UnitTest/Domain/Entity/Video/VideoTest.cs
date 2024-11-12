@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using quilici.Codeflix.Catalog.Domain.Exceptions;
 using quilici.Codeflix.Catalog.Domain.Validation;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
@@ -47,7 +46,7 @@ public class VideoTest
         var notificationValidationHandler = new NotificationValidationHandler();
 
         video.Validate(notificationValidationHandler);
-        
+
         notificationValidationHandler.HasErrors().Should().BeFalse();
     }
 
@@ -68,7 +67,73 @@ public class VideoTest
         video.Validate(notificationValidationHandler);
 
         notificationValidationHandler.HasErrors().Should().BeTrue();
-        notificationValidationHandler.Errors.Should().BeEquivalentTo(new List<ValidationError>() 
+        notificationValidationHandler.Errors.Should().BeEquivalentTo(new List<ValidationError>()
+        {
+            new ValidationError("'Title' should be less or equal 255 characters long"),
+            new ValidationError("'Description' should be less or equal 4000 characters long")
+        });
+    }
+
+    [Fact(DisplayName = nameof(Update))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void Update()
+    {
+        var expectedTitle = _fixture.GetTooLongTitle();
+        var expectedDescription = _fixture.GetValidDescription();
+        var expectedOpened = _fixture.GetRandomBoolean();
+        var expectedPublished = _fixture.GetRandomBoolean();
+        var expectedYearLaunched = _fixture.GetValidYearLaunched();
+        var expectedDuration = _fixture.GetValidDuration();
+
+        var video = _fixture.GetValidVideo();
+        video.Update(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration);
+
+        video.Title.Should().Be(expectedTitle);
+        video.Description.Should().Be(expectedDescription);
+        video.Opened.Should().Be(expectedOpened);
+        video.Published.Should().Be(expectedPublished);
+        video.YearLaunched.Should().Be(expectedYearLaunched);
+        video.Druration.Should().Be(expectedDuration);
+    }
+
+    [Fact(DisplayName = nameof(ValidadeStillAfterUpdateToValidState))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void ValidadeStillAfterUpdateToValidState()
+    {
+        var expectedTitle = _fixture.GetValidTitle();
+        var expectedDescription = _fixture.GetValidDescription();
+        var expectedOpened = _fixture.GetRandomBoolean();
+        var expectedPublished = _fixture.GetRandomBoolean();
+        var expectedYearLaunched = _fixture.GetValidYearLaunched();
+        var expectedDuration = _fixture.GetValidDuration();
+
+        var video = _fixture.GetValidVideo();
+        video.Update(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration);
+        var notificationValidationHandler = new NotificationValidationHandler();
+        video.Validate(notificationValidationHandler);
+
+        notificationValidationHandler.HasErrors().Should().BeFalse();
+    }
+
+    [Fact(DisplayName = nameof(ValidadeGeneraterErrorsAfterUpdateToInvalidState))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void ValidadeGeneraterErrorsAfterUpdateToInvalidState()
+    {
+        var expectedTitle = _fixture.GetTooLongTitle();
+        var expectedDescription = _fixture.GetTooLongDescription();
+        var expectedOpened = _fixture.GetRandomBoolean();
+        var expectedPublished = _fixture.GetRandomBoolean();
+        var expectedYearLaunched = _fixture.GetValidYearLaunched();
+        var expectedDuration = _fixture.GetValidDuration();
+
+        var video = _fixture.GetValidVideo();
+        video.Update(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration);
+        var notificationValidationHandler = new NotificationValidationHandler();
+        video.Validate(notificationValidationHandler);
+
+        notificationValidationHandler.HasErrors().Should().BeTrue();
+        notificationValidationHandler.Errors.Should().HaveCount(2);
+        notificationValidationHandler.Errors.Should().BeEquivalentTo(new List<ValidationError>()
         {
             new ValidationError("'Title' should be less or equal 255 characters long"),
             new ValidationError("'Description' should be less or equal 4000 characters long")

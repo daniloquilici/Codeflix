@@ -31,6 +31,16 @@ public class Video
         CreatedAt = DateTime.Now;
     }
 
+    public void Update(string title, string description, bool opened, bool published, int yearLaunched, int druration)
+    {
+        Title = title;
+        Description = description;
+        Opened = opened;
+        Published = published;
+        YearLaunched = yearLaunched;
+        Druration = druration;
+    }
+
     public void Validate(ValidationHandler handler)
         => new VideoValidator(this, handler).Validate();
 }
