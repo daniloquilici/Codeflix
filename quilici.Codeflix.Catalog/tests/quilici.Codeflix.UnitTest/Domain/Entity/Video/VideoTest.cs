@@ -25,9 +25,10 @@ public class VideoTest
         var expectedPublished = _fixture.GetRandomBoolean();
         var expectedYearLaunched = _fixture.GetValidYearLaunched();
         var expectedDuration = _fixture.GetValidDuration();
+        var expectedRating = _fixture.GetRandomRating();
 
         var expectedCreatedDate = DateTime.Now;
-        var video = new DomainEntity.Video(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration);
+        var video = new DomainEntity.Video(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration, expectedRating);
 
         video.Title.Should().Be(expectedTitle);
         video.Description.Should().Be(expectedDescription);
@@ -36,6 +37,7 @@ public class VideoTest
         video.YearLaunched.Should().Be(expectedYearLaunched);
         video.Druration.Should().Be(expectedDuration);
         video.CreatedAt.Should().BeCloseTo(expectedCreatedDate, TimeSpan.FromSeconds(10));
+        video.Rating.Should().Be(expectedRating);
     }
 
     [Fact(DisplayName = nameof(ValidateWhenValidState))]
@@ -60,7 +62,8 @@ public class VideoTest
             _fixture.GetRandomBoolean(),
             _fixture.GetRandomBoolean(),
             _fixture.GetValidYearLaunched(),
-            _fixture.GetValidDuration());
+            _fixture.GetValidDuration(),
+            _fixture.GetRandomRating());
 
         var notificationValidationHandler = new NotificationValidationHandler();
 
@@ -84,9 +87,10 @@ public class VideoTest
         var expectedPublished = _fixture.GetRandomBoolean();
         var expectedYearLaunched = _fixture.GetValidYearLaunched();
         var expectedDuration = _fixture.GetValidDuration();
+        var expectedRating = _fixture.GetRandomRating();
 
         var video = _fixture.GetValidVideo();
-        video.Update(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration);
+        video.Update(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration, expectedRating);
 
         video.Title.Should().Be(expectedTitle);
         video.Description.Should().Be(expectedDescription);
@@ -106,9 +110,10 @@ public class VideoTest
         var expectedPublished = _fixture.GetRandomBoolean();
         var expectedYearLaunched = _fixture.GetValidYearLaunched();
         var expectedDuration = _fixture.GetValidDuration();
+        var expectedRating = _fixture.GetRandomRating();
 
         var video = _fixture.GetValidVideo();
-        video.Update(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration);
+        video.Update(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration, expectedRating);
         var notificationValidationHandler = new NotificationValidationHandler();
         video.Validate(notificationValidationHandler);
 
@@ -125,9 +130,10 @@ public class VideoTest
         var expectedPublished = _fixture.GetRandomBoolean();
         var expectedYearLaunched = _fixture.GetValidYearLaunched();
         var expectedDuration = _fixture.GetValidDuration();
+        var expectedRating = _fixture.GetRandomRating();
 
         var video = _fixture.GetValidVideo();
-        video.Update(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration);
+        video.Update(expectedTitle, expectedDescription, expectedOpened, expectedPublished, expectedYearLaunched, expectedDuration, expectedRating);
         var notificationValidationHandler = new NotificationValidationHandler();
         video.Validate(notificationValidationHandler);
 

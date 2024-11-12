@@ -1,4 +1,5 @@
-﻿using quilici.Codeflix.Catalog.UnitTest.Common;
+﻿using quilici.Codeflix.Catalog.Domain.Enum;
+using quilici.Codeflix.Catalog.UnitTest.Common;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
@@ -10,7 +11,14 @@ public class VideoTestFixtureCollection : ICollectionFixture<VideoTestFixture> {
 public class VideoTestFixture : BaseFixture
 {
     public DomainEntity.Video GetValidVideo()
-        => new DomainEntity.Video("Title", "Description", true, true, 2001, 180);
+        => new DomainEntity.Video(GetValidTitle(), GetValidDescription(), GetRandomBoolean(), GetRandomBoolean(), GetValidYearLaunched(), GetValidDuration(), GetRandomRating());
+
+    public Rating GetRandomRating()
+    {
+        var values = Enum.GetValues<Rating>();
+        var random = new Random();
+        return values[random.Next(values.Length)];
+    }
 
     public string GetValidTitle()
         => Faker.Lorem.Letter(100);

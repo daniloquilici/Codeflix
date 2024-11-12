@@ -1,4 +1,5 @@
-﻿using quilici.Codeflix.Catalog.Domain.Validation;
+﻿using quilici.Codeflix.Catalog.Domain.Enum;
+using quilici.Codeflix.Catalog.Domain.Validation;
 
 namespace quilici.Codeflix.Catalog.Domain.Entity;
 public class Video
@@ -19,7 +20,9 @@ public class Video
 
     public DateTime CreatedAt { get; private set; }
 
-    public Video(string title, string description, bool opened, bool published, int yearLaunched, int druration)
+    public Rating Rating { get; private set; }
+
+    public Video(string title, string description, bool opened, bool published, int yearLaunched, int druration, Rating rating)
     {
         Id = Guid.NewGuid();
         Title = title;
@@ -29,9 +32,10 @@ public class Video
         YearLaunched = yearLaunched;
         Druration = druration;
         CreatedAt = DateTime.Now;
+        Rating = rating;
     }
 
-    public void Update(string title, string description, bool opened, bool published, int yearLaunched, int druration)
+    public void Update(string title, string description, bool opened, bool published, int yearLaunched, int druration, Rating rating)
     {
         Title = title;
         Description = description;
@@ -39,6 +43,7 @@ public class Video
         Published = published;
         YearLaunched = yearLaunched;
         Druration = druration;
+        Rating = rating;
     }
 
     public void Validate(ValidationHandler handler)
