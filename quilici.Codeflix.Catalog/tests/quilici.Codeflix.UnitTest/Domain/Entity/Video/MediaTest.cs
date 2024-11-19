@@ -1,4 +1,7 @@
-﻿using Xunit;
+﻿using FluentAssertions;
+using quilici.Codeflix.Catalog.Domain.Entity;
+using quilici.Codeflix.Catalog.Domain.Enum;
+using Xunit;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Domain.Entity.Video;
 
@@ -22,5 +25,15 @@ public class MediaTest
 
         media.FilePath.Should().Be(expectedFilePath);
         media.Status.Should().Be(MediaStatus.Pending);
+    }
+
+    [Fact(DisplayName = nameof(UpdateAsSentToEncode))]
+    [Trait("Domain", "Media - Entities")]
+    public void UpdateAsSentToEncode()
+    {
+        var media = _fixture.GetValidMedia();
+
+        media.UpdateAsSentToEncode();
+        media.Status.Should().Be(MediaStatus.Processing);
     }
 }

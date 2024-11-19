@@ -1,4 +1,5 @@
-﻿using quilici.Codeflix.Catalog.Domain.Enum;
+﻿using quilici.Codeflix.Catalog.Domain.Entity;
+using quilici.Codeflix.Catalog.Domain.Enum;
 using quilici.Codeflix.Catalog.UnitTest.Common;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
@@ -41,7 +42,7 @@ public class VideoTestFixture : BaseFixture
     public string GetValidImagePath() 
         => Faker.Image.PlaceImgUrl();
 
-    public object GetValidMediaPath()
+    public string GetValidMediaPath()
     {
         var examplesMedias = new string[]
         {
@@ -53,4 +54,7 @@ public class VideoTestFixture : BaseFixture
         var random = new Random();
         return examplesMedias[random.Next(examplesMedias.Length)];
     }
+
+    public Media GetValidMedia()
+        => new(GetValidMediaPath());
 }
