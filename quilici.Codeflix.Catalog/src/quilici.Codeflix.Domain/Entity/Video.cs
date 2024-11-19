@@ -1,5 +1,6 @@
 ﻿using quilici.Codeflix.Catalog.Domain.Enum;
 using quilici.Codeflix.Catalog.Domain.Validation;
+using quilici.Codeflix.Catalog.Domain.ValueObject;
 
 namespace quilici.Codeflix.Catalog.Domain.Entity;
 public class Video
@@ -21,6 +22,12 @@ public class Video
     public DateTime CreatedAt { get; private set; }
 
     public Rating Rating { get; private set; }
+
+    public Image? Thumb { get; private set; }
+    
+    public Image? ThumbHalf { get; private set; }
+    
+    public Image? Banner { get; private set; }
 
     public Video(string title, string description, bool opened, bool published, int yearLaunched, int druration, Rating rating)
     {
@@ -48,4 +55,13 @@ public class Video
 
     public void Validate(ValidationHandler handler)
         => new VideoValidator(this, handler).Validate();
+
+    public void UpdateThumb(string validImagePath) 
+        => Thumb = new Image(validImagePath);
+
+    public void UpdateThumbHalf(string validImagePath)
+        => ThumbHalf = new Image(validImagePath);
+
+    public void UpdateBanner(string validImagePath) 
+        => Banner = new Image(validImagePath);
 }

@@ -37,4 +37,7 @@ public class VideoTestFixture : BaseFixture
 
     public int GetValidDuration()
         => (new Random()).Next(100, 300);
+
+    public string GetValidImagePath() 
+        => Faker.Image.PlaceImgUrl();
 }
