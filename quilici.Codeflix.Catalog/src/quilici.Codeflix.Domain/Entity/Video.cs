@@ -29,6 +29,10 @@ public class Video
     
     public Image? Banner { get; private set; }
 
+    public Media? Media { get; private set; }
+    
+    public Media? Trailer { get; private set; }
+
     public Video(string title, string description, bool opened, bool published, int yearLaunched, int druration, Rating rating)
     {
         Id = Guid.NewGuid();
@@ -64,4 +68,10 @@ public class Video
 
     public void UpdateBanner(string validImagePath) 
         => Banner = new Image(validImagePath);
+
+    public void UpdateMedia(string validPath)
+        => Media = new Media(validPath);
+
+    public void UpdateTrailer(string validPath)
+        => Trailer = new Media(validPath);
 }

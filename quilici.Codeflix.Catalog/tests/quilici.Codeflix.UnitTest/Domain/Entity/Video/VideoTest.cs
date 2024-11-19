@@ -41,6 +41,8 @@ public class VideoTest
         video.Thumb.Should().BeNull();
         video.ThumbHalf.Should().BeNull();
         video.Banner.Should().BeNull();
+        video.Media.Should().BeNull();
+        video.Trailer.Should().BeNull();
     }
 
     [Fact(DisplayName = nameof(ValidateWhenValidState))]
@@ -183,5 +185,29 @@ public class VideoTest
         video.UpdateBanner(validImagePath);
         video.Banner.Should().NotBeNull();
         video.Banner!.Path.Should().Be(validImagePath);
+    }
+
+    [Fact(DisplayName = nameof(UpdateMedia))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void UpdateMedia()
+    {
+        var video = _fixture.GetValidVideo();
+        var validPath = _fixture.GetValidMediaPath();
+
+        video.UpdateMedia(validPath);
+        video.Media.Should().NotBeNull();
+        video.Media!.FilePath.Should().Be(validPath);
+    }
+
+    [Fact(DisplayName = nameof(UpdateTrailer))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void UpdateTrailer()
+    {
+        var video = _fixture.GetValidVideo();
+        var validPath = _fixture.GetValidMediaPath();
+
+        video.UpdateTrailer(validPath);
+        video.Trailer.Should().NotBeNull();
+        video.Trailer!.FilePath.Should().Be(validPath);
     }
 }
