@@ -1,4 +1,5 @@
 ﻿using quilici.Codeflix.Catalog.Domain.Enum;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
 using quilici.Codeflix.Catalog.Domain.Validation;
 using quilici.Codeflix.Catalog.Domain.ValueObject;
 
@@ -74,4 +75,20 @@ public class Video
 
     public void UpdateTrailer(string validPath)
         => Trailer = new Media(validPath);
+
+    public void UpdateAsSentToEncode()
+    {
+        if (Media is null)
+            throw new EntityValidationException("There is no Media");
+
+        Media!.UpdateAsSentToEncode(); 
+    }
+
+    public void UpdateAsEncoded(string validEncodedPath)
+    {
+        if (Media is null)
+            throw new EntityValidationException("There is no Media");
+        
+        Media!.UpdateAsEncoded(validEncodedPath);
+    }
 }

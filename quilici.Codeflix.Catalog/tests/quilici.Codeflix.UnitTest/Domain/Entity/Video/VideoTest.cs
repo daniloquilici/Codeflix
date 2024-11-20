@@ -1,4 +1,6 @@
 ﻿using FluentAssertions;
+using quilici.Codeflix.Catalog.Domain.Enum;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
 using quilici.Codeflix.Catalog.Domain.Validation;
 using Xunit;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
@@ -209,5 +211,55 @@ public class VideoTest
         video.UpdateTrailer(validPath);
         video.Trailer.Should().NotBeNull();
         video.Trailer!.FilePath.Should().Be(validPath);
+    }
+
+    [Fact(DisplayName = nameof(UpdateAsSendToEnconde))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void UpdateAsSendToEnconde()
+    {
+        var video = _fixture.GetValidVideo();
+        var validPath = _fixture.GetValidMediaPath();
+
+        video.UpdateMedia(validPath);
+        video.UpdateAsSentToEncode();
+        video.Media.Should().NotBeNull();
+        video.Media!.Status.Should().Be(MediaStatus.Processing);
+    }
+
+    [Fact(DisplayName = nameof(UpdateAsSendToEncondeThrowsWhenThereIsNoMedia))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void UpdateAsSendToEncondeThrowsWhenThereIsNoMedia()
+    {
+        var video = _fixture.GetValidVideo();
+
+        var action = () => video.UpdateAsSentToEncode();
+        action.Should().Throw<EntityValidationException>().WithMessage("There is no Media");
+    }
+
+    [Fact(DisplayName = nameof(UpdateAsEncoded))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void UpdateAsEncoded()
+    {
+        var video = _fixture.GetValidVideo();
+        var validPath = _fixture.GetValidMediaPath();
+        var validEncodedPath = _fixture.GetValidMediaPath();
+
+        video.UpdateMedia(validPath);
+        video.UpdateAsEncoded(validEncodedPath);
+        video.Media.Should().NotBeNull();
+        video.Media!.Status.Should().Be(MediaStatus.Completed);
+        video.Media!.EncodedPath.Should().Be(validEncodedPath);
+    }
+
+    [Fact(DisplayName = nameof(UpdateAsEncodedThrowsWhenThereIsNoMedia))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void UpdateAsEncodedThrowsWhenThereIsNoMedia()
+    {
+        var video = _fixture.GetValidVideo();
+       
+        var validEncodedPath = _fixture.GetValidMediaPath();
+
+        var action = () => video.UpdateAsEncoded(validEncodedPath);
+        action.Should().Throw<EntityValidationException>().WithMessage("There is no Media");
     }
 }
