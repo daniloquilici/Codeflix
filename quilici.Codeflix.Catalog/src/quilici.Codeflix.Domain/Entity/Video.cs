@@ -34,6 +34,9 @@ public class Video
     
     public Media? Trailer { get; private set; }
 
+    private List<Guid> _categories;
+    public IReadOnlyList<Guid> Categories => _categories.AsReadOnly();
+
     public Video(string title, string description, bool opened, bool published, int yearLaunched, int druration, Rating rating)
     {
         Id = Guid.NewGuid();
@@ -45,6 +48,8 @@ public class Video
         Druration = druration;
         CreatedAt = DateTime.Now;
         Rating = rating;
+
+        _categories = new();
     }
 
     public void Update(string title, string description, bool opened, bool published, int yearLaunched, int druration, Rating rating)
@@ -91,4 +96,13 @@ public class Video
         
         Media!.UpdateAsEncoded(validEncodedPath);
     }
+
+    public void AddCategory(Guid categoryId)
+        => _categories.Add(categoryId);
+
+    public void RemoveCategory(Guid categoryId)
+        => _categories.Remove(categoryId);
+
+    public void RemoveAllCategory()
+        => _categories = new();
 }

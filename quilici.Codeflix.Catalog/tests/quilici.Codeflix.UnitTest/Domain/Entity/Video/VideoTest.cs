@@ -262,4 +262,49 @@ public class VideoTest
         var action = () => video.UpdateAsEncoded(validEncodedPath);
         action.Should().Throw<EntityValidationException>().WithMessage("There is no Media");
     }
+
+    [Fact(DisplayName = nameof(AddCategory))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void AddCategory()
+    {
+        var video = _fixture.GetValidVideo();
+        var categoryIdExample = Guid.NewGuid();
+
+        video.AddCategory(categoryIdExample);
+        video.Categories.Should().HaveCount(1);
+        video.Categories[0].Should().Be(categoryIdExample);
+    }
+
+    [Fact(DisplayName = nameof(RemoveCategory))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void RemoveCategory()
+    {
+        var video = _fixture.GetValidVideo();
+        var categoryIdExample = Guid.NewGuid();
+        var categoryIdExample2 = Guid.NewGuid();
+
+        video.AddCategory(categoryIdExample);
+        video.AddCategory(categoryIdExample2);
+
+        video.RemoveCategory(categoryIdExample);
+
+        video.Categories.Should().HaveCount(1);
+        video.Categories[0].Should().Be(categoryIdExample2);
+    }
+
+    [Fact(DisplayName = nameof(RemoveAllCategory))]
+    [Trait("Domain", "Video - Aggregate")]
+    public void RemoveAllCategory()
+    {
+        var video = _fixture.GetValidVideo();
+        var categoryIdExample = Guid.NewGuid();
+        var categoryIdExample2 = Guid.NewGuid();
+
+        video.AddCategory(categoryIdExample);
+        video.AddCategory(categoryIdExample2);
+
+        video.RemoveAllCategory();
+
+        video.Categories.Should().HaveCount(0);
+    }
 }
