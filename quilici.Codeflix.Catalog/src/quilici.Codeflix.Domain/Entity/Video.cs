@@ -37,6 +37,9 @@ public class Video
     private List<Guid> _categories;
     public IReadOnlyList<Guid> Categories => _categories.AsReadOnly();
 
+    private List<Guid> _genres;
+    public IReadOnlyList<Guid> Genres => _genres.AsReadOnly();
+
     public Video(string title, string description, bool opened, bool published, int yearLaunched, int druration, Rating rating)
     {
         Id = Guid.NewGuid();
@@ -50,6 +53,7 @@ public class Video
         Rating = rating;
 
         _categories = new();
+        _genres = new();
     }
 
     public void Update(string title, string description, bool opened, bool published, int yearLaunched, int druration, Rating rating)
@@ -105,4 +109,13 @@ public class Video
 
     public void RemoveAllCategory()
         => _categories = new();
+
+    public void AddGenre(Guid genreId)
+        => _genres.Add(genreId);
+
+    public void RemoveGenre(Guid genreId)
+        => _genres.Remove(genreId);
+
+    public void RemoveAllGenre()
+        => _genres = new();
 }
