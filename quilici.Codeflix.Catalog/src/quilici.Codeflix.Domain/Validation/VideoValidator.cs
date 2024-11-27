@@ -22,7 +22,7 @@ public class VideoValidator : Validator
     private void ValidateTitle()
     {
         if (string.IsNullOrWhiteSpace(_video.Title))
-            _handler.HandleError($"'{nameof(_video.Title)}' is requered");
+            _handler.HandleError($"'{nameof(_video.Title)}' is required");
 
         if (_video.Title.Length > 255)
             _handler.HandleError($"'{nameof(_video.Title)}' should be less or equal {TitleMaxLength} characters long");
@@ -31,7 +31,7 @@ public class VideoValidator : Validator
     private void ValidateDescription() 
     {
         if (string.IsNullOrWhiteSpace(_video.Description))
-            _handler.HandleError($"'{nameof(_video.Description)}' is requered");
+            _handler.HandleError($"'{nameof(_video.Description)}' is required");
 
         if (_video.Description.Length > DescriptionMaxLength)
             _handler.HandleError($"'{nameof(_video.Description)}' should be less or equal {DescriptionMaxLength} characters long");

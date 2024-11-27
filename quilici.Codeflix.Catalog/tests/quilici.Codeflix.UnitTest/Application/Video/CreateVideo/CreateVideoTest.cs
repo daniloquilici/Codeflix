@@ -1,9 +1,11 @@
-﻿using Moq;
+﻿using FluentAssertions;
+using Moq;
 using quilici.Codeflix.Catalog.Application.Interfaces;
+using quilici.Codeflix.Catalog.Domain.Exceptions;
+using quilici.Codeflix.Catalog.Domain.Repository;
 using Xunit;
+using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 using UseCase = quilici.Codeflix.Catalog.Application.UseCases.Video.CreateVideo;
-using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity.Video;
-using quilici.Codeflix.Catalog.Domain.Entity;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Application.Video.CreateVideo;
 
@@ -15,13 +17,13 @@ public class CreateVideoTest
     public CreateVideoTest(CreateVideoTestFixture fixture) => _fixture = fixture;
 
     [Fact(DisplayName = nameof(Create))]
-    [Trait("Application", "")]
+    [Trait("Application", "Create video - Uses Cases")]
     public async Task Create()
     {
         var repositoryMock = new Mock<IVideoRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
         var useCase = new UseCase.CreateVideo(unitOfWorkMock.Object, repositoryMock.Object);
-        var input = new CreateVideoInput(
+        var input = new UseCase.CreateVideoInput(
             _fixture.GetValidTitle(),
             _fixture.GetValidDescription(),
             _fixture.GetValidYearLaunched(),
@@ -39,8 +41,8 @@ public class CreateVideoTest
             video.Description == input.Description &&
             video.Duration == input.Duration &&
             video.Rating == input.Rating &&
-            video.Id == input.Id &&
-            video.YearLauched == input.YearLauched &&
+            video.Id != Guid.Empty &&
+            video.YearLaunched == input.YearLaunched &&
             video.Opened == input.Opened
             ), It.IsAny<CancellationToken>()), Times.Once);
 
@@ -48,13 +50,39 @@ public class CreateVideoTest
 
         output.Should().NotBeNull();
         output.Id.Should().NotBeEmpty();
-        output.CreatedAt.Should().NotBeEmpty();
+        output.CreatedAt.Should().NotBe(default);
         output.Title.Should().Be(input.Title);
         output.Published.Should().Be(input.Published);
         output.Description.Should().Be(input.Description);
-        output.Duration.Should().Be(input.Duration)
+        output.Duration.Should().Be(input.Duration);
         output.Rating.Should().Be(input.Rating);
-        output.YearLauched.Should().Be(input.YearLauched);
-        output.Opened.Should().Be(input.Openedoutput);
+        output.YearLaunched.Should().Be(input.YearLaunched);
+        output.Opened.Should().Be(input.Opened);
+    }
+
+    [Fact(DisplayName = nameof(CreateThrowWithInvalidInput))]
+    [Trait("Application", "Create video - Uses Cases")]
+    public async Task CreateThrowWithInvalidInput()
+    {
+        var repositoryMock = new Mock<IVideoRepository>();
+        var unitOfWorkMock = new Mock<IUnitOfWork>();
+        var useCase = new UseCase.CreateVideo(unitOfWorkMock.Object, repositoryMock.Object);
+        var input = new UseCase.CreateVideoInput(
+            "",
+            _fixture.GetValidDescription(),
+            _fixture.GetValidYearLaunched(),
+            _fixture.GetRandomBoolean(),
+            _fixture.GetRandomBoolean(),
+            _fixture.GetValidDuration(),
+            _fixture.GetRandomRating()
+            );
+
+        var action = async () => await useCase.Handle(input, CancellationToken.None);
+        var exceptionAssertion = await action.Should().ThrowAsync<EntityValidationException>();
+
+        exceptionAssertion.WithMessage("There are validation errors").Which.Errors!.ToList()[0].Message.Should().Be("'Title' is required");
+
+
+        repositoryMock.Verify(x => x.Insert(It.IsAny<DomainEntity.Video>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 }

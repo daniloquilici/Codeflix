@@ -1,0 +1,5 @@
+﻿using MediatR;
+using quilici.Codeflix.Catalog.Domain.Enum;
+
+namespace quilici.Codeflix.Catalog.Application.UseCases.Video.CreateVideo;
+public record CreateVideoInput(string Title, string Description, int YearLaunched, bool Opened, bool Published, int Duration, Rating Rating) : IRequest<CreateVideoOutput>;

@@ -56,7 +56,7 @@ public class VideoValidatorTest
 
         notificationValidationHandler.HasErrors().Should().BeTrue();
         notificationValidationHandler.Errors.Should().HaveCount(1);
-        notificationValidationHandler.Errors.First().Message.Should().Be("'Title' is requered");
+        notificationValidationHandler.Errors.First().Message.Should().Be("'Title' is required");
     }
 
     [Fact(DisplayName = nameof(ReturnsErrorWhenDescriptionIsEmpty))]
@@ -71,7 +71,7 @@ public class VideoValidatorTest
 
         notificationValidationHandler.HasErrors().Should().BeTrue();
         notificationValidationHandler.Errors.Should().HaveCount(1);
-        notificationValidationHandler.Errors.First().Message.Should().Be("'Description' is requered");
+        notificationValidationHandler.Errors.First().Message.Should().Be("'Description' is required");
     }
 
     [Fact(DisplayName = nameof(ReturnsErrorWhenDescriptionIsTooLong))]

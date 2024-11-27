@@ -1,13 +1,12 @@
 ﻿using quilici.Codeflix.Catalog.Domain.Enum;
 using quilici.Codeflix.Catalog.Domain.Exceptions;
+using quilici.Codeflix.Catalog.Domain.SeedWork;
 using quilici.Codeflix.Catalog.Domain.Validation;
 using quilici.Codeflix.Catalog.Domain.ValueObject;
 
 namespace quilici.Codeflix.Catalog.Domain.Entity;
-public class Video
+public class Video : AggregateRoot
 {
-    public Guid Id { get; private set; }
-
     public string Title { get; private set; }
 
     public string Description { get; private set; }
@@ -18,7 +17,7 @@ public class Video
 
     public int YearLaunched { get; private set; }
 
-    public int Druration { get; private set; }
+    public int Duration { get; private set; }
 
     public DateTime CreatedAt { get; private set; }
 
@@ -51,7 +50,7 @@ public class Video
         Opened = opened;
         Published = published;
         YearLaunched = yearLaunched;
-        Druration = druration;
+        Duration = druration;
         CreatedAt = DateTime.Now;
         Rating = rating;
 
@@ -67,7 +66,7 @@ public class Video
         Opened = opened;
         Published = published;
         YearLaunched = yearLaunched;
-        Druration = druration;
+        Duration = druration;
         Rating = rating;
     }
 
