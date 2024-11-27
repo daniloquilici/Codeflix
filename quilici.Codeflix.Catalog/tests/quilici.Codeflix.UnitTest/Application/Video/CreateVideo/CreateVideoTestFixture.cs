@@ -1,4 +1,5 @@
-﻿using quilici.Codeflix.Catalog.UnitTest.Common.Fixtures;
+﻿using quilici.Codeflix.Catalog.Application.UseCases.Video.CreateVideo;
+using quilici.Codeflix.Catalog.UnitTest.Common.Fixtures;
 using Xunit;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Application.Video.CreateVideo;
@@ -8,4 +9,16 @@ public class CreateVideoTestFixtureCollection : ICollectionFixture<CreateVideoTe
 
 public class CreateVideoTestFixture : VideoTestFixtureBase
 {
+    public CreateVideoInput CreateValidCreateVideoInput()
+    {
+        return new CreateVideoInput(
+            "",
+            GetValidDescription(),
+            GetValidYearLaunched(),
+            GetRandomBoolean(),
+            GetRandomBoolean(),
+            GetValidDuration(),
+            GetRandomRating()
+            );
+    }
 }
