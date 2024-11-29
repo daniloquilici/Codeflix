@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Moq;
+using quilici.Codeflix.Catalog.Application.Exceptions;
 using quilici.Codeflix.Catalog.Application.Interfaces;
 using quilici.Codeflix.Catalog.Application.UseCases.Video.CreateVideo;
 using quilici.Codeflix.Catalog.Domain.Exceptions;
@@ -23,7 +24,7 @@ public class CreateVideoTest
     {
         var repositoryMock = new Mock<IVideoRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
-        var useCase = new UseCase.CreateVideo(unitOfWorkMock.Object, repositoryMock.Object);
+        var useCase = new UseCase.CreateVideo(unitOfWorkMock.Object, repositoryMock.Object, Mock.Of<ICategoryRepository>());
         var input = _fixture.CreateValidCreateVideoInput();
 
         var output = await useCase.Handle(input, CancellationToken.None);
@@ -60,7 +61,7 @@ public class CreateVideoTest
     {
         var repositoryMock = new Mock<IVideoRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
-        var useCase = new UseCase.CreateVideo(unitOfWorkMock.Object, repositoryMock.Object);
+        var useCase = new UseCase.CreateVideo(unitOfWorkMock.Object, repositoryMock.Object, Mock.Of<ICategoryRepository>());
 
         var action = async () => await useCase.Handle(input, CancellationToken.None);
         var exceptionAssertion = await action.Should().ThrowAsync<EntityValidationException>();
@@ -74,10 +75,15 @@ public class CreateVideoTest
     [Trait("Application", "Create video - Uses Cases")]
     public async Task CreateWithCategoriesIds()
     {
-        var repositoryMock = new Mock<IVideoRepository>();
+        var videoRepositoryMock = new Mock<IVideoRepository>();
+        var categoryRepositoryMock = new Mock<ICategoryRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
-        var useCase = new UseCase.CreateVideo(unitOfWorkMock.Object, repositoryMock.Object);
+        
         var exampleCategories = Enumerable.Range(1,5).Select(_ => Guid.NewGuid()).ToList();
+        categoryRepositoryMock.Setup(x => x.GetIdsListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>())).ReturnsAsync(exampleCategories);
+
+
+        var useCase = new UseCase.CreateVideo(unitOfWorkMock.Object, videoRepositoryMock.Object, categoryRepositoryMock.Object);
         var input = _fixture.CreateValidCreateVideoInput(exampleCategories);
 
         var output = await useCase.Handle(input, CancellationToken.None);
@@ -96,7 +102,7 @@ public class CreateVideoTest
         output.Opened.Should().Be(input.Opened);
         output.CategoriesIds.Should().BeEquivalentTo(exampleCategories);
 
-        repositoryMock.Verify(x => x.Insert(It.Is<DomainEntity.Video>(video =>
+        videoRepositoryMock.Verify(x => x.Insert(It.Is<DomainEntity.Video>(video =>
             video.Title == input.Title &&
             video.Published == input.Published &&
             video.Description == input.Description &&
@@ -107,5 +113,28 @@ public class CreateVideoTest
             video.Opened == input.Opened &&
             video.Categories.All(category => exampleCategories.Contains(category))
             ), It.IsAny<CancellationToken>()), Times.Once);
+
+        categoryRepositoryMock.VerifyAll();
+    }
+
+    [Fact(DisplayName = nameof(ThrowsWhenCategoryIdInvalid))]
+    [Trait("Application", "Create video - Uses Cases")]
+    public async Task ThrowsWhenCategoryIdInvalid()
+    {
+        var videoRepositoryMock = new Mock<IVideoRepository>();
+        var categoryRepositoryMock = new Mock<ICategoryRepository>();
+        var unitOfWorkMock = new Mock<IUnitOfWork>();
+
+        var exampleCategories = Enumerable.Range(1, 5).Select(_ => Guid.NewGuid()).ToList();
+        var removedItem = exampleCategories[2];
+        categoryRepositoryMock.Setup(x => x.GetIdsListByIds(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>())).ReturnsAsync(exampleCategories.FindAll(x => x != removedItem).ToList().AsReadOnly());
+
+        var useCase = new UseCase.CreateVideo(unitOfWorkMock.Object, videoRepositoryMock.Object, categoryRepositoryMock.Object);
+        var input = _fixture.CreateValidCreateVideoInput(exampleCategories);
+
+        var action = async () =>  await useCase.Handle(input, CancellationToken.None);        
+        
+        await action.Should().ThrowAsync<RelatedAggregateException>().WithMessage($"Related category Id not found: {removedItem}");
+        categoryRepositoryMock.VerifyAll();
     }
 }
