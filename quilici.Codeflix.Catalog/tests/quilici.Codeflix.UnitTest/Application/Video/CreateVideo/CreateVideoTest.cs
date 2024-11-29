@@ -167,6 +167,7 @@ public class CreateVideoTest
         output.Rating.Should().Be(input.Rating);
         output.YearLaunched.Should().Be(input.YearLaunched);
         output.Opened.Should().Be(input.Opened);
+        output.CategoriesIds.Should().BeEmpty();
         output.GenresIds.Should().BeEquivalentTo(exampleIds);
 
         videoRepositoryMock.Verify(x => x.Insert(It.Is<DomainEntity.Video>(video =>
@@ -234,6 +235,8 @@ public class CreateVideoTest
         output.Rating.Should().Be(input.Rating);
         output.YearLaunched.Should().Be(input.YearLaunched);
         output.Opened.Should().Be(input.Opened);
+        output.CategoriesIds.Should().BeEmpty();
+        output.GenresIds.Should().BeEmpty();
         output.CastMembersIds.Should().BeEquivalentTo(exampleIds);
 
         videoRepositoryMock.Verify(x => x.Insert(It.Is<DomainEntity.Video>(video =>
