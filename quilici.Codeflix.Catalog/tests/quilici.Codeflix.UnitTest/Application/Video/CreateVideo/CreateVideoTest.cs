@@ -55,7 +55,7 @@ public class CreateVideoTest
 
     [Theory(DisplayName = nameof(CreateThrowWithInvalidInput))]
     [Trait("Application", "Create video - Uses Cases")]
-    [MemberData(nameof(CreateVideoTestDataGenerator.GetInvalidInputs), 2, MemberType = typeof(CreateVideoTestDataGenerator))]
+    [ClassData(typeof(CreateVideoTestDataGenerator))]
     public async Task CreateThrowWithInvalidInput(CreateVideoInput input, string expectedValidationError)
     {
         var repositoryMock = new Mock<IVideoRepository>();

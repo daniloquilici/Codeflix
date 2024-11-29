@@ -12,7 +12,7 @@ public class CreateVideoTestFixture : VideoTestFixtureBase
     public CreateVideoInput CreateValidCreateVideoInput()
     {
         return new CreateVideoInput(
-            "",
+            GetValidTitle(),
             GetValidDescription(),
             GetValidYearLaunched(),
             GetRandomBoolean(),
