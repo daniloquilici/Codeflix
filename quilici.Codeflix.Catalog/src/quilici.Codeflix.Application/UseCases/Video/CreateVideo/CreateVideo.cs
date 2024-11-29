@@ -12,12 +12,14 @@ public class CreateVideo : ICreateVideo
     private readonly IUnitOfWork _unitOfWork;
     private readonly IVideoRepository _videoRepository;
     private readonly ICategoryRepository _categoryRepository;
+    private readonly IGenreRepository _genreRepository;
 
-    public CreateVideo(IUnitOfWork unitOfWork, IVideoRepository videoRepository, ICategoryRepository categoryRepository)
+    public CreateVideo(IUnitOfWork unitOfWork, IVideoRepository videoRepository, ICategoryRepository categoryRepository, IGenreRepository genreRepository)
     {
         _unitOfWork = unitOfWork;
         _videoRepository = videoRepository;
         _categoryRepository = categoryRepository;
+        _genreRepository = genreRepository;
     }
 
     public async Task<CreateVideoOutput> Handle(CreateVideoInput request, CancellationToken cancellationToken)
@@ -37,8 +39,19 @@ public class CreateVideo : ICreateVideo
                 var notfound = request.CategoriesIds.ToList().FindAll(category => !persistencesIds.Contains(category));
                 throw new RelatedAggregateException($"Related category Id not found: {string.Join(',', notfound)}");
             }
-            
+
             request.CategoriesIds!.ToList().ForEach(video.AddCategory);
+        }
+
+        if ((request.GenresIds?.Count() ?? 0) > 0)
+        {
+            request.GenresIds!.ToList().ForEach(video.AddGenre);
+            var persistencesIds = await _genreRepository.GetIdsListByIds(request.GenresIds!.ToList(), cancellationToken);
+            if (persistencesIds.Count < request.GenresIds!.Count)
+            {
+                var notfound = request.GenresIds.ToList().FindAll(genre => !persistencesIds.Contains(genre));
+                throw new RelatedAggregateException($"Related genre Id not found: {string.Join(',', notfound)}");
+            }
         }
 
         await _videoRepository.Insert(video, cancellationToken);
