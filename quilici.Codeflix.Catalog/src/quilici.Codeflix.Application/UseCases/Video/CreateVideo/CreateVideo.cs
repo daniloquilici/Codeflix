@@ -29,6 +29,6 @@ public class CreateVideo : ICreateVideo
         await _videoRepository.Insert(video, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return new CreateVideoOutput(video.Id, video.CreatedAt, video.Title, video.Published, video.Description, video.Rating, video.YearLaunched, video.Opened, video.Duration);
+        return CreateVideoOutput.FromVideo(video);
     }
 }
