@@ -94,7 +94,7 @@ public class CreateVideoTest
         output.Rating.Should().Be(input.Rating);
         output.YearLaunched.Should().Be(input.YearLaunched);
         output.Opened.Should().Be(input.Opened);
-        output.CategoryIds.Should().BeEquivalentTo(exampleCategories);
+        output.CategoriesIds.Should().BeEquivalentTo(exampleCategories);
 
         repositoryMock.Verify(x => x.Insert(It.Is<DomainEntity.Video>(video =>
             video.Title == input.Title &&
