@@ -13,13 +13,15 @@ public class CreateVideo : ICreateVideo
     private readonly IVideoRepository _videoRepository;
     private readonly ICategoryRepository _categoryRepository;
     private readonly IGenreRepository _genreRepository;
+    private readonly ICastMemberRepository _castMemberRepository;
 
-    public CreateVideo(IUnitOfWork unitOfWork, IVideoRepository videoRepository, ICategoryRepository categoryRepository, IGenreRepository genreRepository)
+    public CreateVideo(IUnitOfWork unitOfWork, IVideoRepository videoRepository, ICategoryRepository categoryRepository, IGenreRepository genreRepository, ICastMemberRepository castMemberRepository)
     {
         _unitOfWork = unitOfWork;
         _videoRepository = videoRepository;
         _categoryRepository = categoryRepository;
         _genreRepository = genreRepository;
+        _castMemberRepository = castMemberRepository;
     }
 
     public async Task<CreateVideoOutput> Handle(CreateVideoInput request, CancellationToken cancellationToken)
@@ -51,6 +53,17 @@ public class CreateVideo : ICreateVideo
             {
                 var notfound = request.GenresIds.ToList().FindAll(genre => !persistencesIds.Contains(genre));
                 throw new RelatedAggregateException($"Related genre Id not found: {string.Join(',', notfound)}");
+            }
+        }
+
+        if ((request.CastMembersIds?.Count() ?? 0) > 0)
+        {
+            request.CastMembersIds!.ToList().ForEach(video.AddCastMember);
+            var persistencesIds = await _castMemberRepository.GetIdsListByIds(request.CastMembersIds!.ToList(), cancellationToken);
+            if (persistencesIds.Count < request.CastMembersIds!.Count)
+            {
+                var notfound = request.CastMembersIds.ToList().FindAll(castmember => !persistencesIds.Contains(castmember));
+                throw new RelatedAggregateException($"Related castmember Id not found: {string.Join(',', notfound)}");
             }
         }
 
