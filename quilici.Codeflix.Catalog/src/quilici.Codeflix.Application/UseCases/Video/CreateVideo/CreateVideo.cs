@@ -35,41 +35,55 @@ public class CreateVideo : ICreateVideo
 
         if ((request.CategoriesIds?.Count ?? 0) > 0)
         {
-            var persistencesIds = await _categoryRepository.GetIdsListByIds(request.CategoriesIds!.ToList(), cancellationToken);
-            if (persistencesIds.Count < request.CategoriesIds!.Count)
-            {
-                var notfound = request.CategoriesIds.ToList().FindAll(category => !persistencesIds.Contains(category));
-                throw new RelatedAggregateException($"Related category Id not found: {string.Join(',', notfound)}");
-            }
-
+            await ValidateCategoriesIds(request, cancellationToken);
             request.CategoriesIds!.ToList().ForEach(video.AddCategory);
         }
 
         if ((request.GenresIds?.Count() ?? 0) > 0)
         {
+            await ValidateGenresIds(request, cancellationToken);
             request.GenresIds!.ToList().ForEach(video.AddGenre);
-            var persistencesIds = await _genreRepository.GetIdsListByIds(request.GenresIds!.ToList(), cancellationToken);
-            if (persistencesIds.Count < request.GenresIds!.Count)
-            {
-                var notfound = request.GenresIds.ToList().FindAll(genre => !persistencesIds.Contains(genre));
-                throw new RelatedAggregateException($"Related genre Id not found: {string.Join(',', notfound)}");
-            }
         }
 
         if ((request.CastMembersIds?.Count() ?? 0) > 0)
         {
+            await ValidateCastMembersIds(request, cancellationToken);
             request.CastMembersIds!.ToList().ForEach(video.AddCastMember);
-            var persistencesIds = await _castMemberRepository.GetIdsListByIds(request.CastMembersIds!.ToList(), cancellationToken);
-            if (persistencesIds.Count < request.CastMembersIds!.Count)
-            {
-                var notfound = request.CastMembersIds.ToList().FindAll(castmember => !persistencesIds.Contains(castmember));
-                throw new RelatedAggregateException($"Related castmember Id not found: {string.Join(',', notfound)}");
-            }
         }
 
         await _videoRepository.Insert(video, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
 
         return CreateVideoOutput.FromVideo(video);
+    }
+
+    private async Task ValidateCastMembersIds(CreateVideoInput request, CancellationToken cancellationToken)
+    {
+        var persistencesIds = await _castMemberRepository.GetIdsListByIds(request.CastMembersIds!.ToList(), cancellationToken);
+        if (persistencesIds.Count < request.CastMembersIds!.Count)
+        {
+            var notfound = request.CastMembersIds.ToList().FindAll(castmember => !persistencesIds.Contains(castmember));
+            throw new RelatedAggregateException($"Related castmember Id not found: {string.Join(',', notfound)}");
+        }
+    }
+
+    private async Task ValidateGenresIds(CreateVideoInput request, CancellationToken cancellationToken)
+    {
+        var persistencesIds = await _genreRepository.GetIdsListByIds(request.GenresIds!.ToList(), cancellationToken);
+        if (persistencesIds.Count < request.GenresIds!.Count)
+        {
+            var notfound = request.GenresIds.ToList().FindAll(genre => !persistencesIds.Contains(genre));
+            throw new RelatedAggregateException($"Related genre Id not found: {string.Join(',', notfound)}");
+        }
+    }
+
+    private async Task ValidateCategoriesIds(CreateVideoInput request, CancellationToken cancellationToken)
+    {
+        var persistencesIds = await _categoryRepository.GetIdsListByIds(request.CategoriesIds!.ToList(), cancellationToken);
+        if (persistencesIds.Count < request.CategoriesIds!.Count)
+        {
+            var notfound = request.CategoriesIds.ToList().FindAll(category => !persistencesIds.Contains(category));
+            throw new RelatedAggregateException($"Related category Id not found: {string.Join(',', notfound)}");
+        }
     }
 }
