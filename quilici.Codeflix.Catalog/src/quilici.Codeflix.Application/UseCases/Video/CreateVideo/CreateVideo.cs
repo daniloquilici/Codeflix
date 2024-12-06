@@ -14,14 +14,16 @@ public class CreateVideo : ICreateVideo
     private readonly ICategoryRepository _categoryRepository;
     private readonly IGenreRepository _genreRepository;
     private readonly ICastMemberRepository _castMemberRepository;
+    private readonly IStorageService _storageService;
 
-    public CreateVideo(IUnitOfWork unitOfWork, IVideoRepository videoRepository, ICategoryRepository categoryRepository, IGenreRepository genreRepository, ICastMemberRepository castMemberRepository)
+    public CreateVideo(IUnitOfWork unitOfWork, IVideoRepository videoRepository, ICategoryRepository categoryRepository, IGenreRepository genreRepository, ICastMemberRepository castMemberRepository, IStorageService storageService)
     {
         _unitOfWork = unitOfWork;
         _videoRepository = videoRepository;
         _categoryRepository = categoryRepository;
         _genreRepository = genreRepository;
         _castMemberRepository = castMemberRepository;
+        _storageService = storageService;
     }
 
     public async Task<CreateVideoOutput> Handle(CreateVideoInput request, CancellationToken cancellationToken)
