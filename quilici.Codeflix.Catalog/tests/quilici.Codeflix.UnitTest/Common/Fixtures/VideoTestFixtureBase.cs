@@ -1,5 +1,7 @@
-﻿using quilici.Codeflix.Catalog.Domain.Entity;
+﻿using quilici.Codeflix.Catalog.Application.UseCases.Video.Common;
+using quilici.Codeflix.Catalog.Domain.Entity;
 using quilici.Codeflix.Catalog.Domain.Enum;
+using System.Text;
 using DomainEntity = quilici.Codeflix.Catalog.Domain.Entity;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Common.Fixtures;
@@ -52,4 +54,11 @@ public abstract class VideoTestFixtureBase : BaseFixture
 
     public Media GetValidMedia()
         => new(GetValidMediaPath());
+
+    public FileInput GetValidImageFileInput()
+    {
+        var exampleStream = new MemoryStream(Encoding.ASCII.GetBytes("teste"));
+        var fileInput = new FileInput("jpg", exampleStream);
+        return fileInput;
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using quilici.Codeflix.Catalog.Application.UseCases.Video.Common;
 using quilici.Codeflix.Catalog.Application.UseCases.Video.CreateVideo;
 using quilici.Codeflix.Catalog.UnitTest.Common.Fixtures;
+using System.Text;
 using Xunit;
 
 namespace quilici.Codeflix.Catalog.UnitTest.Application.Video.CreateVideo;
@@ -10,7 +11,7 @@ public class CreateVideoTestFixtureCollection : ICollectionFixture<CreateVideoTe
 
 public class CreateVideoTestFixture : VideoTestFixtureBase
 {
-    public CreateVideoInput CreateValidCreateVideoInput(List<Guid>? categoriesIds = null, List<Guid>? genresIds = null, List<Guid>? castMembersIds = null, FileInput? thumb = null)
+    public CreateVideoInput CreateValidCreateVideoInput(List<Guid>? categoriesIds = null, List<Guid>? genresIds = null, List<Guid>? castMembersIds = null, FileInput? thumb = null, FileInput? banner = null)
     {
         return new CreateVideoInput(
             GetValidTitle(),
@@ -23,6 +24,7 @@ public class CreateVideoTestFixture : VideoTestFixtureBase
             categoriesIds,
             genresIds,
             castMembersIds,
-            thumb);
+            thumb,
+            banner);
     }
 }
