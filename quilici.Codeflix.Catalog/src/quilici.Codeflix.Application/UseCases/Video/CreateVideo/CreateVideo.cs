@@ -59,6 +59,12 @@ public class CreateVideo : ICreateVideo
             video.UpdateThumb(thumbUrl);
         }
 
+        if (request.Banner is not null)
+        {
+            var thumbUrl = await _storageService.Upload($"{video.Id}-banner.{request.Banner.Extension}", request.Banner.FileStream, cancellationToken);
+            video.UpdateBanner(thumbUrl);
+        }
+
         await _videoRepository.Insert(video, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
 
