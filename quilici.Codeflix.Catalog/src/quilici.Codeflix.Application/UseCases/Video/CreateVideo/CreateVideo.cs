@@ -53,6 +53,12 @@ public class CreateVideo : ICreateVideo
             request.CastMembersIds!.ToList().ForEach(video.AddCastMember);
         }
 
+        if (request.Thumb is not null) 
+        {
+            var thumbUrl = await _storageService.Upload($"{video.Id}-thumb.{request.Thumb.Extension}", request.Thumb.FileStream, cancellationToken);
+            video.UpdateThumb(thumbUrl);
+        }
+
         await _videoRepository.Insert(video, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
 
