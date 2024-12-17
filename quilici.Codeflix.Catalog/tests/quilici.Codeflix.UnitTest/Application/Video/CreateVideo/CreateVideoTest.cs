@@ -361,4 +361,46 @@ public class CreateVideoTest
         output.Opened.Should().Be(input.Opened);
         output.Banner.Should().Be(expectedBannerName);
     }
+
+    [Fact(DisplayName = nameof(CreateWithThumbHalf))]
+    [Trait("Application", "Create video - Uses Cases")]
+    public async Task CreateWithThumbHalf()
+    {
+        var repositoryMock = new Mock<IVideoRepository>();
+        var unitOfWorkMock = new Mock<IUnitOfWork>();
+        var storageServiceMock = new Mock<IStorageService>();
+        var expectedThubHalf = "banner.jpg";
+
+        storageServiceMock.Setup(x => x.Upload(It.IsAny<string>(), It.IsAny<Stream>(), It.IsAny<CancellationToken>())).ReturnsAsync(expectedThubHalf);
+
+        var useCase = new UseCase.CreateVideo(unitOfWorkMock.Object, repositoryMock.Object, Mock.Of<ICategoryRepository>(), Mock.Of<IGenreRepository>(), Mock.Of<ICastMemberRepository>(), storageServiceMock.Object);
+        var input = _fixture.CreateValidCreateVideoInput(thumbHalf: _fixture.GetValidImageFileInput());
+
+        var output = await useCase.Handle(input, CancellationToken.None);
+
+        repositoryMock.Verify(x => x.Insert(It.Is<DomainEntity.Video>(video =>
+            video.Title == input.Title &&
+            video.Published == input.Published &&
+            video.Description == input.Description &&
+            video.Duration == input.Duration &&
+            video.Rating == input.Rating &&
+            video.Id != Guid.Empty &&
+            video.YearLaunched == input.YearLaunched &&
+            video.Opened == input.Opened
+            ), It.IsAny<CancellationToken>()), Times.Once);
+
+        unitOfWorkMock.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
+
+        output.Should().NotBeNull();
+        output.Id.Should().NotBeEmpty();
+        output.CreatedAt.Should().NotBe(default);
+        output.Title.Should().Be(input.Title);
+        output.Published.Should().Be(input.Published);
+        output.Description.Should().Be(input.Description);
+        output.Duration.Should().Be(input.Duration);
+        output.Rating.Should().Be(input.Rating);
+        output.YearLaunched.Should().Be(input.YearLaunched);
+        output.Opened.Should().Be(input.Opened);
+        output.ThumbHalf.Should().Be(expectedThubHalf);
+    }
 }

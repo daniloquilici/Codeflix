@@ -61,8 +61,14 @@ public class CreateVideo : ICreateVideo
 
         if (request.Banner is not null)
         {
-            var thumbUrl = await _storageService.Upload($"{video.Id}-banner.{request.Banner.Extension}", request.Banner.FileStream, cancellationToken);
-            video.UpdateBanner(thumbUrl);
+            var bannerUrl = await _storageService.Upload($"{video.Id}-banner.{request.Banner.Extension}", request.Banner.FileStream, cancellationToken);
+            video.UpdateBanner(bannerUrl);
+        }
+
+        if (request.ThumbHalf is not null)
+        {
+            var thumbHalfbUrl = await _storageService.Upload($"{video.Id}-thumbHalf.{request.ThumbHalf.Extension}", request.ThumbHalf.FileStream, cancellationToken);
+            video.UpdateThumbHalf(thumbHalfbUrl);
         }
 
         await _videoRepository.Insert(video, cancellationToken);
