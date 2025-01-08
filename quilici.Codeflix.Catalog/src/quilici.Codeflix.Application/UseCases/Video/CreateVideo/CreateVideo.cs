@@ -60,7 +60,7 @@ public class CreateVideo : ICreateVideo
 
         if (request.ThumbHalf is not null)
         {
-            var thumbHalfbUrl = await _storageService.Upload($"{video.Id}-thumbHalf.{request.ThumbHalf.Extension}", request.ThumbHalf.FileStream, cancellationToken);
+            var thumbHalfbUrl = await _storageService.Upload($"{video.Id}-thumbhalf.{request.ThumbHalf.Extension}", request.ThumbHalf.FileStream, cancellationToken);
             video.UpdateThumbHalf(thumbHalfbUrl);
         }
     }
